@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Available rocks</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<style>
+body {
+   background-color: white;
+   font-family: "bitstream vera sans", "verdana", "sans";
+   font-size: 14px;
+}
+a {
+   color: #0000c0;
+   text-decoration: none;
+}
+a.pkg {
+   color: black;
+}
+a:hover {
+   text-decoration: underline;
+}
+td.main {
+   border-style: none;
+}
+blockquote {
+   font-size: 12px;
+}
+td.package {
+   background-color: #f0f0f0;
+   vertical-align: top;
+}
+td.spacer {
+   height: 5px;
+}
+td.version {
+   background-color: #d0d0d0;
+   vertical-align: top;
+   text-align: left;
+   padding: 5px;
+   width: 100px;
+}
+p.manifest {
+   font-size: 8px;
+}
+</style>
+</head>
+<body>
+<h1>Available rocks</h1>
+<p>
+Lua modules available from this location for use with <a href="http://www.luarocks.org">LuaRocks</a>:
+</p>
+<table class="main">
+<td class="package">
+<p><a name="ime"></a><a href="#ime" class="pkg"><b>ime</b></a> - A library related to input method engine for neovim<br/>
+</p><blockquote><p>rime.nvim, fcitx5-ui.nvim and ime.nvim depend on it<br/>
+
+<font size="-1"><a href="https://github.com/rimeinn/rime.nvim/archive/7753231d81e5e9bf57e7a8c034375428938533f6.zip">latest sources</a> | <a href="https://github.com/rimeinn/rime.nvim/tree/main/packages/ime" target="_blank">project homepage</a> | License: GPL-3.0</font></p>
+</blockquote></a></td>
+<td class="version">
+0.0.9-1:&nbsp;<a href="ime-0.0.9-1.all.rock">all</a>,&nbsp;<a href="ime-0.0.9-1.rockspec">rockspec</a><br/></td></tr>
+<tr><td colspan="2" class="spacer"></td></tr>
+<td class="package">
+<p><a name="lua-cjson"></a><a href="#lua-cjson" class="pkg"><b>lua-cjson</b></a> - A fast JSON encoding/parsing module<br/>
+</p><blockquote><p> The Lua CJSON module provides JSON support for Lua. It features: - Fast, standards compliant encoding/parsing routines - Full support for JSON with UTF-8, including decoding surrogate pairs - Optional run-time support for common exceptions to the JSON specification (infinity, NaN,..) - No dependencies on other libraries <br/>
+
+<font size="-1"><a href="git+https://github.com/openresty/lua-cjson">latest sources</a> | <a href="http://www.kyne.com.au/~mark/software/lua-cjson.php" target="_blank">project homepage</a> | License: MIT</font></p>
+</blockquote></a></td>
+<td class="version">
+2.1.0.10-1:&nbsp;<a href="lua-cjson-2.1.0.10-1.linux-x86_64.rock">linux-x86_64</a>,&nbsp;<a href="lua-cjson-2.1.0.10-1.rockspec">rockspec</a><br/></td></tr>
+<tr><td colspan="2" class="spacer"></td></tr>
+<td class="package">
+<p><a name="luafilesystem"></a><a href="#luafilesystem" class="pkg"><b>luafilesystem</b></a> - File System Library for the Lua Programming Language<br/>
+</p><blockquote><p> LuaFileSystem is a Lua library developed to complement the set of functions related to file systems offered by the standard Lua distribution. LuaFileSystem offers a portable way to access the underlying directory structure and file attributes. <br/>
+
+<font size="-1"><a href="git+https://github.com/lunarmodules/luafilesystem">latest sources</a>  | License: MIT/X11</font></p>
+</blockquote></a></td>
+<td class="version">
+1.9.0-1:&nbsp;<a href="luafilesystem-1.9.0-1.linux-x86_64.rock">linux-x86_64</a>,&nbsp;<a href="luafilesystem-1.9.0-1.rockspec">rockspec</a><br/></td></tr>
+<tr><td colspan="2" class="spacer"></td></tr>
+<td class="package">
+<p><a name="luanativeobjects"></a><a href="#luanativeobjects" class="pkg"><b>LuaNativeObjects</b></a> - A Lua bindings generator.<br/>
+</p><blockquote><p>This is a bindings generator for Lua & LuaJIT2. It can be used to generator both standard Lua C API & LuaJIT2 FFI based bindings for C libraries. Both standard & FFI based bindings are packaged in a single shared library (.so or .dll) file. When the module is loaded in LuaJIT2 (please use git HEAD version of LuaJIT2 for now) it will try to load the FFI-based bindings in-place of the standard Lua API bindings.</p><p>This bindings generator is design to create Object based bindings, instead of simple procedural bindings. So if you have a C structure (your object) and a set of C functions (your object's methods) that work on that structure, then you can turn them into a nice Lua object. <br/>
+
+<font size="-1"><a href="git://github.com/Neopallium/LuaNativeObjects.git">latest sources</a> | <a href="https://github.com/Neopallium/LuaNativeObjects" target="_blank">project homepage</a> | License: MIT/X11</font></p>
+</blockquote></a></td>
+<td class="version">
+0.5-2:&nbsp;<a href="luanativeobjects-0.5-2.all.rock">all</a>,&nbsp;<a href="luanativeobjects-0.5-2.rockspec">rockspec</a><br/></td></tr>
+<tr><td colspan="2" class="spacer"></td></tr>
+<td class="package">
+<p><a name="luarocks-build-xmake"></a><a href="#luarocks-build-xmake" class="pkg"><b>luarocks-build-xmake</b></a> - A luarocks build module based on xmake<br/>
+</p><blockquote><p>luarocks-build-xmake is a luarocks build module based on [xmake](<a href="https://github.com/xmake-io/xmake" target="_blank">https://github.com/xmake-io/xmake</a>). <br/>
+
+<font size="-1"><a href="git+https://github.com/xmake-io/luarocks-build-xmake">latest sources</a> | <a href="https://github.com/xmake-io/luarocks-build-xmake" target="_blank">project homepage</a> | License: Apache-2.0</font></p>
+</blockquote></a></td>
+<td class="version">
+1.4-1:&nbsp;<a href="luarocks-build-xmake-1.4-1.all.rock">all</a>,&nbsp;<a href="luarocks-build-xmake-1.4-1.rockspec">rockspec</a><br/></td></tr>
+<tr><td colspan="2" class="spacer"></td></tr>
+<td class="package">
+<p><a name="platformdirs"></a><a href="#platformdirs" class="pkg"><b>platformdirs</b></a> - A lua implementation of platformdirs<br/>
+</p><blockquote><p>Respect the standards of Unix XDG, Android, macOS, Windows<br/>
+
+<font size="-1"><a href="https://github.com/rimeinn/rime.nvim/archive/3cec8f3142dd42038b4a271f3d5cb0cb82cf0e80.zip">latest sources</a> | <a href="https://github.com/rimeinn/rime.nvim/tree/main/packages/platformdirs" target="_blank">project homepage</a> | License: GPL-3.0</font></p>
+</blockquote></a></td>
+<td class="version">
+0.2.12-1:&nbsp;<a href="platformdirs-0.2.12-1.all.rock">all</a>,&nbsp;<a href="platformdirs-0.2.12-1.rockspec">rockspec</a><br/></td></tr>
+<tr><td colspan="2" class="spacer"></td></tr>
+<td class="package">
+<p><a name="rime.nvim"></a><a href="#rime.nvim" class="pkg"><b>rime.nvim</b></a> - ㄓ rime for neovim<br/>
+</p><blockquote><p><br/>
+
+<font size="-1"><a href="https://github.com/rimeinn/rime.nvim/archive/0.2.17.zip">latest sources</a> | <a href="https://rime-nvim.readthedocs.io/" target="_blank">project homepage</a> | License: GPL-3.0</font></p>
+</blockquote></a></td>
+<td class="version">
+0.2.17-1:&nbsp;<a href="rime.nvim-0.2.17-1.linux-x86_64.rock">linux-x86_64</a>,&nbsp;<a href="rime.nvim-0.2.17-1.rockspec">rockspec</a><br/></td></tr>
+<tr><td colspan="2" class="spacer"></td></tr>
+<td class="package">
+<p><a name="vim"></a><a href="#vim" class="pkg"><b>vim</b></a> - use vim.fs, vim.filetype, vim.uri, ... outside of neovim<br/>
+</p><blockquote><p>See :help vim.XXX<br/>
+
+<font size="-1"><a href="https://github.com/rimeinn/rime.nvim/archive/0d663cca71498c12f9b2b302457459b271177010.zip">latest sources</a> | <a href="https://github.com/rimeinn/rime.nvim/tree/main/packages/vim" target="_blank">project homepage</a> | License: GPL-3.0</font></p>
+</blockquote></a></td>
+<td class="version">
+0.0.9-1:&nbsp;<a href="vim-0.0.9-1.all.rock">all</a>,&nbsp;<a href="vim-0.0.9-1.rockspec">rockspec</a><br/></td></tr>
+<tr><td colspan="2" class="spacer"></td></tr>
+</table>
+<p class="manifest">
+<a href="manifest">manifest file</a>
+&bull; <a href="manifest-5.1">Lua 5.1 manifest file</a> (<a href="manifest-5.1.zip">zip</a>)
+&bull; <a href="manifest-5.2">Lua 5.2 manifest file</a> (<a href="manifest-5.2.zip">zip</a>)
+&bull; <a href="manifest-5.3">Lua 5.3 manifest file</a> (<a href="manifest-5.3.zip">zip</a>)
+&bull; <a href="manifest-5.4">Lua 5.4 manifest file</a> (<a href="manifest-5.4.zip">zip</a>)
+</p>
+</body>
+</html>
