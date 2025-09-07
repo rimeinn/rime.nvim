@@ -13,6 +13,6 @@ local json_text = util.file_load(arg[1])
 local t = json.decode(json_text)
 local f = io.open(arg[2], 'w')
 if f then
-  f:write("local json = require'cjson'\nreturn " .. util.serialise_value(t))
+  f:write("return " .. util.serialise_value(t):gsub("json%.null", "nil"))
   f:close()
 end
