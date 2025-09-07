@@ -1,6 +1,7 @@
 _readthedocs/
 compile_commands.json
 
+data/
 /output/
 build/
 .cache/

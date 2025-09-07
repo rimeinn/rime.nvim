@@ -1,8 +1,8 @@
 ---utilities
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
-local keys = require "rime.data".keys
-local modifiers = require "rime.data".modifiers
+local keys = require "rime.data.keys"
+local modifiers = require "rime.data.modifiers"
 local M = {}
 
 ---judge if dir is a directory

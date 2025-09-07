@@ -16,7 +16,7 @@ description = {
   $license
 }
 
-build_dependencies = { "luanativeobjects", "luarocks-build-xmake" }
+build_dependencies = { "luanativeobjects", "lua-cjson" }
 
 dependencies = $dependencies
 
