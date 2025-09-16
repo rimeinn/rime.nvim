@@ -2,6 +2,7 @@
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
 local rime = require "rime"
+local Traits = require "rime".Traits
 local M = require "rime.config"
 
 ---setup
@@ -17,7 +18,7 @@ end
 function M.process_key(key, modifiers)
     modifiers = modifiers or {}
     local keycode, mask = require("rime.utils").parse_key(key, modifiers)
-    return M.session_id:process_key(keycode, mask)
+    return M.session:process_key(keycode, mask)
 end
 
 ---process keys
@@ -46,8 +47,8 @@ end
 
 ---get rime commit
 function M.get_commit_text()
-    if M.session_id:commit_composition() then
-        return M.session_id:get_commit().text
+    if M.session:commit_composition() then
+        return M.session:get_commit().text
     end
     return ""
 end
@@ -107,7 +108,7 @@ function M.draw_ui(key)
         return
     end
     M.update_IM_signatures()
-    local context = M.session_id:get_context()
+    local context = M.session:get_context()
     if context.menu.num_candidates == 0 then
         M.feed_keys(M.get_commit_text())
         return
@@ -161,17 +162,17 @@ end
 
 ---clear composition
 function M.clear_composition()
-    M.session_id:clear_composition()
+    M.session:clear_composition()
 end
 
 ---initial
 function M.init()
-    if M.session_id == nil then
+    if M.session == nil then
         vim.fn.mkdir(M.traits.log_dir, "p")
         local traits = M.traits
-        rime.init(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
+        M.t = Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
             traits.distribution_code_name, traits.distribution_version, traits.app_name, traits.min_log_level)
-        M.session_id = rime.RimeSessionId()
+        M.session = rime.Session()
     end
     if M.augroup_id == 0 then
         M.augroup_id = vim.api.nvim_create_augroup("rime", { clear = false })
@@ -274,7 +275,7 @@ end
 function M.update_cursor_color()
     local hl = M.cursor.default
     if vim.b.rime_is_enabled then
-        hl = M.cursor[M.session_id:get_current_schema()] or hl
+        hl = M.cursor[M.session:get_current_schema()] or hl
     end
     vim.api.nvim_set_hl(0, "CursorIM", hl)
 end
@@ -289,11 +290,11 @@ function M.update_status_bar()
         if not vim.b.rime_is_enabled then
             vim.g.airline_mode_map = M.g.airline_mode_map
         end
-        if vim.b.rime_is_enabled and M.session_id ~= 0 then
+        if vim.b.rime_is_enabled and M.session ~= 0 then
             if M.schema_list == nil then
                 M.schema_list = rime.get_schema_list()
             end
-            local schema_id = M.session_id:get_current_schema()
+            local schema_id = M.session:get_current_schema()
             for _, schema in ipairs(M.schema_list) do
                 if schema.schema_id == schema_id then
                     for k, _ in pairs(M.default.airline_mode_map) do
