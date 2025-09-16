@@ -2,6 +2,7 @@
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
 local rime = require "rime"
+rime.Session = rime.Session or rime.RimeSessionId
 local Traits = require 'rime.traits'.Traits
 local parse_key = require("rime.keys").parse_key
 local UI = require("rime.ui").UI
