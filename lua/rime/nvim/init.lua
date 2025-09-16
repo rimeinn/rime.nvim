@@ -2,7 +2,7 @@
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
 local rime = require "rime"
-local Traits = require "rime".Traits
+local Traits = require 'rime.traits'.Traits
 local parse_key = require("rime.keys").parse_key
 local UI = require("rime.ui").UI
 local M = require "rime.config"
@@ -117,9 +117,10 @@ function M.draw_ui(key)
     end
     vim.v.char = ""
 
-    local lines, col = UI():draw(context)
+    local ui = UI()
+    local lines, col = ui:draw(context)
     M.preedit = lines[1]
-        :gsub(M.ui.cursor, "")
+        :gsub(ui.cursor, "")
         :gsub(" ", "")
 
     local width = 0
@@ -170,10 +171,7 @@ end
 ---initial
 function M.init()
     if M.session == nil then
-        vim.fn.mkdir(M.traits.log_dir, "p")
-        local traits = M.traits
-        M.t = Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
-            traits.distribution_code_name, traits.distribution_version, traits.app_name, traits.min_log_level)
+        M.traits = Traits()
         M.session = rime.Session()
     end
     if M.augroup_id == 0 then

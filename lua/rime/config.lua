@@ -1,35 +1,4 @@
 ---default config. see `lua vim.print(require"rime.config")`
-local fs = require "rime.fs"
-local shared_data_dir = ""
----@diagnostic disable: undefined-global
--- luacheck: ignore 113
-local prefix = os.getenv("PREFIX") or
-    fs.dirname(fs.dirname(os.getenv("SHELL") or "/bin/sh"))
-for _, dir in ipairs {
-    -- /usr merge: /usr/bin/sh -> /usr/share/rime-data
-    fs.joinpath(prefix, "share/rime-data"),
-    -- non /usr merge: /bin/sh -> /usr/share/rime-data
-    fs.joinpath(prefix, "usr/share/rime-data"),
-    "/run/current-system/sw/share/rime-data",
-    "/sdcard/rime-data"
-} do
-    if fs.isdirectory(dir) then
-        shared_data_dir = dir
-    end
-end
-local user_data_dir = ""
-local home = os.getenv("HOME") or "."
-for _, dir in ipairs {
-    home .. "/.config/ibus/rime",
-    home .. "/.local/share/fcitx5/rime",
-    home .. "/.config/fcitx/rime",
-    home .. "/sdcard/rime"
-} do
-    if fs.isdirectory(dir) then
-        user_data_dir = dir
-    end
-end
-
 local nowait = { "!", "<Bar>", "}", "~" }
 -- "
 for i = 0x23, 0x26 do
@@ -75,9 +44,6 @@ for i = 0x7d, 0x7e do
     table.insert(special, "<M-" .. string.char(i) .. ">")
 end
 
-local indices = {
-    "①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⓪"
-}
 local airline_mode_map = {
     s = "SELECT",
     S = 'S-LINE',
@@ -103,32 +69,6 @@ return {
         disable = {        -- keys which will disable IME. It is useful when you input CJKV/ASCII mixedly
             "<Space>"
         },
-    },
-    --- config for rime traits
-    traits = {
-        shared_data_dir = shared_data_dir,           -- directory store shared data
-        user_data_dir = user_data_dir,               -- directory store user data
-        log_dir = fs.joinpath(fs.stdpath("state"), "rime"), -- Directory of log files.
-        -- Value is passed to Glog library using FLAGS_log_dir variable.
-        -- NULL means temporary directory, and "" means only writing to stderr.
-        app_name = "rime.nvim-rime", -- Pass a C-string constant in the format "rime.x"
-        -- where 'x' is the name of your application.
-        -- Add prefix "rime." to ensure old log files are automatically cleaned.
-        min_log_level = 3, -- Minimal level of logged messages.
-        -- Value is passed to Glog library using FLAGS_minloglevel variable.
-        -- 0 = INFO (default), 1 = WARNING, 2 = ERROR, 3 = FATAL
-        distribution_name = "Rime",           -- distribution name
-        distribution_code_name = "nvim-rime", -- distribution code name
-        distribution_version = "0.0.1",       -- distribution version
-    },
-    --- config for neovim IME UI
-    ui = {
-        left = "<|",       -- symbol for left menu
-        right = "|>",      -- symbol for right menu
-        left_sep = "[",    -- symbol for left separator
-        right_sep = "]",   -- symbol for right separator
-        cursor = "|",      -- symbol for cursor
-        indices = indices, -- symbols for indices, maximum is 10 for 1-9, 0
     },
     --- config for default vim settings
     default = {
