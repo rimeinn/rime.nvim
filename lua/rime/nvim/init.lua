@@ -3,6 +3,8 @@
 -- luacheck: ignore 112 113
 local rime = require "rime"
 local Traits = require "rime".Traits
+local parse_key = require("rime.keys").parse_key
+local UI = require("rime.ui").UI
 local M = require "rime.config"
 
 ---setup
@@ -11,13 +13,13 @@ function M.setup(conf)
     M = vim.tbl_deep_extend("keep", conf, M)
 end
 
----process key. wrap `lua.rime.utils.parse_key`()
+---process key. wrap `lua.rime.keys.parse_key`()
 ---@param key string
 ---@param modifiers string[]
 ---@see process_keys
 function M.process_key(key, modifiers)
     modifiers = modifiers or {}
-    local keycode, mask = require("rime.utils").parse_key(key, modifiers)
+    local keycode, mask = parse_key(key, modifiers)
     return M.session:process_key(keycode, mask)
 end
 
@@ -87,7 +89,7 @@ function M.feed_keys(text)
     M.reset_keymaps()
 end
 
----draw UI. wrap `lua.rime.utils.draw_ui`()
+---draw UI. wrap `ui.draw()`
 ---@param key string
 function M.draw_ui(key)
     if key == "" then
@@ -115,7 +117,7 @@ function M.draw_ui(key)
     end
     vim.v.char = ""
 
-    local lines, col = require("rime.utils").draw_ui(context, M.ui, vim.api.nvim_strwidth(M.ui.left))
+    local lines, col = UI():draw(context)
     M.preedit = lines[1]
         :gsub(M.ui.cursor, "")
         :gsub(" ", "")
