@@ -70,7 +70,7 @@ return {
             "<Space>"
         },
     },
-    --- config for default vim settings
+    --- config for default vim settings, overridden by `vim.g.airline_mode_map`
     default = {
         airline_mode_map = airline_mode_map -- used by `lua.rime.nvim.update_status_bar`
     },

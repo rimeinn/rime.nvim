@@ -4,7 +4,7 @@
 local rime = require "rime"
 rime.Session = rime.Session or rime.RimeSessionId
 local Traits = require 'rime.traits'.Traits
-local parse_key = require("rime.keys").parse_key
+local Key = require("rime.key").Key
 local UI = require("rime.ui").UI
 local M = require "rime.config"
 
@@ -15,23 +15,19 @@ function M.setup(conf)
 end
 
 ---process key. wrap `lua.rime.keys.parse_key`()
----@param key string
----@param modifiers string[]
+---@param basic string
 ---@see process_keys
-function M.process_key(key, modifiers)
-    modifiers = modifiers or {}
-    local keycode, mask = parse_key(key, modifiers)
-    return M.session:process_key(keycode, mask)
+function M.process_key(basic)
+    local key = Key(basic)
+    return M.session:process_key(key.code, key.mask)
 end
 
 ---process keys
 ---@param keys string
----@param modifiers string[]
 ---@see process_key
-function M.process_keys(keys, modifiers)
-    modifiers = modifiers or {}
+function M.process_keys(keys)
     for key in keys:gmatch("(.)") do
-        if M.process_key(key, modifiers) == false then
+        if M.process_key(key) == false then
             return false
         end
     end
