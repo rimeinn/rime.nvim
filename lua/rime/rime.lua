@@ -6,8 +6,6 @@ local Session = require "rime.session".Session
 local M = {
     Rime = {
         ui = UI(),
-        -- lazy instantiation
-        session = nil,
     }
 }
 

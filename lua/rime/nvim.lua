@@ -3,7 +3,7 @@
 -- luacheck: ignore 112 113
 local fs = require 'rime.fs'
 local Session = require "rime.session".Session
-local keys = require "rime.keys"
+local Keymap = require "rime.nvim.keymap".Keymap
 local Rime = require "rime.rime".Rime
 local Airline = require "rime.nvim.airline".Airline
 local Cursor = require "rime.nvim.cursor".Cursor
@@ -11,12 +11,9 @@ local Cursor = require "rime.nvim.cursor".Cursor
 local M = {
     Rime = {
         preedit = "",
-        have_set_keymaps = false,
         win_id = 0,
         buf_id = 0,
-        augroup_id = 0,
-        --- config for neovim keymaps
-        keys = keys,
+        augroup_id = vim.api.nvim_create_augroup("rime", { clear = false }),
     }
 }
 
@@ -26,11 +23,19 @@ function M.Rime:new(rime)
     rime = rime or {}
     rime.cursor = rime.cursor or Cursor()
     rime.airline = rime.airline or Airline()
-    -- rime.session = rime.session or Session()
+    rime.keymap = rime.keymap or Keymap()
+    -- rime = Rime(rime)
     setmetatable(rime, {
         __index = self
     })
     return rime
+end
+
+---initial
+function M.init()
+    if M.session == nil then
+        M.session = Session()
+    end
 end
 
 setmetatable(M.Rime, {
@@ -58,21 +63,6 @@ function M.callback(key)
     end
 end
 
----reset keymaps
-function M.reset_keymaps()
-    if M.preedit ~= "" and M.have_set_keymaps == false then
-        for _, lhs in ipairs(M.keys.special) do
-            vim.keymap.set("i", lhs, M.callback(lhs), { buffer = 0, noremap = true, nowait = true, })
-        end
-        M.have_set_keymaps = true
-    elseif M.preedit == "" and M.have_set_keymaps == true then
-        for _, lhs in ipairs(M.keys.special) do
-            vim.keymap.del("i", lhs, { buffer = 0 })
-        end
-        M.have_set_keymaps = false
-    end
-end
-
 ---feed keys
 ---@param text string
 function M.feed_keys(text)
@@ -89,7 +79,7 @@ function M.feed_keys(text)
     end
     M.win_close()
     M.preedit = ""
-    M.reset_keymaps()
+    M.keymap:reset(M.preedit ~= "", M.callback)
 end
 
 ---draw UI. wrap `ui.draw()`
@@ -99,7 +89,7 @@ function M.draw_ui(key)
         key = vim.v.char
     end
     if M.preedit == "" then
-        for _, disable_key in ipairs(M.keys.disable) do
+        for _, disable_key in ipairs(M.keymap.keys.disable) do
             if key == vim.keycode(disable_key) then
                 M.disable()
                 M.update()
@@ -151,7 +141,7 @@ function M.draw_ui(key)
             end
         end
     )
-    M.reset_keymaps()
+    M.keymap:reset(M.preedit ~= "", M.callback)
 end
 
 ---close IME window
@@ -166,22 +156,12 @@ function M.win_close()
     )
 end
 
----initial
-function M.init()
-    if M.session == nil then
-        M.session = Session()
-    end
-    if M.augroup_id == 0 then
-        M.augroup_id = vim.api.nvim_create_augroup("rime", { clear = false })
-    end
-end
-
 ---enable IME
 ---@see disable
 ---@see toggle
 function M.enable()
     M.init()
-    for _, nowait_key in ipairs(M.keys.nowait) do
+    for _, nowait_key in ipairs(M.keymap.keys.nowait) do
         vim.keymap.set("i", nowait_key, nowait_key, { buffer = 0, noremap = true, nowait = true })
     end
 
@@ -205,7 +185,7 @@ end
 ---@see enable
 ---@see toggle
 function M.disable()
-    for _, nowait_key in ipairs(M.keys.nowait) do
+    for _, nowait_key in ipairs(M.keymap.keys.nowait) do
         vim.keymap.del("i", nowait_key, { buffer = 0 })
     end
 
