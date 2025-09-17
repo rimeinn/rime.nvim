@@ -48,12 +48,12 @@ end
 
 local M = {
     Keymap = {
-        have_set_keymaps = false,
         --- config for neovim keymaps
+        maps = {},
         keys = {
-            nowait = nowait, -- keys which map <nowait>, see `help <nowait>`
+            nowait = nowait,   -- keys which map <nowait>, see `help <nowait>`
             special = special, -- keys which only be mapped when IME window is opened
-            disable = { -- keys which will disable IME. It is useful when you input CJKV/ASCII mixedly
+            disable = {        -- keys which will disable IME. It is useful when you input CJKV/ASCII mixedly
                 "<Space>"
             },
         },
@@ -74,20 +74,36 @@ setmetatable(M.Keymap, {
     __call = M.Keymap.new
 })
 
----reset keymaps
----@param is_enabled string
----@param callback function
-function M.Keymap:reset(is_enabled, callback)
-    if is_enabled and self.have_set_keymaps == false then
-        for _, lhs in ipairs(self.keys.special) do
-            vim.keymap.set("i", lhs, callback(lhs), { buffer = 0, noremap = true, nowait = true, })
+---set or delete keymap
+---@param lhs string
+---@param callback string | function?
+function M.Keymap:set(lhs, callback)
+    if not callback and self.maps[lhs] then
+        vim.keymap.del("i", lhs, { buffer = 0 })
+        self.maps[lhs] = nil
+    elseif callback and not self.maps[lhs] then
+        local rhs = callback
+        if type(callback) == "function" then
+            rhs = callback(lhs)
         end
-        self.have_set_keymaps = true
-    elseif not is_enabled and self.have_set_keymaps == true then
-        for _, lhs in ipairs(self.keys.special) do
-            vim.keymap.del("i", lhs, { buffer = 0 })
-        end
-        self.have_set_keymaps = false
+        vim.keymap.set("i", lhs, rhs, { buffer = 0, noremap = true, nowait = true, })
+        self.maps[lhs] = rhs
+    end
+end
+
+---set special keymaps
+---@param callback function?
+function M.Keymap:set_special(callback)
+    for _, lhs in ipairs(self.keys.special) do
+        self:set(lhs, callback)
+    end
+end
+
+---set `<nowait>` keymaps
+---@param callback boolean
+function M.Keymap:set_nowait(callback)
+    for _, lhs in ipairs(self.keys.nowait) do
+        self:set(lhs, callback and lhs or nil)
     end
 end
 

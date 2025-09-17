@@ -1,18 +1,17 @@
 ---rime support for neovim
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
-local fs = require 'rime.fs'
 local Session = require "rime.session".Session
 local Keymap = require "rime.nvim.keymap".Keymap
 local Rime = require "rime.rime".Rime
 local Airline = require "rime.nvim.airline".Airline
 local Cursor = require "rime.nvim.cursor".Cursor
+local Win = require "rime.nvim.win".Win
 
 local M = {
     Rime = {
         preedit = "",
-        win_id = 0,
-        buf_id = 0,
+        win = Win(),
         augroup_id = vim.api.nvim_create_augroup("rime", { clear = false }),
     }
 }
@@ -77,9 +76,9 @@ function M.feed_keys(text)
         vim.api.nvim_buf_set_text(0, r - 1, c, r - 1, c, { text })
         vim.api.nvim_win_set_cursor(0, { r, c + #text })
     end
-    M.win_close()
+    M.win:close()
     M.preedit = ""
-    M.keymap:reset(M.preedit ~= "", M.callback)
+    M.keymap:set_special(M.preedit ~= "" and M.callback or nil)
 end
 
 ---draw UI. wrap `ui.draw()`
@@ -112,48 +111,10 @@ function M.draw_ui(key)
 
     local ui = M.ui
     local lines, col = ui:draw(context)
-    M.preedit = lines[1]
-        :gsub(ui.cursor, "")
-        :gsub(" ", "")
+    M.preedit = lines[1]:gsub(ui.cursor, ""):gsub(" ", "")
 
-    local width = 0
-    for _, line in ipairs(lines) do
-        width = math.max(fs.strwidth(line), width)
-    end
-    local config = {
-        relative = "cursor",
-        height = #lines,
-        style = "minimal",
-        width = width,
-        row = 1,
-        col = col,
-    }
-    if M.buf_id == 0 or not vim.api.nvim_buf_is_valid(M.buf_id) then
-        M.buf_id = vim.api.nvim_create_buf(false, true)
-    end
-    vim.schedule(
-        function()
-            vim.api.nvim_buf_set_lines(M.buf_id, 0, #lines, false, lines)
-            if (M.win_id == 0 or not vim.api.nvim_win_is_valid(M.win_id)) then
-                M.win_id = vim.api.nvim_open_win(M.buf_id, false, config)
-            else
-                vim.api.nvim_win_set_config(M.win_id, config)
-            end
-        end
-    )
-    M.keymap:reset(M.preedit ~= "", M.callback)
-end
-
----close IME window
-function M.win_close()
-    vim.schedule(
-        function()
-            if M.win_id ~= 0 and vim.api.nvim_win_is_valid(M.win_id) then
-                vim.api.nvim_win_close(M.win_id, false)
-            end
-            M.win_id = 0
-        end
-    )
+    M.win:open(lines, col)
+    M.keymap:set_special(M.preedit ~= "" and M.callback or nil)
 end
 
 ---enable IME
@@ -161,9 +122,7 @@ end
 ---@see toggle
 function M.enable()
     M.init()
-    for _, nowait_key in ipairs(M.keymap.keys.nowait) do
-        vim.keymap.set("i", nowait_key, nowait_key, { buffer = 0, noremap = true, nowait = true })
-    end
+    M.keymap:set_nowait(true)
 
     vim.api.nvim_create_autocmd("InsertCharPre", {
         group = M.augroup_id,
@@ -175,7 +134,7 @@ function M.enable()
         buffer = 0,
         callback = function()
             M.session:clear_composition()
-            M.win_close()
+            M.win:close()
         end
     })
     vim.b.rime_is_enabled = true
@@ -185,9 +144,7 @@ end
 ---@see enable
 ---@see toggle
 function M.disable()
-    for _, nowait_key in ipairs(M.keymap.keys.nowait) do
-        vim.keymap.del("i", nowait_key, { buffer = 0 })
-    end
+    M.keymap:set_nowait(false)
 
     vim.api.nvim_create_augroup("rime", {})
     vim.b.rime_is_enabled = false
