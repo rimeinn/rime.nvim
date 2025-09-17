@@ -30,6 +30,19 @@ setmetatable(M.Rime, {
     __call = M.Rime.new
 })
 
+---get rime commit
+---@return string text
+function M.Rime:get_commit_text()
+    local text = ""
+    if self.session:commit_composition() then
+        local commit = self.session:get_commit()
+        if commit then
+            text = commit.text
+        end
+    end
+    return text
+end
+
 ---wrap `ui:draw()`
 ---@param ... table
 ---@return string, string[], integer
@@ -45,14 +58,7 @@ function M.Rime:draw(...)
     end
     local context = self.session:get_context()
     if context == nil or context.menu.num_candidates == 0 then
-        local text = ""
-        if self.session:commit_composition() then
-            local commit = self.session:get_commit()
-            if commit then
-                text = commit.text
-            end
-        end
-        return text, { self.ui.cursor }, 0
+        return self:get_commit_text(), { self.ui.cursor }, 0
     end
     local lines, col = self.ui:draw(context)
     return "", lines, col
@@ -73,6 +79,45 @@ function M.Rime:main()
         local key = Key { code = c }
         self:call(key)
     end
+end
+
+---process key. wrap `session:process_key()`
+---@param name string
+---@return boolean
+function M.Rime:process_key(name)
+    local key = Key({ name = name })
+    return self.session:process_key(key.code, key.mask)
+end
+
+---get context with all candidates, useful for `lua.rime.nvim.cmp`
+---@param input string
+---@return table
+function M.Rime:get_context(input)
+    for name in input:gmatch("(.)") do
+        if self:process_key(name) == false then
+            break
+        end
+    end
+    local result = self.session:get_context()
+    local context = result
+    while (not context.menu.is_last_page) do
+        self:process_key('=')
+        context = self.session:get_context()
+        result.menu.num_candidates = result.menu.num_candidates + context.menu.num_candidates
+        if (result.menu.select_keys and context.menu.select_keys) then
+            for _, key in ipairs(context.menu.select_keys) do
+                table.insert(result.menu.select_keys, key)
+            end
+        end
+        if (result.menu.candidates and context.menu.candidates) then
+            for _, candidate in ipairs(context.menu.candidates) do
+                table.insert(result.menu.candidates, candidate)
+            end
+        end
+    end
+    self.session:clear_composition()
+    result.menu.is_last_page = true
+    return result
 end
 
 return M

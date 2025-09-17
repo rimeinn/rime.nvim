@@ -5,7 +5,6 @@ local fs = require 'rime.fs'
 local _rime = require "rime"
 local Session = _rime.Session or _rime.RimeSessionId
 local Traits = require 'rime.traits'.Traits
-local Key = require("rime.key").Key
 local keys = require "rime.keys"
 local Rime = require "rime.rime".Rime
 
@@ -68,14 +67,6 @@ function M.setup(conf)
     M = vim.tbl_deep_extend("keep", conf, M)
 end
 
----process key. wrap `lua.rime.keys.parse_key`()
----@param basic string
----@see process_keys
-function M.process_key(basic)
-    local key = Key({ name = basic })
-    return M.session:process_key(key.code, key.mask)
-end
-
 ---get callback for draw UI
 ---@param key string
 function M.callback(key)
@@ -84,14 +75,6 @@ function M.callback(key)
             return M.draw_ui(key)
         end
     end
-end
-
----get rime commit
-function M.get_commit_text()
-    if M.session:commit_composition() then
-        return M.session:get_commit().text
-    end
-    return ""
 end
 
 ---reset keymaps
@@ -142,7 +125,7 @@ function M.draw_ui(key)
             end
         end
     end
-    if M.process_key(key) == false then
+    if M:process_key(key) == false then
         if #key == 1 then
             M.feed_keys(key)
         end
@@ -151,7 +134,7 @@ function M.draw_ui(key)
     M.update_IM_signatures()
     local context = M.session:get_context()
     if context.menu.num_candidates == 0 then
-        M.feed_keys(M.get_commit_text())
+        M.feed_keys(M:get_commit_text())
         return
     end
     vim.v.char = ""
@@ -202,11 +185,6 @@ function M.win_close()
     )
 end
 
----clear composition
-function M.clear_composition()
-    M.session:clear_composition()
-end
-
 ---initial
 function M.init()
     if M.session == nil then
@@ -236,7 +214,7 @@ function M.enable()
         group = M.augroup_id,
         buffer = 0,
         callback = function()
-            M.clear_composition()
+            M.session:clear_composition()
             M.win_close()
         end
     })
@@ -265,35 +243,6 @@ function M.toggle()
         M.enable()
     end
     M.update_IM_signatures()
-end
-
----get context with all candidates, useful for `lua.rime.nvim.cmp`
----@param input string
----@return table
-function M.get_context_with_all_candidates(input)
-    M.init()
-    for key in input:gmatch("(.)") do
-        if M.process_key(key) == false then
-            break
-        end
-    end
-    local context = _rime.get_context(M.sessionId)
-    if (input ~= '') then
-        local result = context
-        while (not context.menu.is_last_page) do
-            M.process_key('=')
-            context = _rime.get_context(M.sessionId)
-            result.menu.num_candidates = result.menu.num_candidates + context.menu.num_candidates
-            if (result.menu.select_keys and context.menu.select_keys) then
-                table.insert(result.menu.select_keys, context.menu.select_keys)
-            end
-            if (result.menu.candidates and context.menu.candidates) then
-                table.insert(result.menu.candidates, context.menu.candidates)
-            end
-        end
-    end
-    M.clear_composition()
-    return context
 end
 
 ---get new airline mode map symbols in `update_status_bar`().
