@@ -37,6 +37,9 @@ build = {
   type = 'xmake',
   copy_directories = {'after'},
   install = {
+    bin = {
+      rime = 'bin/rime'
+    },
     conf = {
       ['..'] = 'shell.nix',
       ['../scripts/update.sh'] = 'scripts/update.sh',

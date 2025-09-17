@@ -1,4 +1,4 @@
----default config. see `lua vim.print(require"rime.config")`
+---config for keys.
 local nowait = { "!", "<Bar>", "}", "~" }
 -- "
 for i = 0x23, 0x26 do
@@ -44,40 +44,10 @@ for i = 0x7d, 0x7e do
     table.insert(special, "<M-" .. string.char(i) .. ">")
 end
 
-local airline_mode_map = {
-    s = "SELECT",
-    S = 'S-LINE',
-    ["\x13"] = 'S-BLOCK',
-    i = 'INSERT',
-    ic = 'INSERT COMPL GENERIC',
-    ix = 'INSERT COMPL',
-    R = 'REPLACE',
-    Rc = 'REPLACE COMP GENERIC',
-    Rv = 'V REPLACE',
-    Rx = 'REPLACE COMP',
-}
 return {
-    preedit = "",
-    has_set_keymaps = false,
-    win_id = 0,
-    buf_id = 0,
-    augroup_id = 0,
-    --- config for neovim keymaps
-    keys = {
-        nowait = nowait,   -- keys which map <nowait>, see `help <nowait>`
-        special = special, -- keys which only be mapped when IME window is opened
-        disable = {        -- keys which will disable IME. It is useful when you input CJKV/ASCII mixedly
-            "<Space>"
-        },
+    nowait = nowait,   -- keys which map <nowait>, see `help <nowait>`
+    special = special, -- keys which only be mapped when IME window is opened
+    disable = {        -- keys which will disable IME. It is useful when you input CJKV/ASCII mixedly
+        "<Space>"
     },
-    --- config for default vim settings, overridden by `vim.g.airline_mode_map`
-    default = {
-        airline_mode_map = airline_mode_map -- used by `lua.rime.nvim.update_status_bar`
-    },
-    --- config for cursor
-    cursor = {
-        default = { bg = 'white' },
-        double_pinyin_mspy = { bg = 'red' },
-        japanese = { bg = 'yellow' }
-    }
 }

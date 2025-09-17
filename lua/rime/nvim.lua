@@ -1,12 +1,66 @@
 ---rime support for neovim
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
-local rime = require "rime"
-rime.Session = rime.Session or rime.RimeSessionId
+local fs = require 'rime.fs'
+local _rime = require "rime"
+local Session = _rime.Session or _rime.RimeSessionId
 local Traits = require 'rime.traits'.Traits
 local Key = require("rime.key").Key
-local UI = require("rime.ui").UI
-local M = require "rime.config"
+local keys = require "rime.keys"
+local Rime = require "rime.rime".Rime
+
+local airline_mode_map = {
+    s = "SELECT",
+    S = 'S-LINE',
+    ["\x13"] = 'S-BLOCK',
+    i = 'INSERT',
+    ic = 'INSERT COMPL GENERIC',
+    ix = 'INSERT COMPL',
+    R = 'REPLACE',
+    Rc = 'REPLACE COMP GENERIC',
+    Rv = 'V REPLACE',
+    Rx = 'REPLACE COMP',
+}
+local M = {
+    --- config for default vim settings, overridden by `vim.g.airline_mode_map`
+    default = {
+        airline_mode_map = airline_mode_map -- used by `lua.rime.nvim.update_status_bar`
+    },
+    Rime = {
+        preedit = "",
+        have_set_keymaps = false,
+        win_id = 0,
+        buf_id = 0,
+        augroup_id = 0,
+        --- config for neovim keymaps
+        keys = keys,
+        --- config for cursor
+        cursor = {
+            default = { bg = 'white' },
+            double_pinyin_mspy = { bg = 'red' },
+            japanese = { bg = 'yellow' }
+        }
+    }
+}
+
+---@param rime table?
+---@return table rime
+function M.Rime:new(rime)
+    rime = rime or {}
+    setmetatable(rime, {
+        __index = self
+    })
+    return rime
+end
+
+setmetatable(M.Rime, {
+    __index = Rime,
+    __call = M.Rime.new
+})
+
+setmetatable(M, {
+    __index = M.Rime,
+})
 
 ---setup
 ---@param conf table
@@ -18,20 +72,8 @@ end
 ---@param basic string
 ---@see process_keys
 function M.process_key(basic)
-    local key = Key(basic)
+    local key = Key({ name = basic })
     return M.session:process_key(key.code, key.mask)
-end
-
----process keys
----@param keys string
----@see process_key
-function M.process_keys(keys)
-    for key in keys:gmatch("(.)") do
-        if M.process_key(key) == false then
-            return false
-        end
-    end
-    return true
 end
 
 ---get callback for draw UI
@@ -54,16 +96,16 @@ end
 
 ---reset keymaps
 function M.reset_keymaps()
-    if M.preedit ~= "" and M.has_set_keymaps == false then
+    if M.preedit ~= "" and M.have_set_keymaps == false then
         for _, lhs in ipairs(M.keys.special) do
             vim.keymap.set("i", lhs, M.callback(lhs), { buffer = 0, noremap = true, nowait = true, })
         end
-        M.has_set_keymaps = true
-    elseif M.preedit == "" and M.has_set_keymaps == true then
+        M.have_set_keymaps = true
+    elseif M.preedit == "" and M.have_set_keymaps == true then
         for _, lhs in ipairs(M.keys.special) do
             vim.keymap.del("i", lhs, { buffer = 0 })
         end
-        M.has_set_keymaps = false
+        M.have_set_keymaps = false
     end
 end
 
@@ -100,7 +142,7 @@ function M.draw_ui(key)
             end
         end
     end
-    if M.process_key(key, {}) == false then
+    if M.process_key(key) == false then
         if #key == 1 then
             M.feed_keys(key)
         end
@@ -114,7 +156,7 @@ function M.draw_ui(key)
     end
     vim.v.char = ""
 
-    local ui = UI()
+    local ui = M.ui
     local lines, col = ui:draw(context)
     M.preedit = lines[1]
         :gsub(ui.cursor, "")
@@ -122,7 +164,7 @@ function M.draw_ui(key)
 
     local width = 0
     for _, line in ipairs(lines) do
-        width = math.max(vim.api.nvim_strwidth(line), width)
+        width = math.max(fs.strwidth(line), width)
     end
     local config = {
         relative = "cursor",
@@ -169,7 +211,7 @@ end
 function M.init()
     if M.session == nil then
         M.traits = Traits()
-        M.session = rime.Session()
+        M.session = Session()
     end
     if M.augroup_id == 0 then
         M.augroup_id = vim.api.nvim_create_augroup("rime", { clear = false })
@@ -226,17 +268,21 @@ function M.toggle()
 end
 
 ---get context with all candidates, useful for `lua.rime.nvim.cmp`
----@param keys string
+---@param input string
 ---@return table
-function M.get_context_with_all_candidates(keys)
+function M.get_context_with_all_candidates(input)
     M.init()
-    M.process_keys(keys, {})
-    local context = rime.get_context(M.sessionId)
-    if (keys ~= '') then
+    for key in input:gmatch("(.)") do
+        if M.process_key(key) == false then
+            break
+        end
+    end
+    local context = _rime.get_context(M.sessionId)
+    if (input ~= '') then
         local result = context
         while (not context.menu.is_last_page) do
-            M.process_key('=', {})
-            context = rime.get_context(M.sessionId)
+            M.process_key('=')
+            context = _rime.get_context(M.sessionId)
             result.menu.num_candidates = result.menu.num_candidates + context.menu.num_candidates
             if (result.menu.select_keys and context.menu.select_keys) then
                 table.insert(result.menu.select_keys, context.menu.select_keys)
@@ -289,7 +335,7 @@ function M.update_status_bar()
         end
         if vim.b.rime_is_enabled and M.session ~= 0 then
             if M.schema_list == nil then
-                M.schema_list = rime.get_schema_list()
+                M.schema_list = _rime.get_schema_list()
             end
             local schema_id = M.session:get_current_schema()
             for _, schema in ipairs(M.schema_list) do

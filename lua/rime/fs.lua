@@ -54,6 +54,15 @@ function M.mkdir(name)
     lfs.mkdir(name)
 end
 
+---wrap `vim.fn.getchar()`
+---@return integer
+function M.getchar()
+    if vim then
+        return vim.fn.getchar()
+    end
+    return io.read(1):byte()
+end
+
 ---wrap `vim.fn.strwidth()`
 ---@param string string
 ---@return integer

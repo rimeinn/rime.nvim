@@ -37,70 +37,61 @@ local M = {
         }
     },
     Key = {
+        name = 'Space',
         code = keys.space,
         mask = 0,
     }
 }
 
----@param key string | table?
+---@param key table?
 ---@return table
 function M.Key:new(key)
     key = key or {}
-    if type(key) == type('') then
-        ---@diagnostic disable-next-line: param-type-mismatch
-        key = M.Key.vim_to_rime(key)
+    if key.code == nil then
+        local mask = 0
+        local name = key.name
+        -- convert vim key name to rime key name
+        if name:sub(1, 1) == "<" and name:sub(-1) == ">" then
+            name = name:sub(2, -2):gsub("-[-]", "-minus"):upper()
+            name = M.keys.aliases[name] or name
+            local parts = {}
+            for part in name:gmatch("([^-]+)") do
+                table.insert(parts, part)
+            end
+            name = table.remove(parts)
+            -- don't capitalize alphabetas
+            if #name ~= 1 then
+                name = name:sub(1, 1):upper() .. name:sub(2)
+                -- lower alphabetas for any modifier: S-A -> S-a
+            elseif parts ~= {} then
+                name = name:lower()
+            end
+            -- map vim key name to rime key name
+            if parts == { "C" } then
+                name = M.keys.Control[name] or name
+            end
+            name = M.keys.any[name] or name
+            for _, part in ipairs(parts) do
+                part = M.keys.modifiers[part] or part
+                for i, modifier in ipairs(modifiers) do
+                    if modifier == part then
+                        mask = mask + 2 ^ (i - 1)
+                    end
+                end
+            end
+        end
+        -- convert rime key name to rime key code
+        key.code = keys[name] or name:byte()
+        key.mask = mask
     end
-    ---@diagnostic disable-next-line: return-type-mismatch
     setmetatable(key, {
         __index = self
     })
-    ---@diagnostic disable-next-line: return-type-mismatch
     return key
 end
 
 setmetatable(M.Key, {
     __call = M.Key.new
 })
-
----convert vim key name to rime code and mask
----@param key string
----@return table key
-function M.Key.vim_to_rime(key)
-    local mask = 0
-    -- convert vim key name to rime key name
-    if key:sub(1, 1) == "<" and key:sub(-1) == ">" then
-        key = key:sub(2, -2):gsub("-[-]", "-minus"):upper()
-        key = M.keys.aliases[key] or key
-        local parts = {}
-        for part in key:gmatch("([^-]+)") do
-            table.insert(parts, part)
-        end
-        key = table.remove(parts)
-        -- don't capitalize alphabetas
-        if #key ~= 1 then
-            key = key:sub(1, 1):upper() .. key:sub(2)
-            -- lower alphabetas for any modifier: S-A -> S-a
-        elseif parts ~= {} then
-            key = key:lower()
-        end
-        -- map vim key name to rime key name
-        if parts == { "C" } then
-            key = M.keys.Control[key] or key
-        end
-        key = M.keys.any[key] or key
-        for _, part in ipairs(parts) do
-            part = M.keys.modifiers[part] or part
-            for i, modifier in ipairs(modifiers) do
-                if modifier == part then
-                    mask = mask + 2 ^ (i - 1)
-                end
-            end
-        end
-    end
-    -- convert rime key name to rime key code
-    local code = keys[key] or key:byte()
-
-    return { code = code, mask = mask }
-end
 
 return M

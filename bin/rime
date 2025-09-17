@@ -1,0 +1,4 @@
+#!/usr/bin/env lua
+local Rime = require'rime.rime'.Rime
+local rime = Rime()
+rime:main()
