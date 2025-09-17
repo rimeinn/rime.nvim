@@ -129,7 +129,7 @@ set guicursor=n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-CursorIM/lCursorIM,r-c
 ```lua
 require('rime.nvim').setup({
     cursor = {
-        default = { bg = 'white' },
+        [".default"] = { bg = 'white' },
         double_pinyin_mspy = { bg = 'red' },
         japanese = { bg = 'yellow' }
     }

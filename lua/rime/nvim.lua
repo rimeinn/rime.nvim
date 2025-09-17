@@ -7,6 +7,7 @@ local Session = _rime.Session or _rime.RimeSessionId
 local Traits = require 'rime.traits'.Traits
 local keys = require "rime.keys"
 local Rime = require "rime.rime".Rime
+local Cursor = require "rime.nvim.cursor".Cursor
 
 local airline_mode_map = {
     s = "SELECT",
@@ -33,12 +34,7 @@ local M = {
         augroup_id = 0,
         --- config for neovim keymaps
         keys = keys,
-        --- config for cursor
-        cursor = {
-            default = { bg = 'white' },
-            double_pinyin_mspy = { bg = 'red' },
-            japanese = { bg = 'yellow' }
-        }
+        cursor = nil,
     }
 }
 
@@ -46,6 +42,7 @@ local M = {
 ---@return table rime
 function M.Rime:new(rime)
     rime = rime or {}
+    rime.cursor = rime.cursor or Cursor()
     setmetatable(rime, {
         __index = self
     })
@@ -58,7 +55,7 @@ setmetatable(M.Rime, {
 })
 
 setmetatable(M, {
-    __index = M.Rime,
+    __index = M.Rime(),
 })
 
 ---setup
@@ -265,11 +262,11 @@ end
 
 ---update cursor color
 function M.update_cursor_color()
-    local hl = M.cursor.default
+    local schema = '.default'
     if vim.b.rime_is_enabled then
-        hl = M.cursor[M.session:get_current_schema()] or hl
+        schema = M.session:get_current_schema()
     end
-    vim.api.nvim_set_hl(0, "CursorIM", hl)
+    M.cursor:update(schema)
 end
 
 ---update status bar by `airline_mode_map`. see `help airline`.
