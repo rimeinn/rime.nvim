@@ -25,12 +25,23 @@ setmetatable(M.Cursor, {
     __call = M.Cursor.new
 })
 
----Update cursor colors
+---Set highlight
 ---@param schema string?
-function M.Cursor:update(schema)
+function M.Cursor:set_hl(schema)
     schema = schema or ".default"
     local hl = self.schemas[schema]
     vim.api.nvim_set_hl(0, "CursorIM", hl)
+end
+
+---Update cursor colors
+---@param session table
+---@param is_enabled boolean
+function M.Cursor:update(session, is_enabled)
+    local schema = '.default'
+    if is_enabled then
+        schema = session:get_current_schema()
+    end
+    self:set_hl(schema)
 end
 
 return M

@@ -3,6 +3,7 @@
 object "Session" {
   c_source [[
 typedef RimeSessionId Session;
+#define BUFFER_SIZE 1024
 ]],
   constructor {
     c_call "Session>1" "rime->create_session" {}

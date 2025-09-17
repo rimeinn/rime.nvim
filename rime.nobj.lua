@@ -5,7 +5,6 @@ c_module "rime" {
     include "rime_api.h",
     c_source [[
       RimeApi *rime;
-      #define BUFFER_SIZE 1024
     ]],
     c_source "module_init_src" [[
       rime = rime_get_api();

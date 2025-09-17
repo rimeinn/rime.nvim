@@ -7,25 +7,10 @@ local Session = _rime.Session or _rime.RimeSessionId
 local Traits = require 'rime.traits'.Traits
 local keys = require "rime.keys"
 local Rime = require "rime.rime".Rime
+local Airline = require "rime.nvim.airline".Airline
 local Cursor = require "rime.nvim.cursor".Cursor
 
-local airline_mode_map = {
-    s = "SELECT",
-    S = 'S-LINE',
-    ["\x13"] = 'S-BLOCK',
-    i = 'INSERT',
-    ic = 'INSERT COMPL GENERIC',
-    ix = 'INSERT COMPL',
-    R = 'REPLACE',
-    Rc = 'REPLACE COMP GENERIC',
-    Rv = 'V REPLACE',
-    Rx = 'REPLACE COMP',
-}
 local M = {
-    --- config for default vim settings, overridden by `vim.g.airline_mode_map`
-    default = {
-        airline_mode_map = airline_mode_map -- used by `lua.rime.nvim.update_status_bar`
-    },
     Rime = {
         preedit = "",
         have_set_keymaps = false,
@@ -34,6 +19,7 @@ local M = {
         augroup_id = 0,
         --- config for neovim keymaps
         keys = keys,
+        airline = nil,
         cursor = nil,
     }
 }
@@ -43,6 +29,7 @@ local M = {
 function M.Rime:new(rime)
     rime = rime or {}
     rime.cursor = rime.cursor or Cursor()
+    rime.airline = rime.airline or Airline()
     setmetatable(rime, {
         __index = self
     })
@@ -118,7 +105,7 @@ function M.draw_ui(key)
         for _, disable_key in ipairs(M.keys.disable) do
             if key == vim.keycode(disable_key) then
                 M.disable()
-                M.update_IM_signatures()
+                M.update()
             end
         end
     end
@@ -128,7 +115,7 @@ function M.draw_ui(key)
         end
         return
     end
-    M.update_IM_signatures()
+    M.update()
     local context = M.session:get_context()
     if context.menu.num_candidates == 0 then
         M.feed_keys(M:get_commit_text())
@@ -239,62 +226,13 @@ function M.toggle()
     else
         M.enable()
     end
-    M.update_IM_signatures()
-end
-
----get new airline mode map symbols in `update_status_bar`().
----use `setup`() to redfine it.
----@param old string
----@param name string
----@return string
-function M.get_new_symbol(old, name)
-    if old == M.airline_mode_map.i or old == M.airline_mode_map.ic or old == M.airline_mode_map.ix then
-        return name
-    end
-    return old .. name
+    M.update()
 end
 
 ---update IM signatures
-function M.update_IM_signatures()
-    M.update_status_bar()
-    M.update_cursor_color()
-end
-
----update cursor color
-function M.update_cursor_color()
-    local schema = '.default'
-    if vim.b.rime_is_enabled then
-        schema = M.session:get_current_schema()
-    end
-    M.cursor:update(schema)
-end
-
----update status bar by `airline_mode_map`. see `help airline`.
-function M.update_status_bar()
-    if vim.g.airline_mode_map then
-        if M.airline_mode_map == nil then
-            M.airline_mode_map = vim.tbl_deep_extend("keep", vim.g.airline_mode_map, M.default.airline_mode_map)
-            M.g = { airline_mode_map = vim.g.airline_mode_map }
-        end
-        if not vim.b.rime_is_enabled then
-            vim.g.airline_mode_map = M.g.airline_mode_map
-        end
-        if vim.b.rime_is_enabled and M.session ~= 0 then
-            if M.schema_list == nil then
-                M.schema_list = _rime.get_schema_list()
-            end
-            local schema_id = M.session:get_current_schema()
-            for _, schema in ipairs(M.schema_list) do
-                if schema.schema_id == schema_id then
-                    for k, _ in pairs(M.default.airline_mode_map) do
-                        vim.g.airline_mode_map = vim.tbl_deep_extend("keep",
-                            { [k] = M.get_new_symbol(M.airline_mode_map[k], schema.name) }, vim.g.airline_mode_map)
-                    end
-                    break
-                end
-            end
-        end
-    end
+function M.update()
+    M.airline:update(M.session, vim.b.rime_is_enabled)
+    M.cursor:update(M.session, vim.b.rime_is_enabled)
 end
 
 return M
