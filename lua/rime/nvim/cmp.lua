@@ -38,7 +38,7 @@ function M.complete(self, request, callback)
     M._callback_table[request.context.id] = callback
     local cursor = request.context.cursor
     local context_id = request.context.id
-    local menu = nvim_rime.get_context(keys).menu
+    local menu = nvim_rime.get_full_context(keys).menu
     local items = {}
     for i, candidate in ipairs(menu.candidates) do
         local item = {

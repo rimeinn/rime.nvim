@@ -1,7 +1,6 @@
 ---Update airline Airline
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
-local rime = require 'rime'
 local M = {
     Airline = {
         --- config for default vim settings, overridden by `vim.g.airline_mode_map`
@@ -48,25 +47,12 @@ function M.Airline:get_new_symbol(old, name)
     return old .. name
 end
 
----get schema name
----@param session table
-function M.get_schema_name(session)
-    local schemas = rime.get_schema_list()
-    local schema_id = session:get_current_schema()
-    for _, schema in ipairs(schemas) do
-        if schema.schema_id == schema_id then
-            return schema.name
-        end
-    end
-    return ""
-end
-
 ---update `g:airline_mode_map`
 ---@param session table
 function M.Airline:update_modes(session)
     for k, _ in pairs(self.modes) do
         vim.g.airline_mode_map = vim.tbl_deep_extend("keep",
-            { [k] = self:get_new_symbol(self.modes[k], M.get_schema_name(session)) },
+            { [k] = self:get_new_symbol(self.modes[k], session:get_schema_name()) },
             vim.g.airline_mode_map)
     end
 end

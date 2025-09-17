@@ -2,9 +2,7 @@
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
 local fs = require 'rime.fs'
-local _rime = require "rime"
-local Session = _rime.Session or _rime.RimeSessionId
-local Traits = require 'rime.traits'.Traits
+local Session = require "rime.session".Session
 local keys = require "rime.keys"
 local Rime = require "rime.rime".Rime
 local Airline = require "rime.nvim.airline".Airline
@@ -19,8 +17,6 @@ local M = {
         augroup_id = 0,
         --- config for neovim keymaps
         keys = keys,
-        airline = nil,
-        cursor = nil,
     }
 }
 
@@ -30,6 +26,7 @@ function M.Rime:new(rime)
     rime = rime or {}
     rime.cursor = rime.cursor or Cursor()
     rime.airline = rime.airline or Airline()
+    -- rime.session = rime.session or Session()
     setmetatable(rime, {
         __index = self
     })
@@ -109,7 +106,7 @@ function M.draw_ui(key)
             end
         end
     end
-    if M:process_key(key) == false then
+    if M.session:parse_key(key) == false then
         if #key == 1 then
             M.feed_keys(key)
         end
@@ -118,7 +115,7 @@ function M.draw_ui(key)
     M.update()
     local context = M.session:get_context()
     if context.menu.num_candidates == 0 then
-        M.feed_keys(M:get_commit_text())
+        M.feed_keys(M.session:get_commit_text())
         return
     end
     vim.v.char = ""
@@ -172,7 +169,6 @@ end
 ---initial
 function M.init()
     if M.session == nil then
-        M.traits = Traits()
         M.session = Session()
     end
     if M.augroup_id == 0 then
