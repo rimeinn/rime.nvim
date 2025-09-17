@@ -23,13 +23,13 @@ typedef RimeTraits Traits;
       traits.distribution_version = ${distribution_version};
       traits.app_name = ${app_name};
       traits.min_log_level = ${min_log_level};
-      rime->setup(&traits);
-      rime->initialize(&traits);
+      api->setup(&traits);
+      api->initialize(&traits);
 ]]
   },
   destructor "finalize" {
     c_source [[
-      rime->finalize();
+      api->finalize();
 ]]
   }
 }

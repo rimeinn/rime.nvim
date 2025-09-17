@@ -6,31 +6,31 @@ typedef RimeSessionId Session;
 #define BUFFER_SIZE 1024
 ]],
   constructor {
-    c_call "Session>1" "rime->create_session" {}
+    c_call "Session>1" "api->create_session" {}
   },
   destructor "destroy" {
-    c_method_call "bool" "rime->destroy_session" {}
+    c_method_call "bool" "api->destroy_session" {}
   },
   method "get_current_schema" {
     var_out { "char *", "result" },
     c_source [[
               char schema_id[BUFFER_SIZE];
-              if(!rime->get_current_schema(${this}, schema_id, BUFFER_SIZE))
+              if(!api->get_current_schema(${this}, schema_id, BUFFER_SIZE))
                 return 0;
               ${result} = schema_id;
             ]]
   },
   method "select_schema" {
-    c_method_call "bool" "rime->select_schema" { "char *", "schema_id" }
+    c_method_call "bool" "api->select_schema" { "char *", "schema_id" }
   },
   method "process_key" {
-    c_method_call "bool" "rime->process_key" { "int", "key", "int", "mask?" }
+    c_method_call "bool" "api->process_key" { "int", "key", "int", "mask?" }
   },
   method "get_context" {
     var_out { "<any>", "result" },
     c_source [[
               RIME_STRUCT(RimeContext, context);
-              if (!rime->get_context(${this}, &context))
+              if (!api->get_context(${this}, &context))
                 return 0;
               lua_createtable(L, 0, 2);
               lua_createtable(L, 0, 5);
@@ -69,25 +69,25 @@ typedef RimeSessionId Session;
               }
               lua_setfield(L, -2, "candidates");
               lua_setfield(L, -2, "menu");
-              rime->free_context(&context);
+              api->free_context(&context);
             ]]
   },
   method "get_commit" {
     var_out { "<any>", "result" },
     c_source [[
               RIME_STRUCT(RimeCommit, commit);
-              if(!rime->get_commit(${this}, &commit))
+              if(!api->get_commit(${this}, &commit))
                 return 0;
               lua_createtable(L, 0, 1);
               lua_pushstring(L, commit.text);
               lua_setfield(L, -2, "text");
-              rime->free_commit(&commit);
+              api->free_commit(&commit);
             ]]
   },
   method "commit_composition" {
-    c_method_call "bool" "rime->commit_composition" {}
+    c_method_call "bool" "api->commit_composition" {}
   },
   method "clear_composition" {
-    c_method_call "void" "rime->clear_composition" {}
+    c_method_call "void" "api->clear_composition" {}
   },
 }

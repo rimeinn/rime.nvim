@@ -4,16 +4,16 @@ c_module "rime" {
     use_globals = true,
     include "rime_api.h",
     c_source [[
-      RimeApi *rime;
+      RimeApi *api;
     ]],
     c_source "module_init_src" [[
-      rime = rime_get_api();
+      api = rime_get_api();
     ]],
     c_function "get_schema_list" {
         var_out { "<any>", "result" },
         c_source [[
           RimeSchemaList schema_list;
-          if (!rime->get_schema_list(&schema_list)) {
+          if (!api->get_schema_list(&schema_list)) {
             fputs("cannot get schema list", stderr);
             return 0;
           }
