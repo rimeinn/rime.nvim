@@ -131,20 +131,12 @@ rime
 
 ### IME
 
-Refer [config](https://rime-nvim.readthedocs.io/en/latest/modules/lua.rime.config.html):
-
-```lua
-require('rime.nvim').setup({
-    -- ...
-})
-```
-
 Set keymap:
 
 ```lua
 local Rime = require('rime.nvim.rime').Rime
 local rime = Rime()
-vim.keymap.set('i', '<C-^>', rime.toggle)
+vim.keymap.set('i', '<C-^>', rime:toggle())
 ```
 
 Once it is enabled, any printable key will be passed to rime in any case while
@@ -152,10 +144,23 @@ any non-printable key will be passed to rime only if rime window is opened. If
 you want to pass a key to rime in any case, try:
 
 ```lua
-vim.keymap.set('i', '<C-\\>', rime.callback('<C-\\>'))
+vim.keymap.set('i', '<C-\\>', rime:callback('<C-\\>'))
 ```
 
 It is useful for some key such as the key for switching input schema.
+
+Lazy load is possible:
+
+```lua
+local rime = require('rime.nvim')
+rime.rime = {
+  -- will pass to Rime()
+}
+vim.keymap.set('i', '<C-^>', rime.toggle)
+vim.keymap.set('i', '<C-\\>', rime.callback('<C-\\>'))
+```
+
+Only when you press `<C-^>`, `Rime()` will be call to save time.
 
 Once you switch to ascii mode of rime, you **cannot** switch back unless you
 have defined any hotkey to pass the key for switching ascii mode of rime to rime.
@@ -170,9 +175,11 @@ set guicursor=n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-CursorIM/lCursorIM,r-c
 ```lua
 local Cursor = require('rime.nvim.plugins.cursor').Cursor
 local cursor = Cursor {
+  schemas = {
     [".default"] = { bg = 'white' },
     double_pinyin_mspy = { bg = 'red' },
     japanese = { bg = 'yellow' }
+  }
 }
 local Plugins = require('rime.nvim.plugins').Plugins
 local plugins = Plugins {

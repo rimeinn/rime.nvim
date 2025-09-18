@@ -34,12 +34,12 @@ function M.Rime:draw(...)
             if key.mask == 0 then
                 text = string.char(key.code)
             end
-            return text, { self.ui.cursor }, 0
+            return text, {}, 0
         end
     end
     local context = self.session:get_context()
     if context == nil or context.menu.num_candidates == 0 then
-        return self.session:get_commit_text(), { self.ui.cursor }, 0
+        return self.session:get_commit_text(), {}, 0
     end
     local lines, col = self.ui:draw(context)
     return "", lines, col

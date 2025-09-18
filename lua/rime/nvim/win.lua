@@ -37,8 +37,14 @@ function M.Win:has_preedit()
     return #self.lines == 2
 end
 
----Open a window
-function M.Win:_open()
+---Open or close a window
+function M.Win:_update()
+    if #self.lines == 0 then
+        if self:is_valid() then
+            vim.api.nvim_win_close(self.win_id, false)
+        end
+        return
+    end
     vim.api.nvim_buf_set_lines(self.buf_id, 0, #self.lines, false, self.lines)
     if self:is_valid() then
         vim.api.nvim_win_set_config(self.win_id, self.config)
@@ -47,42 +53,26 @@ function M.Win:_open()
     end
 end
 
----Close a window
-function M.Win:_close()
-    if self:is_valid() then
-        vim.api.nvim_win_close(self.win_id, false)
-    end
-end
-
----Wrap `self._open()`
-function M.Win:open(lines, col)
+---Wrap `self._update()`
+---@param lines string[]?
+---@param col integer?
+function M.Win:update(lines, col)
+    self.lines = lines or {}
     local width = 0
-    for _, line in ipairs(lines) do
+    for _, line in ipairs(self.lines) do
         width = math.max(fs.strwidth(line), width)
     end
-    self.lines = lines
     self.config = {
         relative = "cursor",
-        height = #lines,
+        height = #self.lines,
         style = "minimal",
         width = width,
         row = 1,
-        col = col,
+        col = col or 0,
     }
     vim.schedule(
         function()
-            self:_open()
-        end
-    )
-end
-
----Wrap `self._close()`
-function M.Win:close()
-    self.lines = {}
-    self.config = {}
-    vim.schedule(
-        function()
-            self:_close()
+            self:_update()
         end
     )
 end

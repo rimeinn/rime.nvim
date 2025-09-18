@@ -1,7 +1,6 @@
 ---rime support for neovim
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
-local Session = require "rime.session".Session
 local Rime = require "rime.rime".Rime
 local Win = require "rime.nvim.win".Win
 local Keymap = require "rime.nvim.keymap".Keymap
@@ -28,12 +27,6 @@ function M.feed_keys(text)
     vim.api.nvim_win_set_cursor(0, { r, c + #text })
 end
 
----setup
----@param conf table
-function M.setup(conf)
-    M = vim.tbl_deep_extend("keep", conf, M)
-end
-
 ---@param rime table?
 ---@return table rime
 function M.Rime:new(rime)
@@ -54,7 +47,7 @@ setmetatable(M.Rime, {
 })
 
 ---get callback for drawing UI
----@param key string
+---@param key string?
 function M.Rime:callback(key)
     return function()
         return self:exe(key)
@@ -62,14 +55,12 @@ function M.Rime:callback(key)
 end
 
 ---wrap `self:process()`
----@param input string
+---@param input string?
 function M.Rime:exe(input)
     if not vim.b.rime_is_enabled then
         return
     end
-    if input == "" then
-        input = vim.v.char
-    end
+    input = input or vim.v.char
     if not self.win:has_preedit() then
         for _, disable_key in ipairs(self.keymap.keys.disable) do
             if input == vim.keycode(disable_key) then
@@ -81,15 +72,12 @@ function M.Rime:exe(input)
 
     local text, lines, col = self:process(input)
     M.feed_keys(text)
-    if text ~= "" then
-        self.win:close()
-        self.keymap:set_special(self.win:has_preedit() and self.callback or nil, self)
-        return
-    end
-    self.win:open(lines, col)
+    self.win:update(lines, col)
     self.keymap:set_special(self.win:has_preedit() and self.callback or nil, self)
     -- change input schema
-    self.plugins:update(self.session, vim.b.rime_is_enabled)
+    if text == "" then
+        self.plugins:update(self.session, vim.b.rime_is_enabled)
+    end
 end
 
 ---toggle IME
@@ -104,20 +92,23 @@ function M.Rime:_toggle(is_enabled)
     self.keymap:set_nowait(is_enabled)
 
     if is_enabled then
-        if self.session == nil then
-            self.session = Session()
-        end
         vim.api.nvim_create_autocmd("InsertCharPre", {
             group = self.augroup_id,
             buffer = 0,
-            callback = self:callback(""),
+            callback = self:callback(),
         })
-        vim.api.nvim_create_autocmd({ "InsertLeave", "WinLeave" }, {
+        vim.api.nvim_create_autocmd({ "InsertLeave", "BufLeave" }, {
             group = self.augroup_id,
             buffer = 0,
             callback = function()
                 self.session:clear_composition()
-                self.win:close()
+                self.win:update()
+            end
+        })
+        vim.api.nvim_create_autocmd("BufEnter", {
+            group = self.augroup_id,
+            callback = function()
+                self.plugins:update(self.session, vim.b.rime_is_enabled)
             end
         })
     else
