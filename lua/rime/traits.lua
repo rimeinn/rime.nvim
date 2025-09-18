@@ -1,7 +1,6 @@
 ---wrap `rime.Traits()`
 local fs = require 'rime.fs'
-local rime = require 'rime'
-rime.Traits = rime.Traits or rime.init
+local Traits = require 'rime'.Traits
 
 local shared_data_dir = ""
 ---@diagnostic disable: undefined-global
@@ -67,10 +66,9 @@ function M.Traits:new(traits)
         __index = self
     })
     fs.mkdir(traits.log_dir)
-    return rime.Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
-            traits.distribution_code_name, traits.distribution_version, traits.app_name,
-            M.log_level[traits.min_log_level])
-        or self
+    return Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
+        traits.distribution_code_name, traits.distribution_version, traits.app_name,
+        M.log_level[traits.min_log_level])
 end
 
 setmetatable(M.Traits, {

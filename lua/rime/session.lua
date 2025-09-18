@@ -1,6 +1,5 @@
 ---wrap `rime.Session()`
 local rime = require "rime"
-local Session = rime.Session or rime.RimeSessionId
 local Key = require 'rime.key'.Key
 local Traits = require 'rime.traits'.Traits
 
@@ -13,7 +12,7 @@ local M = {
 function M.Session:new(session)
     session = session or {}
     session.traits = session.traits or Traits()
-    session.userdata = Session()
+    session.userdata = rime.Session()
     setmetatable(session, {
         __index = self
     })
