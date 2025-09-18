@@ -41,9 +41,7 @@ function M.Rime:new(rime)
     rime.keymap = rime.keymap or Keymap()
     rime.plugins = rime.plugins or Plugins()
     rime.augroup_id = rime.augroup_id or vim.api.nvim_create_augroup("rime", { clear = false })
-    -- rime = Rime(rime)
-    local UI = require'rime.ui'.UI
-    rime.ui = rime.ui or UI()
+    rime = Rime(rime)
     setmetatable(rime, {
         __index = self
     })
@@ -54,8 +52,6 @@ setmetatable(M.Rime, {
     __index = Rime,
     __call = M.Rime.new
 })
-
-local rime = M.Rime()
 
 ---get callback for drawing UI
 ---@param key string
@@ -74,72 +70,85 @@ function M.Rime:exe(input)
     if input == "" then
         input = vim.v.char
     end
-    if not rime.win:has_preedit() then
-        for _, disable_key in ipairs(rime.keymap.keys.disable) do
+    if not self.win:has_preedit() then
+        for _, disable_key in ipairs(self.keymap.keys.disable) do
             if input == vim.keycode(disable_key) then
-                self:disable()
+                self:_toggle(false)
                 return
             end
         end
     end
 
-    local text, lines, col = rime:process(input)
+    local text, lines, col = self:process(input)
     M.feed_keys(text)
     if text ~= "" then
-        rime.win:close()
-        rime.keymap:set_special(rime.win:has_preedit() and self.callback or nil, rime)
+        self.win:close()
+        self.keymap:set_special(self.win:has_preedit() and self.callback or nil, self)
         return
     end
-    rime.win:open(lines, col)
-    rime.keymap:set_special(rime.win:has_preedit() and self.callback or nil, rime)
+    self.win:open(lines, col)
+    self.keymap:set_special(self.win:has_preedit() and self.callback or nil, self)
     -- change input schema
-    rime.plugins:update(rime.session, vim.b.rime_is_enabled)
+    self.plugins:update(self.session, vim.b.rime_is_enabled)
 end
 
 ---toggle IME
 ---@param is_enabled boolean?
 ---@see enable
 ---@see disable
-function M.Rime:toggle(is_enabled)
+function M.Rime:_toggle(is_enabled)
     if is_enabled == nil then
         is_enabled = not vim.b.rime_is_enabled
     end
     vim.b.rime_is_enabled = is_enabled
-    rime.keymap:set_nowait(is_enabled)
+    self.keymap:set_nowait(is_enabled)
 
     if is_enabled then
-        if rime.session == nil then
-            rime.session = Session()
+        if self.session == nil then
+            self.session = Session()
         end
         vim.api.nvim_create_autocmd("InsertCharPre", {
-            group = rime.augroup_id,
+            group = self.augroup_id,
             buffer = 0,
-            callback = rime:callback(""),
+            callback = self:callback(""),
         })
         vim.api.nvim_create_autocmd({ "InsertLeave", "WinLeave" }, {
-            group = rime.augroup_id,
+            group = self.augroup_id,
             buffer = 0,
             callback = function()
-                rime.session:clear_composition()
-                rime.win:close()
+                self.session:clear_composition()
+                self.win:close()
             end
         })
     else
         vim.api.nvim_create_augroup("rime", {})
     end
-    rime.plugins:update(rime.session, vim.b.rime_is_enabled)
+    self.plugins:update(self.session, vim.b.rime_is_enabled)
+end
+
+---toggle IME
+---@see _toggle
+---@param is_enabled boolean?
+function M.Rime:toggle(is_enabled)
+    return function()
+        self:_toggle(is_enabled)
+    end
 end
 
 ---enable IME
 ---@see toggle
 function M.Rime:enable()
-    self:toggle(true)
+    return function()
+        self:_toggle(true)
+    end
 end
 
 ---disable IME
 ---@see toggle
 function M.Rime:disable()
-    self:toggle(false)
+    return function()
+        self:_toggle(false)
+    end
 end
 
 return M

@@ -142,7 +142,7 @@ require('rime.nvim').setup({
 Set keymap:
 
 ```lua
-local Rime = require('rime.nvim').Rime
+local Rime = require('rime.nvim.rime').Rime
 local rime = Rime()
 vim.keymap.set('i', '<C-^>', rime.toggle)
 ```
