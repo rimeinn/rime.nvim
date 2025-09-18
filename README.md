@@ -176,7 +176,9 @@ local cursor = Cursor {
 }
 local Plugins = require('rime.nvim.plugins').Plugins
 local plugins = Plugins {
-  cursor = cursor
+  plugins = {
+    cursor = cursor
+  }
 }
 local rime = Rime {
   plugins = plugins
@@ -225,7 +227,9 @@ function airline.get_new_mode(mode, old, name)
 end
 
 local plugins = Plugins {
-  airline = airline
+  plugins = {
+    airline = airline
+  }
 }
 local rime = Rime {
   plugins = plugins
