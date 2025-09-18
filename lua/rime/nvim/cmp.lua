@@ -1,7 +1,10 @@
 ---rime support for nvim-cmp
 local nvim_rime = require('rime.nvim')
 
-local M = {}
+local M = {
+    _callback_table = {},
+    keyword_pattern = '\\%([!-~]\\)*',
+}
 
 ---callback
 ---@param id integer
@@ -11,10 +14,8 @@ function M._callback(id, candidates)
         items = candidates,
         isIncomplete = true
     })
-    table.remove(M._callback_table, id)
+    M._callback_table[id] = nil
 end
-
-M._callback_table = {}
 
 ---new
 ---@return table
@@ -25,7 +26,7 @@ end
 ---get keyword pattern
 ---@return string
 function M.get_keyword_pattern()
-    return '\\%([!-~]\\)*'
+    return M.keyword_pattern
 end
 
 ---complete

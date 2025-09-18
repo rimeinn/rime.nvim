@@ -47,7 +47,18 @@ end
 
 ---wrap `self:draw()`
 ---@param ... table
-function M.Rime:call(...)
+function M.Rime:process(...)
+    local keys = {}
+    for _, name in ipairs { ... } do
+        table.insert(keys, Key { name = name })
+    end
+    local unpack = unpack or table.unpack
+    return self:draw(unpack(keys))
+end
+
+---wrap `self:draw()`
+---@param ... table
+function M.Rime:exe(...)
     local text, lines, _ = self:draw(...)
     print(text)
     print(table.concat(lines, "\n"))
@@ -57,8 +68,7 @@ end
 function M.Rime:main()
     while true do
         local c = fs.getchar()
-        local key = Key { code = c }
-        self:call(key)
+        self:exe({ code = c })
     end
 end
 

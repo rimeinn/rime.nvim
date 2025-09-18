@@ -5,6 +5,8 @@ local fs = require 'rime.fs'
 local M = {
     Win = {
         win_id = -1,
+        lines = {},
+        config = {},
     }
 }
 
@@ -23,15 +25,43 @@ setmetatable(M.Win, {
     __call = M.Win.new
 })
 
+---If the windows is valid
+---@return boolean is_valid
+function M.Win:is_valid()
+    return vim.api.nvim_win_is_valid(self.win_id)
+end
+
+---If the windows has preedit
+---@return boolean has_preedit
+function M.Win:has_preedit()
+    return #self.lines == 2
+end
+
 ---Open a window
----@param lines string[]
----@param col integer
-function M.Win:_open(lines, col)
+function M.Win:_open()
+    vim.api.nvim_buf_set_lines(self.buf_id, 0, #self.lines, false, self.lines)
+    if self:is_valid() then
+        vim.api.nvim_win_set_config(self.win_id, self.config)
+    else
+        self.win_id = vim.api.nvim_open_win(self.buf_id, false, self.config)
+    end
+end
+
+---Close a window
+function M.Win:_close()
+    if self:is_valid() then
+        vim.api.nvim_win_close(self.win_id, false)
+    end
+end
+
+---Wrap `self._open()`
+function M.Win:open(lines, col)
     local width = 0
     for _, line in ipairs(lines) do
         width = math.max(fs.strwidth(line), width)
     end
-    local config = {
+    self.lines = lines
+    self.config = {
         relative = "cursor",
         height = #lines,
         style = "minimal",
@@ -39,35 +69,17 @@ function M.Win:_open(lines, col)
         row = 1,
         col = col,
     }
-    vim.api.nvim_buf_set_lines(self.buf_id, 0, #lines, false, lines)
-    if vim.api.nvim_win_is_valid(self.win_id) then
-        vim.api.nvim_win_set_config(self.win_id, config)
-    else
-        self.win_id = vim.api.nvim_open_win(self.buf_id, false, config)
-    end
-end
-
----Close a window
-function M.Win:_close()
-    if vim.api.nvim_win_is_valid(self.win_id) then
-        vim.api.nvim_win_close(self.win_id, false)
-        self.win_id = -1
-    end
-end
-
----Wrap `self._open()`
----@param lines string[]
----@param col integer
-function M.Win:open(lines, col)
     vim.schedule(
         function()
-            self:_open(lines, col)
+            self:_open()
         end
     )
 end
 
 ---Wrap `self._close()`
 function M.Win:close()
+    self.lines = {}
+    self.config = {}
     vim.schedule(
         function()
             self:_close()
