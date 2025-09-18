@@ -61,7 +61,7 @@ function M.Key:new(key)
             name = table.remove(parts)
             -- don't capitalize alphabetas
             if #name ~= 1 then
-                name = name:sub(1, 1):upper() .. name:sub(2)
+                name = name:sub(1, 1):upper() .. name:sub(2):lower()
                 -- lower alphabetas for any modifier: S-A -> S-a
             elseif parts ~= {} then
                 name = name:lower()
