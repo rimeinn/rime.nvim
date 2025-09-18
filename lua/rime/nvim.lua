@@ -10,7 +10,6 @@ local Plugins = require "rime.nvim.plugins".Plugins
 local M = {
     Rime = {
         win = Win(),
-        augroup_id = vim.api.nvim_create_augroup("rime", { clear = false }),
     }
 }
 
@@ -29,13 +28,22 @@ function M.feed_keys(text)
     vim.api.nvim_win_set_cursor(0, { r, c + #text })
 end
 
+---setup
+---@param conf table
+function M.setup(conf)
+    M = vim.tbl_deep_extend("keep", conf, M)
+end
+
 ---@param rime table?
 ---@return table rime
 function M.Rime:new(rime)
     rime = rime or {}
     rime.keymap = rime.keymap or Keymap()
     rime.plugins = rime.plugins or Plugins()
+    rime.augroup_id = rime.augroup_id or vim.api.nvim_create_augroup("rime", { clear = false })
     -- rime = Rime(rime)
+    local UI = require'rime.ui'.UI
+    rime.ui = rime.ui or UI()
     setmetatable(rime, {
         __index = self
     })
@@ -47,99 +55,91 @@ setmetatable(M.Rime, {
     __call = M.Rime.new
 })
 
-setmetatable(M, {
-    __index = M.Rime(),
-})
+local rime = M.Rime()
 
----setup
----@param conf table
-function M.setup(conf)
-    M = vim.tbl_deep_extend("keep", conf, M)
-end
-
----get callback for draw UI
+---get callback for drawing UI
 ---@param key string
-function M.callback(key)
+function M.Rime:callback(key)
     return function()
-        return M.exe(key)
+        return self:exe(key)
     end
 end
 
 ---wrap `self:process()`
 ---@param input string
-function M.exe(input)
+function M.Rime:exe(input)
     if not vim.b.rime_is_enabled then
         return
     end
     if input == "" then
         input = vim.v.char
     end
-    if not M.win:has_preedit() then
-        for _, disable_key in ipairs(M.keymap.keys.disable) do
+    if not rime.win:has_preedit() then
+        for _, disable_key in ipairs(rime.keymap.keys.disable) do
             if input == vim.keycode(disable_key) then
-                M.disable()
+                self:disable()
                 return
             end
         end
     end
 
-    local text, lines, col = M:process(input)
+    local text, lines, col = rime:process(input)
     M.feed_keys(text)
     if text ~= "" then
-        M.win:close()
-        M.keymap:set_special(M.win:has_preedit() and M.callback or nil)
+        rime.win:close()
+        rime.keymap:set_special(rime.win:has_preedit() and self.callback or nil, rime)
         return
     end
-    M.win:open(lines, col)
-    M.keymap:set_special(M.win:has_preedit() and M.callback or nil)
+    rime.win:open(lines, col)
+    rime.keymap:set_special(rime.win:has_preedit() and self.callback or nil, rime)
     -- change input schema
-    M.plugins:update(M.session, vim.b.rime_is_enabled)
+    rime.plugins:update(rime.session, vim.b.rime_is_enabled)
 end
 
 ---toggle IME
 ---@param is_enabled boolean?
 ---@see enable
 ---@see disable
-function M.toggle(is_enabled)
+function M.Rime:toggle(is_enabled)
     if is_enabled == nil then
         is_enabled = not vim.b.rime_is_enabled
     end
     vim.b.rime_is_enabled = is_enabled
-    M.keymap:set_nowait(is_enabled)
+    rime.keymap:set_nowait(is_enabled)
 
     if is_enabled then
-        if M.session == nil then
-            M.session = Session()
+        if rime.session == nil then
+            rime.session = Session()
         end
         vim.api.nvim_create_autocmd("InsertCharPre", {
-            group = M.augroup_id,
+            group = rime.augroup_id,
             buffer = 0,
-            callback = M.callback(""),
+            callback = rime:callback(""),
         })
         vim.api.nvim_create_autocmd({ "InsertLeave", "WinLeave" }, {
-            group = M.augroup_id,
+            group = rime.augroup_id,
             buffer = 0,
             callback = function()
-                M.session:clear_composition()
-                M.win:close()
+                rime.session:clear_composition()
+                rime.win:close()
             end
         })
     else
         vim.api.nvim_create_augroup("rime", {})
     end
-    M.plugins:update(M.session, vim.b.rime_is_enabled)
+    rime.plugins:update(rime.session, vim.b.rime_is_enabled)
 end
 
 ---enable IME
 ---@see toggle
-function M.enable()
-    M.toggle(true)
+function M.Rime:enable()
+    self:toggle(true)
 end
 
 ---disable IME
 ---@see toggle
-function M.disable()
-    M.toggle(false)
+function M.Rime:disable()
+    self:toggle(false)
 end
 
 return M

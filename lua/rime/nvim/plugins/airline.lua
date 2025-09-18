@@ -23,8 +23,8 @@ local M = {
 ---@return table Airline
 function M.Airline:new(airline)
     airline = airline or {}
-    if airline.mode == nil and vim.g.airline_mode_map then
-        airline.mode = vim.g.airline_mode_map
+    if airline.modes == nil and vim.g.airline_mode_map then
+        airline.modes = vim.g.airline_mode_map
     end
     setmetatable(airline, {
         __index = self
@@ -36,25 +36,33 @@ setmetatable(M.Airline, {
     __call = M.Airline.new
 })
 
----get new airline mode map symbols in `update_status_bar`().
----@param old string
----@param name string
----@return string
-function M.Airline:get_new_symbol(old, name)
-    if old == self.modes.i or old == self.modes.ic or old == self.modes.ix then
-        return name
+---get new airline mode map symbols
+---@param mode string mode name
+---@param old string old mode symbol
+---@param name string schema name
+---@return string new new mode symbol
+function M.Airline.get_new_mode(mode, old, name)
+    for mode_name, _ in pairs(M.Airline.modes) do
+        if mode_name == mode then
+            if mode:sub(1, 1) == 'i' then
+                return name
+            end
+            return old .. name
+        end
     end
-    return old .. name
+    return old
 end
 
----update `g:airline_mode_map`
+---get new modes from old modes and session
 ---@param session table
-function M.Airline:update_modes(session)
-    for k, _ in pairs(self.modes) do
-        vim.g.airline_mode_map = vim.tbl_deep_extend("keep",
-            { [k] = self:get_new_symbol(self.modes[k], session:get_schema_name()) },
-            vim.g.airline_mode_map)
+---@return table<string, string> modes
+function M.Airline:get_new_modes(session)
+    local name = session:get_schema_name()
+    local modes = {}
+    for mode, old in pairs(self.modes) do
+        modes[mode] = M.Airline.get_new_mode(mode, old, name)
     end
+    return modes
 end
 
 ---update status bar by `airline_mode_map`. see `help airline`.
@@ -62,11 +70,10 @@ end
 ---@param is_enabled boolean
 function M.Airline:update(session, is_enabled)
     if vim.g.airline_mode_map then
-        if not is_enabled then
-            vim.g.airline_mode_map = self.modes
-        end
         if is_enabled then
-            self:update_modes(session)
+            vim.g.airline_mode_map = self:get_new_modes(session)
+        else
+            vim.g.airline_mode_map = self.modes
         end
     end
 end

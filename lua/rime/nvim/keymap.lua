@@ -77,14 +77,14 @@ setmetatable(M.Keymap, {
 ---set or delete keymap
 ---@param lhs string
 ---@param callback string | function?
-function M.Keymap:set(lhs, callback)
+function M.Keymap:set(lhs, callback, ...)
     if not callback and self.maps[lhs] then
         vim.keymap.del("i", lhs, { buffer = 0 })
         self.maps[lhs] = nil
     elseif callback and not self.maps[lhs] then
         local rhs = callback
         if type(callback) == "function" then
-            rhs = callback(lhs)
+            rhs = callback(..., lhs)
         end
         vim.keymap.set("i", lhs, rhs, { buffer = 0, noremap = true, nowait = true, })
         self.maps[lhs] = rhs
@@ -93,17 +93,17 @@ end
 
 ---set special keymaps
 ---@param callback function?
-function M.Keymap:set_special(callback)
+function M.Keymap:set_special(callback, ...)
     for _, lhs in ipairs(self.keys.special) do
-        self:set(lhs, callback)
+        self:set(lhs, callback, ...)
     end
 end
 
 ---set `<nowait>` keymaps
----@param callback boolean
-function M.Keymap:set_nowait(callback)
+---@param is_enabled boolean
+function M.Keymap:set_nowait(is_enabled)
     for _, lhs in ipairs(self.keys.nowait) do
-        self:set(lhs, callback and lhs or nil)
+        self:set(lhs, is_enabled and lhs or nil)
     end
 end
 

@@ -5,7 +5,6 @@ local UI = require 'rime.ui'.UI
 local Session = require "rime.session".Session
 local M = {
     Rime = {
-        ui = UI(),
     }
 }
 
@@ -14,6 +13,7 @@ local M = {
 function M.Rime:new(rime)
     rime = rime or {}
     rime.session = rime.session or Session()
+    rime.ui = rime.ui or UI()
     setmetatable(rime, {
         __index = self
     })
@@ -46,7 +46,7 @@ function M.Rime:draw(...)
 end
 
 ---wrap `self:draw()`
----@param ... table
+---@param ... string
 function M.Rime:process(...)
     local keys = {}
     for _, name in ipairs { ... } do

@@ -37,6 +37,11 @@ However, use lua not javascript.
 
 ![screencast](https://github.com/user-attachments/assets/71882a57-d4dd-4898-8eee-b7a17ae5193f)
 
+This project is consist of two parts:
+
+- A lua binding of librime
+- An IME for neovim
+
 ## Dependence
 
 - [librime](https://github.com/rime/librime)
@@ -90,7 +95,41 @@ $ luarocks --lua-version 5.1 --local --tree ~/.local/share/nvim/rocks install ri
 # you can change it according to your vim.g.rocks_nvim.rocks_path
 ```
 
-## Configure
+## Usage
+
+### Binding
+
+```lua
+local Key = require "rime.key".Key
+local Session = require "rime.session".Session
+local UI = require "rime.ui".UI
+
+local session = Session()
+local key = Key {name = "n"}
+local ui = UI()
+if not session:process_key(key.code, key.mask) then
+    return
+end
+local context = session:get_context()
+if context == nil then
+    return
+end
+content, _ = ui:draw(context)
+print(table.concat(content, "\n"))
+```
+
+```text
+n|
+[① 你]② 那 ③ 呢 ④ 能 ⑤ 年 ⑥ 您 ⑦ 内 ⑧ 拿 ⑨ 哪 ⓪ 弄 |>
+```
+
+A simplest example can be found by:
+
+```sh
+rime
+```
+
+### IME
 
 Refer [config](https://rime-nvim.readthedocs.io/en/latest/modules/lua.rime.config.html):
 
@@ -103,7 +142,9 @@ require('rime.nvim').setup({
 Set keymap:
 
 ```lua
-vim.keymap.set('i', '<C-^>', require('rime.nvim').toggle)
+local Rime = require('rime.nvim').Rime
+local rime = Rime()
+vim.keymap.set('i', '<C-^>', rime.toggle)
 ```
 
 Once it is enabled, any printable key will be passed to rime in any case while
@@ -111,7 +152,7 @@ any non-printable key will be passed to rime only if rime window is opened. If
 you want to pass a key to rime in any case, try:
 
 ```lua
-vim.keymap.set('i', '<C-\\>', require('rime.nvim').callback('<C-\\>'))
+vim.keymap.set('i', '<C-\\>', rime.callback('<C-\\>'))
 ```
 
 It is useful for some key such as the key for switching input schema.
@@ -127,13 +168,19 @@ set guicursor=n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-CursorIM/lCursorIM,r-c
 ```
 
 ```lua
-require('rime.nvim').setup({
-    cursor = {
-        [".default"] = { bg = 'white' },
-        double_pinyin_mspy = { bg = 'red' },
-        japanese = { bg = 'yellow' }
-    }
-})
+local Cursor = require('rime.nvim.plugins.cursor').Cursor
+local cursor = Cursor {
+    [".default"] = { bg = 'white' },
+    double_pinyin_mspy = { bg = 'red' },
+    japanese = { bg = 'yellow' }
+}
+local Plugins = require('rime.nvim.plugins').Plugins
+local plugins = Plugins {
+  cursor = cursor
+}
+local rime = Rime {
+  plugins = plugins
+}
 ```
 
 ![ASCII](https://github.com/user-attachments/assets/2e45a3b3-195e-45c9-a99a-0c49e95fda56)
@@ -167,24 +214,33 @@ You can customize it. Such as:
 Only display input schema name in insert mode:
 
 ```lua
-require('rime.nvim').setup({
-  get_new_symbol = function (old, name)
-    if old == M.airline_mode_map.i
-      return name
-    end
-    return old
+local Airline = require('rime.nvim.plugins.airline').Airline
+local airline = Airline()
+
+function airline.get_new_mode(mode, old, name)
+  if mode == 'i' then
+    return name
   end
-})
+  return old
+end
+
+local plugins = Plugins {
+  airline = airline
+}
+local rime = Rime {
+  plugins = plugins
+}
 ```
 
 See airline's `g:airline_mode_map` to know `i`, `R`, `s`, ...
 
-Disable this feature:
+Disable all plugins:
 
 ```lua
-require('rime.nvim').setup({
-  update_status_bar = function () end
-})
+local plugins = Plugins {}
+local rime = Rime {
+  plugins = plugins
+}
 ```
 
 ## Tips
