@@ -126,7 +126,7 @@ A simplest example can be found by:
 rime
 ```
 
-### IME
+### Frontend
 
 Set keymap:
 
@@ -164,7 +164,9 @@ Once you switch to ascii mode of rime, you **cannot** switch back unless you
 have defined any hotkey to pass the key for switching ascii mode of rime to rime.
 Because only printable key can be passed to rime when rime window is closed.
 
-For cursor color,
+## Integration
+
+### Vim Cursor
 
 ```vim
 set guicursor=n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-CursorIM/lCursorIM,r-cr-o:hor20-CursorIM/lCursorIM
@@ -195,22 +197,6 @@ local rime = Rime {
 ![MSPY](https://github.com/user-attachments/assets/05f9e142-0357-452b-b466-d25d06cdd954)
 
 ![japanese](https://github.com/user-attachments/assets/706ce7a7-9aa7-4e62-8ca6-af6dde799776)
-
-## Integration
-
-### [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
-
-Like [cmp-rime](https://github.com/Ninlives/cmp-rime):
-
-```lua
-require('cmp').setup {
-  -- ...
-  sources = {
-    -- ...
-    { name = 'rime' }
-  }
-}
-```
 
 ### [vim-airline](https://github.com/vim-airline/vim-airline/)
 
@@ -252,6 +238,20 @@ local rime = Rime {
 }
 ```
 
+### [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
+
+Like [cmp-rime](https://github.com/Ninlives/cmp-rime):
+
+```lua
+require('cmp').setup {
+  -- ...
+  sources = {
+    -- ...
+    { name = 'rime' }
+  }
+}
+```
+
 ## Tips
 
 For Nix user, run
@@ -262,7 +262,8 @@ dynamic link libraries are broken after `nix-collect-garbage -d`.
 
 - [pyrime](https://github.com/rimeinn/pyrime): a python binding of librime.
   Practically, a vim plugin with the same feature as this plugin by python
-  implementation is possible.
+  implementation is possible. Like
+  [cmp-rime](https://github.com/Ninlives/cmp-rime).
 - [coc-rime](https://github.com/rimeinn/coc-rime): nodejs
   implementation. Not active maintenance.
 
