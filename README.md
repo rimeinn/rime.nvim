@@ -265,7 +265,7 @@ dynamic link libraries are broken after `nix-collect-garbage -d`.
   implementation is possible. Like
   [cmp-rime](https://github.com/Ninlives/cmp-rime).
 - [coc-rime](https://github.com/rimeinn/coc-rime): nodejs
-  implementation. Not active maintenance.
+  implementation. Inactive maintenance.
 
 ## Related Projects
 
