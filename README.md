@@ -153,12 +153,13 @@ Lazy load is possible:
 
 ```lua
 local rime = require('rime.nvim')
-rime.rime = {
-  -- will pass to Rime()
-}
+local ui = require('rime.ui')
+rime.rime = { ui = ui.UI { indices = ui.styles.square } }
 vim.keymap.set('i', '<C-^>', rime.toggle)
 vim.keymap.set('i', '<C-\\>', rime.callback('<C-\\>'))
 ```
+
+![square](https://github.com/user-attachments/assets/65c1de8b-c07c-4576-81bd-a034373ec160)
 
 Only when you press `<C-^>`, `Rime()` will be call to save time.
 
