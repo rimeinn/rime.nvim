@@ -284,4 +284,4 @@ dynamic link libraries are broken after `nix-collect-garbage -d`.
 - [librime-lua](https://github.com/hchunhui/librime-lua): use lua to write
   translators and filters of librime
 - [librime-python](https://github.com/ayaka14732/librime-python): use python
-- [librime-qjs](https://github.com/HuangJian/librime-qjs): use qjs
+- [librime-qjs](https://github.com/HuangJian/librime-qjs): use quickjs
