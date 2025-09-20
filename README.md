@@ -32,15 +32,12 @@
 
 Rime for neovim.
 
-Like [coc-rime](https://github.com/tonyfettes/coc-rime).
-However, use lua not javascript.
-
 ![screencast](https://github.com/user-attachments/assets/71882a57-d4dd-4898-8eee-b7a17ae5193f)
 
 This project is consist of two parts:
 
 - A lua binding of librime
-- An IME for neovim
+- A librime frontend on neovim
 
 ## Dependence
 
@@ -261,8 +258,29 @@ For Nix user, run
 `/the/path/of/luarocks/rocks-5.1/rime.nvim/VERSION/scripts/update.sh` when
 dynamic link libraries are broken after `nix-collect-garbage -d`.
 
+## Similar Projects
+
+- [pyrime](https://github.com/rimeinn/pyrime): a python binding of librime.
+  Practically, a vim plugin with the same feature as this plugin by python
+  implementation is possible.
+- [coc-rime](https://github.com/rimeinn/coc-rime): nodejs
+  implementation. Not active maintenance.
+
 ## Related Projects
 
 - [A collection](https://github.com/rimeinn/ime.nvim) of the solutions to
   input CJKV characters in vim
 - [A collection](https://github.com/rime/librime#frontends) of rime frontends
+
+### Translators and Filters
+
+- [librime-python](https://github.com/ayaka14732/librime-python): use python to
+  write translators and filters of librime
+- [librime-qjs](https://github.com/HuangJian/librime-qjs): use qjs
+- [librime-lua](https://github.com/hchunhui/librime-lua): use lua
+
+### Bindings
+
+- [rime.nvim](https://github.com/rimeinn/rime.nvim): for lua
+- [pyrime](https://github.com/rimeinn/pyrime): for python
+- [coc-rime](https://github.com/rimeinn/coc-rime): for nodejs
