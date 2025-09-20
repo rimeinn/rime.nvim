@@ -272,15 +272,15 @@ dynamic link libraries are broken after `nix-collect-garbage -d`.
   input CJKV characters in vim
 - [A collection](https://github.com/rime/librime#frontends) of rime frontends
 
-### Translators and Filters
-
-- [librime-python](https://github.com/ayaka14732/librime-python): use python to
-  write translators and filters of librime
-- [librime-qjs](https://github.com/HuangJian/librime-qjs): use qjs
-- [librime-lua](https://github.com/hchunhui/librime-lua): use lua
-
 ### Bindings
 
-- [rime.nvim](https://github.com/rimeinn/rime.nvim): for lua
+- [rime.nvim](https://github.com/rimeinn/rime.nvim): this project
 - [pyrime](https://github.com/rimeinn/pyrime): for python
 - [coc-rime](https://github.com/rimeinn/coc-rime): for nodejs
+
+### Translators and Filters
+
+- [librime-lua](https://github.com/hchunhui/librime-lua): use lua to write
+  translators and filters of librime
+- [librime-python](https://github.com/ayaka14732/librime-python): use python
+- [librime-qjs](https://github.com/HuangJian/librime-qjs): use qjs
