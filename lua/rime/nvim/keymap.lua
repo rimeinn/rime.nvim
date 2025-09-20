@@ -48,8 +48,8 @@ end
 
 local M = {
     Keymap = {
-        --- config for neovim keymaps
         maps = {},
+        --- config for neovim keymaps
         keys = {
             nowait = nowait,   -- keys which map <nowait>, see `help <nowait>`
             special = special, -- keys which only be mapped when IME window is opened

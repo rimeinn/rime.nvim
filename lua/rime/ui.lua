@@ -1,29 +1,28 @@
 ---Provide a UI
 local fs = require 'rime.fs'
 
+local styles = {
+    circle = { '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⓪' },
+    circle_inv = { '󰲠', '󰲢', '󰲤', '󰲦', '󰲨', '󰲪', '󰲬', '󰲮', '󰲰', '0' },
+    square = { '󰎦', '󰎩', '󰎬', '󰎮', '󰎰', '󰎵', '󰎸', '󰎻', '󰎾', '󰎣' },
+    square_inv = { '󰎤', '󰎧', '󰎪', '󰎭', '󰎱', '󰎳', '󰎶', '󰎹', '󰎼', '󰎡' },
+    layer = { '󰎥', '󰎨', '󰎫', '󰎲', '󰎯', '󰎴', '󰎷', '󰎺', '󰎽', '󰎢' },
+    layer_inv = { '󰼏', '󰼐', '󰼑', '󰼒', '󰼓', '󰼔', '󰼕', '󰼖', '󰼗', '󰼎' },
+    number = { '󰬺', '󰬻', '󰬼', '󰬽', '󰬾', '󰬿', '󰭀', '󰭁', '󰭂', '' },
+}
 local M = {
     --- styles for digits
-    styles = {
-        circle = { '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⓪' },
-        circle_inv = { '󰲠', '󰲢', '󰲤', '󰲦', '󰲨', '󰲪', '󰲬', '󰲮', '󰲰', '0' },
-        square = { '󰎦', '󰎩', '󰎬', '󰎮', '󰎰', '󰎵', '󰎸', '󰎻', '󰎾', '󰎣' },
-        square_inv = { '󰎤', '󰎧', '󰎪', '󰎭', '󰎱', '󰎳', '󰎶', '󰎹', '󰎼', '󰎡' },
-        layer = { '󰎥', '󰎨', '󰎫', '󰎲', '󰎯', '󰎴', '󰎷', '󰎺', '󰎽', '󰎢' },
-        layer_inv = { '󰼏', '󰼐', '󰼑', '󰼒', '󰼓', '󰼔', '󰼕', '󰼖', '󰼗', '󰼎' },
-        number = { '󰬺', '󰬻', '󰬼', '󰬽', '󰬾', '󰬿', '󰭀', '󰭁', '󰭂', '' },
-    },
+    styles = styles,
     --- config for IME UI
     UI = {
-        left = "<|",     -- symbol for left menu
-        right = "|>",    -- symbol for right menu
-        left_sep = "[",  -- symbol for left separator
+        left = "<|", -- symbol for left menu
+        right = "|>", -- symbol for right menu
+        left_sep = "[", -- symbol for left separator
         right_sep = "]", -- symbol for right separator
-        cursor = "|",    -- symbol for cursor
-        indices = {},    -- symbols for indices, maximum is 10 for 1-9, 0
+        cursor = "|", -- symbol for cursor
+        indices = styles.circle, -- symbols for indices, maximum is 10 for 1-9, 0
     },
 }
-
-M.UI.indices = M.styles.circle
 
 ---@param ui table?
 ---@return table ui

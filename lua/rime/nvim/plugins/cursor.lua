@@ -3,6 +3,7 @@
 -- luacheck: ignore 112 113
 local M = {
     Cursor = {
+        --- config for cursor
         schemas = {
             [".default"] = { bg = 'white' },
             double_pinyin_mspy = { bg = 'red' },

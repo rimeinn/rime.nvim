@@ -5,12 +5,13 @@ local keys = require "rime.data.keys"
 local modifiers = require "rime.data.modifiers"
 local M = {
     keys = {
+        --- key aliases
         aliases = {
             ["C-M"] = "Return",
             ["C-I"] = "Tab",
             ["C-["] = "Escape",
         },
-        -- capital
+        --- key map for any modifiers. keep capital name
         any = {
             Bs = "BackSpace",
             Del = "Delete",
@@ -24,11 +25,13 @@ local M = {
             Bar = "bar",
             Minus = "minus",
         },
+        --- key map for Control
         Control = {
             _ = "minus",
             ["^"] = "6",
             ["@"] = "Space",
         },
+        --- modifier map
         modifiers = {
             C = "Control",
             S = "Shift",
@@ -36,10 +39,11 @@ local M = {
             A = "Alt",
         }
     },
+    --- config for Key
     Key = {
-        name = 'Space',
-        code = keys.space,
-        mask = 0,
+        name = 'Space', -- vim key name
+        code = keys.space, -- rime key code
+        mask = 0, -- rime key mask
     }
 }
 
