@@ -52,9 +52,6 @@ setmetatable(M.Rime, {
 ---wrap `self:process()`
 ---@param input string?
 function M.Rime:exe(input)
-    if not self:is_enabled() then
-        return
-    end
     input = input or vim.v.char
     if not self.win:has_preedit() then
         for _, disable_key in ipairs(self.keymap.keys.disable) do
@@ -76,8 +73,8 @@ function M.Rime:exe(input)
 end
 
 ---enable/disable IME
----@param is_enabled boolean
-function M.Rime:switch(is_enabled)
+function M.Rime:switch()
+    local is_enabled = self:is_enabled()
     self.keymap:set_nowait(is_enabled)
 
     if is_enabled then
@@ -103,7 +100,7 @@ function M.Rime:switch(is_enabled)
     else
         vim.api.nvim_create_augroup("rime", {})
     end
-    self.hook:update(self.session, self:is_enabled())
+    self.hook:update(self.session, is_enabled)
 end
 
 ---use `vim.b.rime_is_enabled` to keep local

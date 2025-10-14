@@ -29,9 +29,8 @@ function M.IME:exe(...)
 end
 
 ---enable/disable IME. **abstract method**
----@param is_enabled boolean
-function M.IME:switch(is_enabled)
-    print(self.rime_is_enabled and is_enabled)
+function M.IME:switch()
+    print(self:is_enabled())
 end
 
 ---set/get IME enabled flag
@@ -70,7 +69,7 @@ function M.IME:toggle(is_enabled)
     end
     self:is_enabled(is_enabled)
 
-    self:switch(is_enabled)
+    self:switch()
 end
 
 ---enable IME. wrap `self:toggle()`
