@@ -221,8 +221,10 @@ See airline's `g:airline_mode_map` to know `i`, `R`, `s`, ...
 Disable all hooks:
 
 ```lua
-local ChainedHook = require('rime.nvim.hooks.chainedplugin').ChainedHook
+local ChainedHook = require('rime.nvim.hooks.chainedhook').ChainedHook
 local hook = ChainedHook { }
+-- by default
+-- local hook = ChainedHook { cursor, airline }
 local rime = Rime {
   hook = hook
 }
