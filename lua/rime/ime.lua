@@ -28,7 +28,7 @@ function M.IME:exe(...)
     print(self, ...)
 end
 
----enable/disable IME. **abstract method**
+---switch IME to `self:is_enabled()`. **abstract method**
 function M.IME:switch()
     print(self:is_enabled())
 end
@@ -99,18 +99,18 @@ function M.IME:toggle_cb(is_enabled)
 end
 
 ---get a callback for `self:enable()`
----@see toggle
+---@see enable
 function M.IME:enable_cb()
     return function()
-        self:toggle(true)
+        self:enable()
     end
 end
 
 ---get a callback for `self:disable()`
----@see toggle
+---@see disable
 function M.IME:disable_cb()
     return function()
-        self:toggle(false)
+        self:disable()
     end
 end
 
