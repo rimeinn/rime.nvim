@@ -133,7 +133,7 @@ Set keymap:
 ```lua
 local Rime = require('rime.nvim.rime').Rime
 local rime = Rime()
-vim.keymap.set('i', '<C-^>', rime:toggle())
+vim.keymap.set('i', '<C-^>', rime:toggle_cb())
 ```
 
 Once it is enabled, any printable key will be passed to rime in any case while
@@ -173,7 +173,7 @@ set guicursor=n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-CursorIM/lCursorIM,r-c
 ```
 
 ```lua
-local Cursor = require('rime.nvim.plugins.cursor').Cursor
+local Cursor = require('rime.nvim.hooks.cursor').Cursor
 local cursor = Cursor {
   schemas = {
     [".default"] = { bg = 'white' },
@@ -181,14 +181,8 @@ local cursor = Cursor {
     japanese = { bg = 'yellow' }
   }
 }
-local Plugins = require('rime.nvim.plugins').Plugins
-local plugins = Plugins {
-  plugins = {
-    cursor = cursor
-  }
-}
 local rime = Rime {
-  plugins = plugins
+  hook = cursor
 }
 ```
 
@@ -207,7 +201,7 @@ You can customize it. Such as:
 Only display input schema name in insert mode:
 
 ```lua
-local Airline = require('rime.nvim.plugins.airline').Airline
+local Airline = require('rime.nvim.hooks.airline').Airline
 local airline = Airline()
 
 function airline.get_new_mode(mode, old, name)
@@ -217,24 +211,20 @@ function airline.get_new_mode(mode, old, name)
   return old
 end
 
-local plugins = Plugins {
-  plugins = {
-    airline = airline
-  }
-}
 local rime = Rime {
-  plugins = plugins
+  hook = airline
 }
 ```
 
 See airline's `g:airline_mode_map` to know `i`, `R`, `s`, ...
 
-Disable all plugins:
+Disable all hooks:
 
 ```lua
-local plugins = Plugins {}
+local ChainedHook = require('rime.nvim.hooks.chainedplugin').ChainedHook
+local hook = ChainedHook { }
 local rime = Rime {
-  plugins = plugins
+  hook = hook
 }
 ```
 

@@ -1,10 +1,10 @@
----rime support for neovim
+---rime support for neovim based `rime.Rime()`.
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
 local Rime = require "rime.rime".Rime
 local Win = require "rime.nvim.win".Win
 local Keymap = require "rime.nvim.keymap".Keymap
-local Plugins = require "rime.nvim.plugins".Plugins
+local Hook = require "rime.nvim.hooks.chainedhook".ChainedHook
 
 local M = {
     Rime = {
@@ -32,7 +32,7 @@ end
 function M.Rime:new(rime)
     rime = rime or {}
     rime.keymap = rime.keymap or Keymap()
-    rime.plugins = rime.plugins or Plugins()
+    rime.hook = rime.hook or Hook()
     rime.augroup_id = rime.augroup_id or vim.api.nvim_create_augroup("rime", { clear = false })
     rime = Rime(rime)
     setmetatable(rime, {
@@ -46,18 +46,13 @@ setmetatable(M.Rime, {
     __call = M.Rime.new
 })
 
----get callback for drawing UI
----@param key string?
-function M.Rime:callback(key)
-    return function()
-        return self:exe(key)
-    end
-end
+---override `IME`.
+---@section overrides
 
 ---wrap `self:process()`
 ---@param input string?
 function M.Rime:exe(input)
-    if not vim.b.rime_is_enabled then
+    if not self:is_enabled() then
         return
     end
     input = input or vim.v.char
@@ -76,22 +71,13 @@ function M.Rime:exe(input)
     self.keymap:set_special(self.win:has_preedit() and self.callback or nil, self)
     -- change input schema
     if text == "" then
-        self.plugins:update(self.session, vim.b.rime_is_enabled)
+        self.hook:update(self.session, self:is_enabled())
     end
 end
 
----toggle IME
----@param is_enabled boolean?
----@see enable
----@see disable
-function M.Rime:_toggle(is_enabled)
-    if is_enabled == nil then
-        is_enabled = not vim.b.rime_is_enabled
-    end
-    if vim.b.rime_is_enabled == is_enabled then
-        return
-    end
-    vim.b.rime_is_enabled = is_enabled
+---enable/disable IME
+---@param is_enabled boolean
+function M.Rime:switch(is_enabled)
     self.keymap:set_nowait(is_enabled)
 
     if is_enabled then
@@ -111,38 +97,23 @@ function M.Rime:_toggle(is_enabled)
         vim.api.nvim_create_autocmd("BufEnter", {
             group = self.augroup_id,
             callback = function()
-                self.plugins:update(self.session, vim.b.rime_is_enabled)
+                self.hook:update(self.session, self:is_enabled())
             end
         })
     else
         vim.api.nvim_create_augroup("rime", {})
     end
-    self.plugins:update(self.session, vim.b.rime_is_enabled)
+    self.hook:update(self.session, self:is_enabled())
 end
 
----toggle IME
----@see _toggle
+---use `vim.b.rime_is_enabled` to keep local
 ---@param is_enabled boolean?
-function M.Rime:toggle(is_enabled)
-    return function()
-        self:_toggle(is_enabled)
+function M.Rime:is_enabled(is_enabled)
+    if is_enabled == nil then
+        return vim.b.rime_is_enabled or self.rime_is_enabled
     end
-end
-
----enable IME
----@see toggle
-function M.Rime:enable()
-    return function()
-        self:_toggle(true)
-    end
-end
-
----disable IME
----@see toggle
-function M.Rime:disable()
-    return function()
-        self:_toggle(false)
-    end
+    vim.b.rime_is_enabled = is_enabled
+    return vim.b.rime_is_enabled
 end
 
 return M

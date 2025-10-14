@@ -1,7 +1,9 @@
----Provide a simple IME
+---Provide a simple IME based on `ime.IME()`.
+---any subclass can use `self:process()` to customize `self:exe()`
 local fs = require 'rime.fs'
 local Key = require 'rime.key'.Key
 local UI = require 'rime.ui'.UI
+local IME = require "rime.ime".IME
 local Session = require "rime.session".Session
 local M = {
     Rime = {
@@ -10,10 +12,12 @@ local M = {
 
 ---@param rime table?
 ---@return table rime
+---@see ime.new
 function M.Rime:new(rime)
     rime = rime or {}
     rime.session = rime.session or Session()
     rime.ui = rime.ui or UI()
+    rime = IME(rime)
     setmetatable(rime, {
         __index = self
     })
@@ -21,12 +25,14 @@ function M.Rime:new(rime)
 end
 
 setmetatable(M.Rime, {
+    __index = IME,
     __call = M.Rime.new
 })
 
----wrap `ui:draw()`
+---wrap `self.ui:draw()`
 ---@param ... table
 ---@return string, string[], integer
+---@see ui.draw
 function M.Rime:draw(...)
     for _, key in ipairs { ... } do
         if not self.session:process_key(key.code, key.mask) then
@@ -47,29 +53,35 @@ end
 
 ---wrap `self:draw()`
 ---@param ... string
+---@see draw
 function M.Rime:process(...)
     local keys = {}
     for _, name in ipairs { ... } do
         table.insert(keys, Key { name = name })
     end
+    ---@diagnostic disable-next-line: deprecated
     local unpack = unpack or table.unpack
     return self:draw(unpack(keys))
 end
 
----wrap `self:draw()`
+---**entry for rime**
+function M.Rime:main()
+    self:enable()
+    while true do
+        local c = fs.getchar()
+        self:call({ code = c })
+    end
+end
+
+---override `IME`.
+---@section overrides
+
+---override `IME`.
 ---@param ... table
 function M.Rime:exe(...)
     local text, lines, _ = self:draw(...)
     print(text)
     print(table.concat(lines, "\n"))
-end
-
----**entry for rime**
-function M.Rime:main()
-    while true do
-        local c = fs.getchar()
-        self:exe({ code = c })
-    end
 end
 
 return M
