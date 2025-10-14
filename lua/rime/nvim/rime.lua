@@ -88,6 +88,9 @@ function M.Rime:_toggle(is_enabled)
     if is_enabled == nil then
         is_enabled = not vim.b.rime_is_enabled
     end
+    if vim.b.rime_is_enabled == is_enabled then
+        return
+    end
     vim.b.rime_is_enabled = is_enabled
     self.keymap:set_nowait(is_enabled)
 
