@@ -56,7 +56,7 @@ function M.Rime:exe(input)
     if not self.win:has_preedit() then
         for _, disable_key in ipairs(self.keymap.keys.disable) do
             if input == vim.keycode(disable_key) then
-                self:_toggle(false)
+                self:disable()
                 return
             end
         end
