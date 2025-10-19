@@ -133,7 +133,7 @@ function M.Rime:is_enabled(is_enabled)
     else
         vim.o.iminsert = 0
     end
-    return vim.o.iminsert == 1
+    return is_enabled
 end
 
 return M
