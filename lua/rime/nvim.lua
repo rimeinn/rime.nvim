@@ -4,8 +4,12 @@ local Rime = require('rime.nvim.rime').Rime
 local M = {}
 
 ---init if required
-function M.init()
-    M.ime = M.ime or Rime(M.rime)
+---@param augroup_id integer?
+function M.init(augroup_id)
+    if M.ime == nil then
+        M.ime = Rime(M.rime)
+        M.ime:create_autocmds(augroup_id)
+    end
 end
 
 ---wrap `self.ime:toggle()`
@@ -33,7 +37,7 @@ end
 ---@param key string?
 ---@see ime.callback
 function M.callback(key)
-    return function ()
+    return function()
         M.init()
         return M.ime:callback(key)
     end

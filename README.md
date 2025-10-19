@@ -133,7 +133,16 @@ Set keymap:
 ```lua
 local Rime = require('rime.nvim.rime').Rime
 local rime = Rime()
+rime:create_autocmds()
 vim.keymap.set('i', '<C-^>', rime:toggle_cb())
+vim.keymap.set('i', '<C-@>', rime:enable_cb())
+vim.keymap.set('i', '<C-_>', rime:disable_cb())
+```
+
+```vim
+inoremap <C-^> <C-O>:let &iminsert = 1 - &iminsert<CR>
+inoremap <C-@> <C-O>:set iminsert=1<CR>
+inoremap <C-_> <C-O>:set iminsert=0<CR>
 ```
 
 Once it is enabled, any printable key will be passed to rime in any case while
@@ -153,12 +162,15 @@ local rime = require('rime.nvim')
 local ui = require('rime.ui')
 rime.rime = { ui = ui.UI { indices = ui.styles.square } }
 vim.keymap.set('i', '<C-^>', rime.toggle)
+vim.keymap.set('i', '<C-@>', rime.enable)
+vim.keymap.set('i', '<C-_>', rime.disable)
 vim.keymap.set('i', '<C-\\>', rime.callback('<C-\\>'))
 ```
 
 ![square](https://github.com/user-attachments/assets/65c1de8b-c07c-4576-81bd-a034373ec160)
 
-Only when you press `<C-^>`, `Rime()` will be call to save time.
+Only when you press `<C-^>`, `Rime():create_autocmds()` will be call, which will
+save time.
 
 Once you switch to ascii mode of rime, you **cannot** switch back unless you
 have defined any hotkey to pass the key for switching ascii mode of rime to rime.

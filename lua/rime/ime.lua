@@ -29,8 +29,7 @@ function M.IME:exe(...)
 end
 
 ---switch IME to `self:is_enabled()`. **abstract method**
-function M.IME:switch()
-    print(self:is_enabled())
+function M.IME.switch()
 end
 
 ---set/get IME enabled flag
