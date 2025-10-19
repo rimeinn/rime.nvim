@@ -98,6 +98,7 @@ function M.Rime:exe(input)
             if input == vim.keycode(disable_key) then
                 self:disable()
                 -- TODO: will not trigger autocmd
+                local is_enabled = self:is_enabled()
                 self.keymap:set_nowait(is_enabled)
                 self.hook:update(self.session, is_enabled)
                 return
