@@ -121,14 +121,11 @@ end
 ---override `self.rime_is_enabled` because it is global to all buffers.
 ---@param is_enabled boolean?
 ---@return boolean
+-- luacheck: ignore 212/self
 function M.Rime:is_enabled(is_enabled)
     if is_enabled == nil then
-        if vim then
-            return vim.o.iminsert ~= 0
-        end
-        return self.rime_is_enabled
-    end
-    if is_enabled then
+        is_enabled = vim.o.iminsert ~= 0
+    elseif is_enabled then
         vim.o.iminsert = 1
     else
         vim.o.iminsert = 0
