@@ -103,14 +103,24 @@ function M.Rime:switch()
     self.hook:update(self.session, is_enabled)
 end
 
----use `vim.b.rime_is_enabled` to keep local
+---modify `vim.o.iminsert`:
+---save the flag to use IM in insert mode for each buffer.
+---see `:h iminsert`.
+---override `self.rime_is_enabled` because it is global to all buffers.
 ---@param is_enabled boolean?
 function M.Rime:is_enabled(is_enabled)
     if is_enabled == nil then
-        return vim.b.rime_is_enabled or self.rime_is_enabled
+        if vim then
+            return vim.o.iminsert ~= 0
+        end
+        return self.rime_is_enabled
     end
-    vim.b.rime_is_enabled = is_enabled
-    return vim.b.rime_is_enabled
+    if is_enabled then
+        vim.o.iminsert = 1
+    else
+        vim.o.iminsert = 0
+    end
+    return vim.o.iminsert
 end
 
 return M
