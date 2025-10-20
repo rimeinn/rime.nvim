@@ -61,19 +61,25 @@ function M.IME:toggle()
 end
 
 ---enable IME.
+---@return boolean
 ---@see toggle
 function M.IME:enable()
     if self:get_enabled() == false then
         self:set_enabled(true)
+        return true
     end
+    return false
 end
 
 ---disable IME.
+---@return boolean
 ---@see toggle
 function M.IME:disable()
     if self:get_enabled() then
         self:set_enabled(false)
+        return true
     end
+    return false
 end
 
 ---Callbacks
