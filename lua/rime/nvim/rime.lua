@@ -49,18 +49,6 @@ setmetatable(M.Rime, {
 ---@param augroup_id integer?
 function M.Rime:create_autocmds(augroup_id)
     augroup_id = augroup_id or vim.api.nvim_create_augroup("rime", {})
-    vim.api.nvim_create_autocmd("OptionSet", {
-        group = augroup_id,
-        pattern = "iminsert",
-        callback = function()
-            if vim.v.option_new == vim.v.option_old then
-                return
-            end
-            local is_enabled = self:get_enabled()
-            self.keymap:set_nowait(is_enabled)
-            self.hook:update(self.session, is_enabled)
-        end
-    })
 
     vim.api.nvim_create_autocmd("InsertCharPre", {
         group = augroup_id,
@@ -97,10 +85,6 @@ function M.Rime:exe(input)
         for _, disable_key in ipairs(self.keymap.keys.disable) do
             if input == vim.keycode(disable_key) then
                 self:disable()
-                -- TODO: will not trigger autocmd
-                local is_enabled = self:get_enabled()
-                self.keymap:set_nowait(is_enabled)
-                self.hook:update(self.session, is_enabled)
                 return
             end
         end
@@ -116,20 +100,21 @@ function M.Rime:exe(input)
     end
 end
 
----modify `vim.o.iminsert`:
 ---save the flag to use IM in insert mode for each buffer.
----override `self.rime_is_enabled` because it is global to all buffers.
+---override `self.iminsert` because it is global to all buffers.
 ---@param is_enabled boolean
 -- luacheck: ignore 212/self
 function M.Rime:set_enabled(is_enabled)
-    vim.o.iminsert = is_enabled and 1 or 0
+    self.keymap:set_nowait(is_enabled)
+    self.hook:update(self.session, is_enabled)
+    vim.b.iminsert = is_enabled or nil
 end
 
----see `:h iminsert`.
+---similar to `set_enabled()`.
 ---@return boolean
 -- luacheck: ignore 212/self
 function M.Rime:get_enabled()
-    return vim.o.iminsert > 0
+    return vim.b.iminsert
 end
 
 return M

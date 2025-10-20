@@ -4,7 +4,7 @@
 ---any subclass must define `self:exe()`
 local M = {
     IME = {
-        is_enabled = false
+        iminsert = false
     }
 }
 
@@ -31,13 +31,13 @@ end
 ---get IME enabled flag
 ---@return boolean
 function M.IME:get_enabled()
-    return self.is_enabled
+    return self.iminsert
 end
 
 ---set IME enabled flag
 ---@param is_enabled boolean
 function M.IME:set_enabled(is_enabled)
-    self.is_enabled = is_enabled
+    self.iminsert = is_enabled
 end
 
 ---Wrappers

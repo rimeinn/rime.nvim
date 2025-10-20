@@ -139,12 +139,6 @@ vim.keymap.set('i', '<C-@>', rime:enable_cb())
 vim.keymap.set('i', '<C-_>', rime:disable_cb())
 ```
 
-```vim
-inoremap <C-^> <C-O>:let &iminsert = 1 - &iminsert<CR>
-inoremap <C-@> <C-O>:set iminsert=1<CR>
-inoremap <C-_> <C-O>:set iminsert=0<CR>
-```
-
 Once it is enabled, any printable key will be passed to rime in any case while
 any non-printable key will be passed to rime only if rime window is opened. If
 you want to pass a key to rime in any case, try:
@@ -255,6 +249,17 @@ require('cmp').setup {
   }
 }
 ```
+
+### [ime.nvim](https://github.com/rimeinn/ime.nvim)
+
+- `ime.nvim` uses `:set iminsert=1/0` and `:set imsearch=1/0` to save external
+  IME's enabled flags.
+- `rime.nvim` uses `:let/unlet b:iminsert` to save internal IME's enabled flags.
+
+So they will not conflict.
+
+PS: both of them share same abstract class `IME` between `require'rime.ime'` and
+`require'ime.ime'`.
 
 ## Tips
 
