@@ -1,10 +1,10 @@
 ---A fake IME to provide callbacks
 ---`self:enable_cb()`, `self:disable_cb()`, `self.toggle_cb()` and ``
 ---for neovim.
----any subclass must define `self:switch()` and `self:exe()`
+---any subclass must define `self:exe()`
 local M = {
     IME = {
-        rime_is_enabled = false
+        is_enabled = false
     }
 }
 
@@ -28,18 +28,16 @@ function M.IME:exe(...)
     print(self, ...)
 end
 
----switch IME to `self:is_enabled()`. **abstract method**
-function M.IME.switch()
+---get IME enabled flag
+---@return boolean
+function M.IME:get_enabled()
+    return self.is_enabled
 end
 
----set/get IME enabled flag
----@param is_enabled boolean?
-function M.IME:is_enabled(is_enabled)
-    if is_enabled == nil then
-        return self.rime_is_enabled
-    end
-    self.rime_is_enabled = is_enabled
-    return self.rime_is_enabled
+---set IME enabled flag
+---@param is_enabled boolean
+function M.IME:set_enabled(is_enabled)
+    self.is_enabled = is_enabled
 end
 
 ---Wrappers
@@ -49,40 +47,33 @@ end
 ---@param ... any
 ---@see exe
 function M.IME:call(...)
-    if not self:is_enabled() then
+    if not self:get_enabled() then
         return
     end
     self:exe(...)
 end
 
----toggle IME. wrap `self:switch()`
----@param is_enabled boolean?
+---toggle IME.
 ---@see enable
 ---@see disable
-function M.IME:toggle(is_enabled)
-    if is_enabled == nil then
-        is_enabled = not self:is_enabled()
-    end
-    if self:is_enabled() == is_enabled then
-        return
-    end
-    self:is_enabled(is_enabled)
-
-    self:switch()
+function M.IME:toggle()
+    self:set_enabled(not self:get_enabled())
 end
 
----enable IME. wrap `self:toggle()`
+---enable IME.
 ---@see toggle
 function M.IME:enable()
-    return function()
-        self:toggle(true)
+    if self:get_enabled() == false then
+        self:set_enabled(true)
     end
 end
 
----disable IME. wrap `self:toggle()`
+---disable IME.
 ---@see toggle
 function M.IME:disable()
-    self:toggle(false)
+    if self:get_enabled() then
+        self:set_enabled(false)
+    end
 end
 
 ---Callbacks
@@ -90,10 +81,9 @@ end
 
 ---get a callback for `self:toggle()`
 ---@see toggle
----@param is_enabled boolean?
-function M.IME:toggle_cb(is_enabled)
+function M.IME:toggle_cb()
     return function()
-        self:toggle(is_enabled)
+        self:toggle()
     end
 end
 

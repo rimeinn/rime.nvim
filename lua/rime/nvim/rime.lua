@@ -56,7 +56,7 @@ function M.Rime:create_autocmds(augroup_id)
             if vim.v.option_new == vim.v.option_old then
                 return
             end
-            local is_enabled = self:is_enabled()
+            local is_enabled = self:get_enabled()
             self.keymap:set_nowait(is_enabled)
             self.hook:update(self.session, is_enabled)
         end
@@ -70,7 +70,7 @@ function M.Rime:create_autocmds(augroup_id)
     vim.api.nvim_create_autocmd({ "InsertLeave", "BufLeave" }, {
         group = augroup_id,
         callback = function()
-            if not self:is_enabled() then
+            if not self:get_enabled() then
                 return
             end
             self.session:clear_composition()
@@ -81,7 +81,7 @@ function M.Rime:create_autocmds(augroup_id)
     vim.api.nvim_create_autocmd("BufEnter", {
         group = augroup_id,
         callback = function()
-            self.hook:update(self.session, self:is_enabled())
+            self.hook:update(self.session, self:get_enabled())
         end
     })
 end
@@ -98,7 +98,7 @@ function M.Rime:exe(input)
             if input == vim.keycode(disable_key) then
                 self:disable()
                 -- TODO: will not trigger autocmd
-                local is_enabled = self:is_enabled()
+                local is_enabled = self:get_enabled()
                 self.keymap:set_nowait(is_enabled)
                 self.hook:update(self.session, is_enabled)
                 return
@@ -112,26 +112,24 @@ function M.Rime:exe(input)
     self.keymap:set_special(self.win:has_preedit() and self.callback or nil, self)
     -- change input schema
     if text == "" then
-        self.hook:update(self.session, self:is_enabled())
+        self.hook:update(self.session, self:get_enabled())
     end
 end
 
 ---modify `vim.o.iminsert`:
 ---save the flag to use IM in insert mode for each buffer.
----see `:h iminsert`.
 ---override `self.rime_is_enabled` because it is global to all buffers.
----@param is_enabled boolean?
+---@param is_enabled boolean
+-- luacheck: ignore 212/self
+function M.Rime:set_enabled(is_enabled)
+    vim.o.iminsert = is_enabled and 1 or 0
+end
+
+---see `:h iminsert`.
 ---@return boolean
 -- luacheck: ignore 212/self
-function M.Rime:is_enabled(is_enabled)
-    if is_enabled == nil then
-        is_enabled = vim.o.iminsert ~= 0
-    elseif is_enabled then
-        vim.o.iminsert = 1
-    else
-        vim.o.iminsert = 0
-    end
-    return is_enabled
+function M.Rime:get_enabled()
+    return vim.o.iminsert > 0
 end
 
 return M
