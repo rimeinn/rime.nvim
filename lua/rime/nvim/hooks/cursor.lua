@@ -4,6 +4,7 @@
 local M = {
     Cursor = {
         --- config for cursor
+        highlight = 'CursorIM',
         schemas = {
             [".default"] = { bg = 'white' },
             double_pinyin_mspy = { bg = 'red' },
@@ -31,7 +32,7 @@ setmetatable(M.Cursor, {
 function M.Cursor:set_hl(schema)
     schema = schema or ".default"
     local hl = self.schemas[schema]
-    vim.api.nvim_set_hl(0, "CursorIM", hl)
+    vim.api.nvim_set_hl(0, self.highlight, hl)
 end
 
 ---Update cursor colors
