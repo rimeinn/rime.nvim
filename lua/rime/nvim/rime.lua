@@ -65,9 +65,21 @@ function M.Rime:create_autocmds(augroup_id)
     vim.api.nvim_create_autocmd("BufEnter", {
         group = augroup_id,
         callback = function()
-            self.hook:update(self.session, self:get_enabled())
+            self.hook:update(self, self:get_enabled())
         end
     })
+end
+
+---get current schema ID, aka short name
+---@return string
+function M.Rime:get_current_schema()
+    return self.session:get_current_schema()
+end
+
+---get current schema name
+---@return string
+function M.Rime:get_schema_name()
+    return self.session:get_schema_name()
 end
 
 ---override `IME`.
@@ -92,7 +104,7 @@ function M.Rime:exe(input)
     self.keymap:set_special(self.win:has_preedit() and self.callback or nil, self)
     -- change input schema
     if text == "" then
-        self.hook:update(self.session, self:get_enabled())
+        self.hook:update(self, self:get_enabled())
     end
 end
 
@@ -102,7 +114,7 @@ end
 -- luacheck: ignore 212/self
 function M.Rime:set_enabled(is_enabled)
     self.keymap:set_nowait(is_enabled)
-    self.hook:update(self.session, is_enabled)
+    self.hook:update(self, is_enabled)
     vim.b.iminsert = is_enabled or nil
 end
 
