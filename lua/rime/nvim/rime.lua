@@ -13,18 +13,13 @@ local M = {
 }
 
 ---feed keys, wrap `vim.v.char` and `vim.api.nvim_feedkeys()`
----TODO: `vim.api.nvim_feedkeys(text, 't', true)` cannot work
 ---@param text string
 function M.feed_keys(text)
     if vim.v.char ~= "" then
         vim.v.char = text
         return
     end
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    local r = cursor[1]
-    local c = cursor[2]
-    vim.api.nvim_buf_set_text(0, r - 1, c, r - 1, c, { text })
-    vim.api.nvim_win_set_cursor(0, { r, c + #text })
+    vim.api.nvim_feedkeys(text, 't', true)
 end
 
 ---@param rime table?
