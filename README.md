@@ -258,8 +258,10 @@ require('cmp').setup {
 
 So they will not conflict.
 
-PS: both of them share same abstract class `IME` between `require'rime.ime'` and
-`require'ime.ime'`.
+![ime.nvim](https://github.com/user-attachments/assets/c7b61bb2-0d30-4bf2-9745-cc8ff1690596)
+
+PS: both of them share the same abstract class `IME` between `require'rime.ime'`
+and `require'ime.ime'`.
 
 ## Tips
 
