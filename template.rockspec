@@ -16,7 +16,7 @@ description = {
   $license
 }
 
-build_dependencies = { "luanativeobjects", "lua-cjson" }
+build_dependencies = { "luanativeobjects", "lua-cjson", "ime" }
 
 dependencies = $dependencies
 

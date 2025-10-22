@@ -2,7 +2,7 @@
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
 local lfs = require "lfs"
-local M = require 'ime.fs'
+local M = {}
 
 ---wrap `vim.fs.joinpath()`
 ---@param ... string

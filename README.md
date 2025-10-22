@@ -97,9 +97,10 @@ $ luarocks --lua-version 5.1 --local --tree ~/.local/share/nvim/rocks install ri
 ### Binding
 
 ```lua
+local UI = require "ime.ui".UI
+
 local Key = require "rime.key".Key
 local Session = require "rime.session".Session
-local UI = require "rime.ui".UI
 
 local session = Session()
 local key = Key {name = "n"}
@@ -152,8 +153,9 @@ It is useful for some key such as the key for switching input schema.
 Lazy load is possible:
 
 ```lua
+local ui = require('ime.ui')
+
 local rime = require('rime.nvim')
-local ui = require('rime.ui')
 rime.rime = { ui = ui.UI { indices = ui.styles.square } }
 vim.keymap.set('i', '<C-^>', rime.toggle)
 vim.keymap.set('i', '<C-@>', rime.enable)
@@ -179,7 +181,8 @@ set guicursor=n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-CursorIM/lCursorIM,r-c
 ```
 
 ```lua
-local Cursor = require('rime.nvim.hooks.cursor').Cursor
+local Cursor = require('ime.nvim.hooks.cursor').Cursor
+
 local cursor = Cursor {
   schemas = {
     [".default"] = { bg = 'white' },
@@ -207,7 +210,8 @@ You can customize it. Such as:
 Only display input schema name in insert mode:
 
 ```lua
-local Airline = require('rime.nvim.hooks.airline').Airline
+local Airline = require('ime.nvim.hooks.airline').Airline
+
 local airline = Airline()
 
 function airline.get_new_mode(mode, old, name)
@@ -227,7 +231,8 @@ See airline's `g:airline_mode_map` to know `i`, `R`, `s`, ...
 Disable all hooks:
 
 ```lua
-local ChainedHook = require('rime.nvim.hooks.chainedhook').ChainedHook
+local ChainedHook = require('ime.nvim.hooks.chainedhook').ChainedHook
+
 local hook = ChainedHook { }
 -- by default
 -- local hook = ChainedHook { cursor, airline }
@@ -260,8 +265,10 @@ So they will not conflict.
 
 ![ime.nvim](https://github.com/user-attachments/assets/c7b61bb2-0d30-4bf2-9745-cc8ff1690596)
 
-PS: both of them share the same abstract class `IME` between `require'rime.ime'`
-and `require'ime.ime'`.
+### [fcitx5-ui.nvim](https://github.com/black-desk/fcitx5-ui.nvim)
+
+Both `rime.nvim` and `fcitx5-ui.nvim` uses `:let/unlet b:iminsert` to save
+internal IME's enabled flags. They will conflict.
 
 ## Tips
 
