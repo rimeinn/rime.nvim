@@ -3,8 +3,8 @@
 -- luacheck: ignore 111 113
 local Key = require 'ime.key'.Key
 
-local rime_keys = require "rime.data.keys"
-local rime_modifiers = require "rime.data.modifiers"
+local keys = require "rime.data.keys"
+local modifiers = require "rime.data.modifiers"
 
 local M = {
     Key = {}
@@ -14,7 +14,7 @@ local M = {
 ---@return table
 function M.Key:new(key)
     key = key or {}
-    key = Key(key, rime_keys, rime_modifiers)
+    key = Key(key, keys, modifiers)
     setmetatable(key, {
         __index = self
     })
