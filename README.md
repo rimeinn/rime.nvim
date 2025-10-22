@@ -28,7 +28,7 @@
 [![github/repo-size](https://shields.io/github/repo-size/rimeinn/rime.nvim)](https://github.com/rimeinn/rime.nvim)
 [![github/v](https://shields.io/github/v/release/rimeinn/rime.nvim)](https://github.com/rimeinn/rime.nvim)
 
-[![luarocks](https://img.shields.io/luarocks/v/rimeinn/rime.nvim)](https://luarocks.org/modules/rimeinn/rime.nvim)
+[![luarocks](https://img.shields.io/luarocks/v/rimeinn/rime.nvim)](https://luarocks.org/modules/Freed-Wu/rime.nvim)
 
 Rime for neovim.
 
