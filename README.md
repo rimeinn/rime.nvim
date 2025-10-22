@@ -255,6 +255,17 @@ require('cmp').setup {
 }
 ```
 
+### [lualine](https://github.com/nvim-lualine/lualine.nvim)
+
+```lua
+local cfg = require('lualine').get_config()
+table.insert(
+  cfg.sections.lualine_y,
+  'require("rime.nvim").get_schema_name()'
+)
+require('lualine').setup(cfg)
+```
+
 ### [ime.nvim](https://github.com/rimeinn/ime.nvim)
 
 - `ime.nvim` uses `:set iminsert=1/0` and `:set imsearch=1/0` to save external

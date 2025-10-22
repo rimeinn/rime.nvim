@@ -20,6 +20,9 @@ function M.Rime:new(rime)
     setmetatable(rime, {
         __index = self
     })
+    if rime.trigger then
+        rime:process(rime.trigger.code, rime.trigger.mask)
+    end
     return rime
 end
 
