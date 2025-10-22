@@ -1,8 +1,8 @@
 ---utilities
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
-local keys = require "rime.data.keys"
-local modifiers = require "rime.data.modifiers"
+local rime_keys = require "rime.data.keys"
+local rime_modifiers = require "rime.data.modifiers"
 local M = {
     keys = {
         --- key aliases
@@ -42,20 +42,22 @@ local M = {
     --- config for Key
     Key = {
         name = 'Space', -- vim key name
-        code = keys.space, -- rime key code
+        code = rime_keys.space, -- rime key code
         mask = 0, -- rime key mask
     }
 }
 
 ---@param key table?
 ---@return table
-function M.Key:new(key)
+function M.Key:new(key, keys, modifiers)
     key = key or {}
+    keys = keys or rime_keys
+    modifiers = modifiers or rime_modifiers
     if key.code == nil then
         local mask = 0
         local name = key.name
         -- convert vim key name to rime key name
-        if name:sub(1, 1) == "<" and name:sub(-1) == ">" then
+        if name:sub(1, 1) == "<" and name:sub( -1) == ">" then
             name = name:sub(2, -2):gsub("-[-]", "-minus"):upper()
             name = M.keys.aliases[name] or name
             local parts = {}
