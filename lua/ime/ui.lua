@@ -1,5 +1,6 @@
 ---Provide a UI
-local fs = require 'rime.fs'
+---NOTE: `ui:draw()`'s output is `win:update()`'s input
+local fs = require 'ime.fs'
 
 local styles = {
     circle = { '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⓪' },

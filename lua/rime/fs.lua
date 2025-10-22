@@ -2,7 +2,7 @@
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
 local lfs = require "lfs"
-local M = {}
+local M = require 'ime.fs'
 
 ---wrap `vim.fs.joinpath()`
 ---@param ... string
@@ -11,7 +11,7 @@ function M.joinpath(...)
     if vim then
         return vim.fs.joinpath(...)
     end
-    return table.concat({...}, '/')
+    return table.concat({ ... }, '/')
 end
 
 ---wrap `vim.fs.dirname()`
@@ -52,25 +52,6 @@ function M.mkdir(name)
         return
     end
     lfs.mkdir(name)
-end
-
----wrap `vim.fn.getchar()`
----@return integer
-function M.getchar()
-    if vim then
-        return vim.fn.getchar()
-    end
-    return io.read(1):byte()
-end
-
----wrap `vim.fn.strwidth()`
----@param string string
----@return integer
-function M.strwidth(string)
-    if vim then
-        return vim.api.nvim_strwidth(string)
-    end
-    return #string
 end
 
 return M

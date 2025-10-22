@@ -1,6 +1,6 @@
 ---Wrap many hooks in a hook
-local Airline = require "rime.nvim.hooks.airline".Airline
-local Cursor = require "rime.nvim.hooks.cursor".Cursor
+local Airline = require "ime.nvim.hooks.airline".Airline
+local Cursor = require "ime.nvim.hooks.cursor".Cursor
 
 local M = {
     ChainedHook = {}

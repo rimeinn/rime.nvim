@@ -1,13 +1,12 @@
 ---Provide a simple IME based on `ime.IME()`.
 ---any subclass can use `self:process()` to customize `self:exe()`
-local fs = require 'rime.fs'
+local fs = require 'ime.fs'
 local Key = require 'rime.key'.Key
-local UI = require 'rime.ui'.UI
-local IME = require "rime.ime".IME
+local UI = require 'ime.ui'.UI
+local IME = require "ime.ime".IME
 local Session = require "rime.session".Session
 local M = {
-    Rime = {
-    }
+    Rime = {}
 }
 
 ---@param rime table?

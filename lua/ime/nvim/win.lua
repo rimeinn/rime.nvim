@@ -1,7 +1,8 @@
----Wrap `vim.api.nvim_open_win()`
+---Wrap `vim.api.nvim_open_win()`.
+---NOTE: `ui:draw()`'s output is `win:update()`'s input
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
-local fs = require 'rime.fs'
+local fs = require 'ime.fs'
 local M = {
     Win = {
         win_id = -1,

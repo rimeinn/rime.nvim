@@ -1,10 +1,11 @@
 ---rime support for neovim based `rime.Rime()`.
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 112 113
+local Win = require "ime.nvim.win".Win
+local Keymap = require "ime.nvim.keymap".Keymap
+local Hook = require "ime.nvim.hooks.chainedhook".ChainedHook
+
 local Rime = require "rime.rime".Rime
-local Win = require "rime.nvim.win".Win
-local Keymap = require "rime.nvim.keymap".Keymap
-local Hook = require "rime.nvim.hooks.chainedhook".ChainedHook
 
 local M = {
     Rime = {
