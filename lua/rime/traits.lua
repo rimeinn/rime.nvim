@@ -2,31 +2,27 @@
 local fs = require 'rime.fs'
 local Traits = require 'rime'.Traits
 
-local shared_data_dir = ""
----@diagnostic disable: undefined-global
--- luacheck: ignore 113
 local prefix = os.getenv("PREFIX") or
     fs.dirname(fs.dirname(os.getenv("SHELL") or "/bin/sh"))
-for _, dir in ipairs {
-    -- /usr merge: /usr/bin/sh -> /usr/share/rime-data
-    fs.joinpath(prefix, "share/rime-data"),
-    -- non /usr merge: /bin/sh -> /usr/share/rime-data
-    fs.joinpath(prefix, "usr/share/rime-data"),
-    "/run/current-system/sw/share/rime-data",
-    "/sdcard/rime-data"
-} do
+local xdg_data_dirs = os.getenv "XDG_DATA_DIRS" or fs.joinpath(prefix, "share")
+local home = os.getenv("HOME") or "."
+local xdg_config_home = os.getenv "XDG_CONFIG_HOME" or fs.joinpath(home, ".config")
+local xdg_data_home = os.getenv "XDG_DATA_HOME" or fs.joinpath(home, ".local", "share")
+
+local shared_data_dir = "/sdcard/rime-data"
+for dir in xdg_data_dirs:gmatch("([^:]+):?") do
+    dir = fs.joinpath(dir, "rime-data")
     if fs.isdirectory(dir) then
         shared_data_dir = dir
     end
 end
-local user_data_dir = ""
-local home = os.getenv("HOME") or "."
+local user_data_dir = "/sdcard/rime"
 for _, dir in ipairs {
-    home .. "/.config/ibus/rime",
-    home .. "/.local/share/fcitx5/rime",
-    home .. "/.config/fcitx/rime",
-    home .. "/sdcard/rime"
+    fs.joinpath(xdg_config_home, "ibus"),
+    fs.joinpath(xdg_data_home, "fcitx5"),
+    fs.joinpath(xdg_config_home, "fcitx")
 } do
+    dir = fs.joinpath(dir, "rime")
     if fs.isdirectory(dir) then
         user_data_dir = dir
     end
