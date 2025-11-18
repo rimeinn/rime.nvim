@@ -2,9 +2,7 @@
 local fs = require 'rime.fs'
 local Traits = require 'rime'.Traits
 
-local prefix = os.getenv("PREFIX") or
-    fs.dirname(fs.dirname(os.getenv("SHELL") or "/bin/sh"))
-local xdg_data_dirs = os.getenv "XDG_DATA_DIRS" or fs.joinpath(prefix, "share")
+local xdg_data_dirs = os.getenv "XDG_DATA_DIRS" or "/usr/share:/usr/local/share"
 local home = os.getenv("HOME") or "."
 local xdg_config_home = os.getenv "XDG_CONFIG_HOME" or fs.joinpath(home, ".config")
 local xdg_data_home = os.getenv "XDG_DATA_HOME" or fs.joinpath(home, ".local", "share")
