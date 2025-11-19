@@ -1,4 +1,5 @@
 ---wrap `rime.Traits()`
+---@module rime.traits
 local fs = require 'platformdirs.fs'
 local PlatformDirs = require 'platformdirs'.PlatformDirs
 
