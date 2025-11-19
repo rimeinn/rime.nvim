@@ -29,6 +29,8 @@ do
     add_files("*.nobj.lua")
     add_cflags("-Wno-int-conversion")
     add_packages("rime")
+    set_configdir("lua/rime")
+    add_configfiles("assets/templates/traits.lua")
 end
 
 target("json")

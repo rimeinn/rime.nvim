@@ -38,16 +38,16 @@ local M = {
     Traits = {
         shared_data_dir = shared_data_dir,                  -- directory store shared data
         user_data_dir = user_data_dir,                      -- directory store user data
-        log_dir = fs.joinpath(fs.stdpath("state"), "rime"), -- Directory of log files.
         -- Value is passed to Glog library using FLAGS_log_dir variable.
         -- NULL means temporary directory, and "" means only writing to stderr.
+        log_dir = fs.joinpath(fs.stdpath("state"), "rime"), -- Directory of log files.
         app_name = "rime.nvim-rime", -- Pass a C-string constant in the format "rime.x"
         -- where 'x' is the name of your application.
         -- Add prefix "rime." to ensure old log files are automatically cleaned.
         min_log_level = 'FATAL',              -- Minimal level of logged messages.
         distribution_name = "Rime",           -- distribution name
         distribution_code_name = "nvim-rime", -- distribution code name
-        distribution_version = "0.0.1",       -- distribution version
+        distribution_version = "${GIT_TAG}",       -- distribution version
     },
 }
 
@@ -59,6 +59,9 @@ function M.Traits:new(traits)
     setmetatable(traits, {
         __index = self
     })
+    if traits.version:match"%$" or traits.version == "none" then
+        traits.version = "0.0.1"
+    end
     fs.mkdir(traits.log_dir)
     return Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
         traits.distribution_code_name, traits.distribution_version, traits.app_name,
