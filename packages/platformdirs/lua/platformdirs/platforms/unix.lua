@@ -1,5 +1,5 @@
 ---respect XDG
----@module platformdirs.unix
+---@module platformdirs.platformdirs.unix
 local getuid = require 'posix.unistd'.getuid
 
 local fs = require 'platformdirs.fs'

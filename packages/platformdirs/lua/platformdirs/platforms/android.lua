@@ -1,5 +1,5 @@
 ---android miss a library like <https://pypi.org/project/jnius>
----@module platformdirs.android
+---@module platformdirs.platformdirs.android
 local PlatformDirs = require 'platformdirs.platformdirs'.PlatformDirs
 
 local M = {
