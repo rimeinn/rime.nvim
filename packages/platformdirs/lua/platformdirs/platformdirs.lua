@@ -1,19 +1,4 @@
 ---abstract class.
----user/site_*_dir:
----  data
----  config
----  cache
----  state
----by default,
----  log: state/log
----  runtime: cache/tmp
----user_*_dir:
----  documents
----  downloads
----  pictures
----  videos
----  music
----  desktop
 ---@module platformdirs.platformsdirs
 local fs = require 'platformdirs.fs'
 
@@ -89,7 +74,8 @@ end
 ---user/site directories
 ---@section user/site
 
----store user-specific data files
+---store user-specific data files.
+---`~/.$app`
 ---@return string
 function M.PlatformDirs:user_data_dir()
     local home = self.get_home()
@@ -99,7 +85,8 @@ function M.PlatformDirs:user_data_dir()
     return home
 end
 
----the preference-ordered set of base directories to search for data files
+---the preference-ordered set of base directories to search for data files.
+---`user_data_dir`
 ---@return string
 function M.PlatformDirs:site_data_dir()
     return self:user_data_dir()
@@ -110,13 +97,15 @@ function M.PlatformDirs:site_data_dirs()
     return { self:site_data_dir() }
 end
 
----store user-specific configuration files
+---store user-specific configuration files.
+---`user_data_dir`
 ---@return string
 function M.PlatformDirs:user_config_dir()
     return self:user_data_dir()
 end
 
----the preference-ordered set of base directories to search for configuration files
+---the preference-ordered set of base directories to search for configuration files.
+---`user_config_dir`
 ---@return string
 function M.PlatformDirs:site_config_dir()
     return self:user_config_dir()
@@ -127,23 +116,27 @@ function M.PlatformDirs:site_config_dirs()
     return { self:site_config_dir() }
 end
 
----store user-specific non-essential files
+---store user-specific non-essential files.
+---`user_data_dir`
 ---@return string
 function M.PlatformDirs:user_cache_dir()
     return self:user_data_dir()
 end
 
+---`user_cache_dir`
 ---@return string
 function M.PlatformDirs:site_cache_dir()
     return self:user_cache_dir()
 end
 
----store user-specific state files
+---store user-specific state files.
+---`user_cache_dir`
 ---@return string
 function M.PlatformDirs:user_state_dir()
     return self:user_cache_dir()
 end
 
+---`user_state_dir/log`
 ---@return string
 function M.PlatformDirs:user_log_dir()
     local path = self:user_state_dir()
@@ -156,6 +149,7 @@ end
 
 ---store user-specific non-essential runtime files and other file objects
 ---such as sockets, named pipes, ...
+---`user_cache_dir/tmp`
 ---@return string
 function M.PlatformDirs:user_runtime_dir()
     local path = self:user_cache_dir()
@@ -166,6 +160,7 @@ function M.PlatformDirs:user_runtime_dir()
     return path
 end
 
+---`user_runtime_dir`
 ---@return string
 function M.PlatformDirs:site_runtime_dir()
     return self:user_runtime_dir()
@@ -174,31 +169,37 @@ end
 ---user directories
 ---@section user
 
+---`~`
 ---@return string
 function M.PlatformDirs:user_documents_dir()
     return self.get_home()
 end
 
+---`~`
 ---@return string
 function M.PlatformDirs:user_downloads_dir()
     return self.get_home()
 end
 
+---`~`
 ---@return string
 function M.PlatformDirs:user_pictures_dir()
     return self.get_home()
 end
 
+---`~`
 ---@return string
 function M.PlatformDirs:user_videos_dir()
     return self.get_home()
 end
 
+---`~`
 ---@return string
 function M.PlatformDirs:user_music_dir()
     return self.get_home()
 end
 
+---`~`
 ---@return string
 function M.PlatformDirs:user_desktop_dir()
     return self.get_home()
