@@ -1,4 +1,7 @@
----respect XDG
+---respect
+---[XDG base directories](https://specifications.freedesktop.org/basedir-spec/latest/)
+---and
+---[XDG user directories](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/)
 ---@module platformdirs.platformdirs.unix
 local getuid = require 'posix.unistd'.getuid
 
@@ -45,6 +48,7 @@ end
 ---user/site directories
 ---@section user/site
 
+---`/home/$USER/.local/share/$app/$version`
 ---@return string
 function M.PlatformDirs:user_data_dir()
     local path = M.getenv("XDG_DATA_HOME", self:expand_user("~/.local/share"))
@@ -61,6 +65,7 @@ function M.PlatformDirs:site_data_dirs()
     return paths
 end
 
+---`/usr/share/$app/$version:/usr/local/share/$app/$version`
 ---@return string
 function M.PlatformDirs:site_data_dir()
     local paths = self:site_data_dirs()
@@ -70,6 +75,7 @@ function M.PlatformDirs:site_data_dir()
     return table.concat(paths, ':')
 end
 
+---`/home/$USER/.config/$app/$version`
 ---@return string
 function M.PlatformDirs:user_config_dir()
     local path = M.getenv("XDG_CONFIG_HOME", self:expand_user("~/.config"))
@@ -86,6 +92,7 @@ function M.PlatformDirs:site_config_dirs()
     return paths
 end
 
+---`/etc/xdg/$app/$version`
 ---@return string
 function M.PlatformDirs:site_config_dir()
     local paths = self:site_config_dirs()
@@ -95,23 +102,29 @@ function M.PlatformDirs:site_config_dir()
     return table.concat(paths, ':')
 end
 
+---`/home/$USER/.cache/$app/$version`
 ---@return string
 function M.PlatformDirs:user_cache_dir()
     local path = M.getenv("XDG_CACHE_HOME", self:expand_user("~/.cache"))
     return self:append_app_name_and_version(path)
 end
 
+---`/var/cache/$app/$version`
 ---@return string
 function M.PlatformDirs:site_cache_dir()
     return self:append_app_name_and_version("/var/cache")
 end
 
+---`/home/$USER/.local/state/$app/$version`
 ---@return string
 function M.PlatformDirs:user_state_dir()
     local path = M.getenv("XDG_STATE_HOME", self:expand_user("~/.local/state"))
     return self:append_app_name_and_version(path)
 end
 
+---Linux: `/run/user/1000/$app/$version`
+---BSD: `/var/run/user/1000/$app/$version`
+---fallback: `/tmp/runtime-1000/$app/$version`
 ---@return string
 function M.PlatformDirs:user_runtime_dir()
     local path = fs.joinpath("/run/user", getuid())
@@ -125,6 +138,8 @@ function M.PlatformDirs:user_runtime_dir()
     return self:append_app_name_and_version(path)
 end
 
+---Linux: `/run/$app/$version`
+---BSD: `/var/run/$app/$version`
 ---@return string
 function M.PlatformDirs:site_runtime_dir()
     local path = "/run"
@@ -138,31 +153,37 @@ end
 ---user directories
 ---@section user
 
+---`/home/$USER/Documents`
 ---@return string
 function M.PlatformDirs:user_documents_dir()
     return M.getenv("XDG_DOCUMENTS_DIR", self:expand_user("~/Documents"))
 end
 
+---`/home/$USER/Downloads`
 ---@return string
 function M.PlatformDirs:user_downloads_dir()
     return M.getenv("XDG_DOWNLOAD_DIR", self:expand_user("~/Downloads"))
 end
 
+---`/home/$USER/Pictures`
 ---@return string
 function M.PlatformDirs:user_pictures_dir()
     return M.getenv("XDG_PICTURES_DIR", self:expand_user("~/Pictures"))
 end
 
+---`/home/$USER/Videos`
 ---@return string
 function M.PlatformDirs:user_videos_dir()
     return M.getenv("XDG_VIDEOS_DIR", self:expand_user("~/Videos"))
 end
 
+---`/home/$USER/Music`
 ---@return string
 function M.PlatformDirs:user_music_dir()
     return M.getenv("XDG_MUSIC_DIR", self:expand_user("~/Music"))
 end
 
+---`/home/$USER/Desktop`
 ---@return string
 function M.PlatformDirs:user_desktop_dir()
     return M.getenv("XDG_DESKTOP_DIR", self:expand_user("~/Desktop"))

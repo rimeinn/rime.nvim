@@ -89,6 +89,7 @@ end
 ---user/site directories
 ---@section user/site
 
+---store user-specific data files
 ---@return string
 function M.PlatformDirs:user_data_dir()
     local home = self.get_home()
@@ -98,6 +99,7 @@ function M.PlatformDirs:user_data_dir()
     return home
 end
 
+---the preference-ordered set of base directories to search for data files
 ---@return string
 function M.PlatformDirs:site_data_dir()
     return self:user_data_dir()
@@ -108,11 +110,13 @@ function M.PlatformDirs:site_data_dirs()
     return { self:site_data_dir() }
 end
 
+---store user-specific configuration files
 ---@return string
 function M.PlatformDirs:user_config_dir()
     return self:user_data_dir()
 end
 
+---the preference-ordered set of base directories to search for configuration files
 ---@return string
 function M.PlatformDirs:site_config_dir()
     return self:user_config_dir()
@@ -123,6 +127,7 @@ function M.PlatformDirs:site_config_dirs()
     return { self:site_config_dir() }
 end
 
+---store user-specific non-essential files
 ---@return string
 function M.PlatformDirs:user_cache_dir()
     return self:user_data_dir()
@@ -133,6 +138,7 @@ function M.PlatformDirs:site_cache_dir()
     return self:user_cache_dir()
 end
 
+---store user-specific state files
 ---@return string
 function M.PlatformDirs:user_state_dir()
     return self:user_cache_dir()
@@ -148,6 +154,8 @@ function M.PlatformDirs:user_log_dir()
     return path
 end
 
+---store user-specific non-essential runtime files and other file objects
+---such as sockets, named pipes, ...
 ---@return string
 function M.PlatformDirs:user_runtime_dir()
     local path = self:user_cache_dir()

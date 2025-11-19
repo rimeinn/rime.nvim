@@ -69,26 +69,31 @@ end
 ---user/site directories
 ---@section user/site
 
+---`C:\Users\$USER\AppData\Local\$author\$app\$version`
 ---@return string
 function M.PlatformDirs:user_data_dir()
     return self:append_app_name_and_version(self:expand_user(self.roaming and "~/AppData/Roaming" or "~/AppData/Local"))
 end
 
+---`C:\ProgramData\$author\$app\$version`
 ---@return string
 function M.PlatformDirs:site_data_dir()
     return self:append_app_name_and_version("C:\\ProgramData")
 end
 
+---`C:\Users\$USER\AppData\Local\$author\$app\Caches\$version`
 ---@return string
 function M.PlatformDirs:user_cache_dir()
     return self:append_app_name_and_version(self:expand_user("~/AppData/Local"), "Caches")
 end
 
+---`C:\ProgramData\$author\$app\Cache\$version`
 ---@return string
 function M.PlatformDirs:site_cache_dir()
     return self:append_app_name_and_version("C:\\ProgramData", "Cache")
 end
 
+---`C:\Users\$USER\AppData\Local\$author\$app\$version\Logs`
 ---@return string
 function M.PlatformDirs:user_log_dir()
     local path = self:user_state_dir()
@@ -100,6 +105,7 @@ function M.PlatformDirs:user_log_dir()
     return path
 end
 
+---`C:\Users\$USER\AppData\Local\Temp\$author\$app\$version`
 ---@return string
 function M.PlatformDirs:user_runtime_dir()
     return self:append_app_name_and_version(self:expand_user("~/AppData/Local/Temp"))
@@ -108,31 +114,37 @@ end
 ---user directories
 ---@section user
 
+---`C:\Users\$USER\Documents`
 ---@return string
 function M.PlatformDirs:user_documents_dir()
     return self:expand_user("~/Documents")
 end
 
+---`C:\Users\$USER\Downloads`
 ---@return string
 function M.PlatformDirs:user_downloads_dir()
     return self:expand_user("~/Downloads")
 end
 
+---`C:\Users\$USER\Pictures`
 ---@return string
 function M.PlatformDirs:user_pictures_dir()
     return self:expand_user("~/Pictures")
 end
 
+---`C:\Users\$USER\Videos`
 ---@return string
 function M.PlatformDirs:user_videos_dir()
     return self:expand_user("~/Videos")
 end
 
+---`C:\Users\$USER\Music`
 ---@return string
 function M.PlatformDirs:user_music_dir()
     return self:expand_user("~/Music")
 end
 
+---`C:\Users\$USER\Desktop`
 ---@return string
 function M.PlatformDirs:user_desktop_dir()
     return self:expand_user("~/Desktop")
