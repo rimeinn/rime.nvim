@@ -18,7 +18,7 @@ description = {
 
 build_dependencies = { "luanativeobjects", "lua-cjson" }
 
-dependencies = { "lua >= 5.1", 'ime >= 0.0.4' }
+dependencies = { "lua >= 5.1", 'ime >= 0.0.4', 'platformdirs' }
 
 test_dependencies = $test_dependencies
 

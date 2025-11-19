@@ -1,5 +1,5 @@
 package = "platformdirs"
-version = "0.2.6"
+version = "0.2.7"
 lua = ">=5.1"
 
 [description]
