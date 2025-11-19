@@ -66,8 +66,8 @@ function M.PlatformDirs:append_app_name_and_version(base, ...)
     return self.normpath(path)
 end
 
----@section user/site
 ---user/site directories
+---@section user/site
 
 ---@return string
 function M.PlatformDirs:user_data_dir()
@@ -105,8 +105,8 @@ function M.PlatformDirs:user_runtime_dir()
     return self:append_app_name_and_version(self:expand_user("~/AppData/Local/Temp"))
 end
 
----@section user
 ---user directories
+---@section user
 
 ---@return string
 function M.PlatformDirs:user_documents_dir()

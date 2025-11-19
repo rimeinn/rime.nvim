@@ -39,8 +39,8 @@ function M.PlatformDirs.get_home()
     return "/storage/emulated/0"
 end
 
----@section user/site
 ---user/site directories
+---@section user/site
 
 ---@return string
 function M.PlatformDirs:user_data_dir()
@@ -57,8 +57,8 @@ function M.PlatformDirs:user_cache_dir()
     return self:append_app_name_and_version(M.android_folder(), "cache")
 end
 
----@section user
 ---user directories
+---@section user
 
 ---@return string
 function M.PlatformDirs:user_documents_dir()

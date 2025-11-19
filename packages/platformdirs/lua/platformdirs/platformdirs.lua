@@ -86,8 +86,8 @@ function M.PlatformDirs:expand_user(path)
     return path
 end
 
----@section user/site
 ---user/site directories
+---@section user/site
 
 ---@return string
 function M.PlatformDirs:user_data_dir()
@@ -163,8 +163,8 @@ function M.PlatformDirs:site_runtime_dir()
     return self:user_runtime_dir()
 end
 
----@section user
 ---user directories
+---@section user
 
 ---@return string
 function M.PlatformDirs:user_documents_dir()
