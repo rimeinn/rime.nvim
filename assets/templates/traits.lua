@@ -1,5 +1,7 @@
 ---wrap `rime.Traits()`
-local fs = require 'rime.fs'
+local fs = require 'platformdirs.fs'
+local PlatformDirs = require 'platformdirs'.PlatformDirs
+
 local Traits = require 'rime'.Traits
 
 local M = {
@@ -16,8 +18,10 @@ local M = {
         user_data_dir = "/sdcard/rime",        -- directory store user data
         -- Value is passed to Glog library using FLAGS_log_dir variable.
         -- NULL means temporary directory, and "" means only writing to stderr.
-        log_dir = fs.joinpath(fs.stdpath("state"), "rime"), -- Directory of log files.
-        app_name = "rime.nvim-rime",                        -- Pass a C-string constant in the format "rime.x"
+        log_dir = PlatformDirs {
+            appname = "nvim", version = "rime"
+        }.user_state_dir(),          -- Directory of log files.
+        app_name = "rime.nvim-rime", -- Pass a C-string constant in the format "rime.x"
         -- where 'x' is the name of your application.
         -- Add prefix "rime." to ensure old log files are automatically cleaned.
         min_log_level = 'FATAL',              -- Minimal level of logged messages.
@@ -27,23 +31,16 @@ local M = {
     },
 }
 
-local xdg_data_dirs = os.getenv "XDG_DATA_DIRS" or "/usr/share:/usr/local/share"
-local home = os.getenv("HOME") or "."
-local xdg_config_home = os.getenv "XDG_CONFIG_HOME" or fs.joinpath(home, ".config")
-local xdg_data_home = os.getenv "XDG_DATA_HOME" or fs.joinpath(home, ".local", "share")
-
-for dir in xdg_data_dirs:gmatch("([^:]+):?") do
-    dir = fs.joinpath(dir, "rime-data")
+for _, dir in ipairs(PlatformDirs { appname = "rime-data", multipath = true }.site_data_dirs()) do
     if fs.isdirectory(dir) then
         M.Traits.shared_data_dir = dir
     end
 end
 for _, dir in ipairs {
-    fs.joinpath(xdg_config_home, "ibus"),
-    fs.joinpath(xdg_data_home, "fcitx5"),
-    fs.joinpath(xdg_config_home, "fcitx")
+    PlatformDirs { appname = "ibus", version = "rime" }.user_config_dir(),
+    PlatformDirs { appname = "fcitx5", version = "rime" }.user_data_dir(),
+    PlatformDirs { appname = "fcitx", version = "rime" }.user_config_dir(),
 } do
-    dir = fs.joinpath(dir, "rime")
     if fs.isdirectory(dir) then
         M.Traits.user_data_dir = dir
     end

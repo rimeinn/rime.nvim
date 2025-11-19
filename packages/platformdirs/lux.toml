@@ -1,0 +1,25 @@
+package = "platformdirs"
+version = "0.2.6"
+lua = ">=5.1"
+
+[description]
+summary = "A lua implementation of platformdirs"
+detailed = "Respect the standards of Unix XDG, Android, macOS, Windows"
+maintainer = "Wu"
+labels = ["xdg"]
+homepage = "https://github.com/rimeinn/rime.nvim/tree/main/packages/platformdirs"
+license = 'GPL-3.0'
+
+[source]
+url = "https://github.com/rimeinn/rime.nvim/archive/$(VERSION).zip"
+dir = "rime.nvim-$(VERSION)/packages/$(PACKAGE)"
+
+[dependencies]
+luaposix = ">= 36"
+luafilesystem = " >= 1.8.0"
+
+[test]
+type = "busted"
+
+[build]
+type = "builtin"

@@ -1,4 +1,5 @@
 ---wrap `vim.fs` and `vim.fn`
+---@module platformdirs.fs
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
 local lfs = require "lfs"
@@ -14,16 +15,6 @@ function M.joinpath(...)
     return table.concat({ ... }, '/')
 end
 
----wrap `vim.fs.dirname()`
----@param path string
----@return string
-function M.dirname(path)
-    if vim then
-        return vim.fs.dirname(path)
-    end
-    return path:match("(.*)/[^/]*$") or '/'
-end
-
 ---wrap `vim.fn.isdirectory()`
 ---@param dir string
 ---@return boolean
@@ -32,16 +23,6 @@ function M.isdirectory(dir)
         return vim.fn.isdirectory(dir) == 1
     end
     return lfs.attributes(dir) and lfs.attributes(dir).mode == "directory"
-end
-
----wrap `vim.fn.stdpath()`
----@param name string
----@return string
-function M.stdpath(name)
-    if vim then
-        return vim.fn.stdpath(name)
-    end
-    return M.joinpath(os.getenv("HOME") or ".", ".local", name)
 end
 
 ---wrap `vim.fn.mkdir()`
