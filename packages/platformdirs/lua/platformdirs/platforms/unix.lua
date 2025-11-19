@@ -2,7 +2,7 @@
 ---[XDG base directories](https://specifications.freedesktop.org/basedir-spec/latest/)
 ---and
 ---[XDG user directories](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/)
----@module platformdirs.platformdirs.unix
+---@module platformdirs.platforms.unix
 local getuid = require 'posix.unistd'.getuid
 
 local fs = require 'platformdirs.fs'

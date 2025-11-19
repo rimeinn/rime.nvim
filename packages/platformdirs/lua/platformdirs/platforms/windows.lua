@@ -1,5 +1,5 @@
 ---win32 miss a library like ctypes, only luajit has `require'ffi'`
----@module platformdirs.platformdirs.windows
+---@module platformdirs.platforms.windows
 local fs = require 'platformdirs.fs'
 
 local PlatformDirs = require 'platformdirs.platformdirs'.PlatformDirs

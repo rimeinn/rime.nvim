@@ -1,5 +1,5 @@
 ---macOS
----@module platformdirs.platformdirs.macos
+---@module platformdirs.platforms.macos
 local PlatformDirs = require 'platformdirs.platformdirs'.PlatformDirs
 
 local M = {
