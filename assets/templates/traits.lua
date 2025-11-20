@@ -16,31 +16,31 @@ local M = {
     --- config for rime traits
     Traits = {
         shared_data_dir = "/sdcard/rime-data", -- directory store shared data
-        user_data_dir = "/sdcard/rime",        -- directory store user data
+        user_data_dir = "/sdcard/rime", -- directory store user data
         -- Value is passed to Glog library using FLAGS_log_dir variable.
         -- NULL means temporary directory, and "" means only writing to stderr.
         log_dir = PlatformDirs {
             appname = "nvim", version = "rime"
-        }.user_state_dir(),          -- Directory of log files.
+        }:user_state_dir(), -- Directory of log files.
         app_name = "rime.nvim-rime", -- Pass a C-string constant in the format "rime.x"
         -- where 'x' is the name of your application.
         -- Add prefix "rime." to ensure old log files are automatically cleaned.
-        min_log_level = 'FATAL',              -- Minimal level of logged messages.
-        distribution_name = "Rime",           -- distribution name
+        min_log_level = 'FATAL', -- Minimal level of logged messages.
+        distribution_name = "Rime", -- distribution name
         distribution_code_name = "nvim-rime", -- distribution code name
-        distribution_version = "${GIT_TAG}",  -- distribution version
+        distribution_version = "${GIT_TAG}", -- distribution version
     },
 }
 
-for _, dir in ipairs(PlatformDirs { appname = "rime-data", multipath = true }.site_data_dirs()) do
+for _, dir in ipairs(PlatformDirs { appname = "rime-data", multipath = true }:site_data_dirs()) do
     if fs.isdirectory(dir) then
         M.Traits.shared_data_dir = dir
     end
 end
 for _, dir in ipairs {
-    PlatformDirs { appname = "ibus", version = "rime" }.user_config_dir(),
-    PlatformDirs { appname = "fcitx5", version = "rime" }.user_data_dir(),
-    PlatformDirs { appname = "fcitx", version = "rime" }.user_config_dir(),
+    PlatformDirs { appname = "ibus", version = "rime" }:user_config_dir(),
+    PlatformDirs { appname = "fcitx5", version = "rime" }:user_data_dir(),
+    PlatformDirs { appname = "fcitx", version = "rime" }:user_config_dir(),
 } do
     if fs.isdirectory(dir) then
         M.Traits.user_data_dir = dir
@@ -55,8 +55,8 @@ function M.Traits:new(traits)
     setmetatable(traits, {
         __index = self
     })
-    if traits.version:match "%$" or traits.version == "none" then
-        traits.version = "0.0.1"
+    if traits.distribution_version:match "%$" or traits.distribution_version == "none" then
+        traits.distribution_version = "0.0.1"
     end
     fs.mkdir(traits.log_dir)
     return Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
