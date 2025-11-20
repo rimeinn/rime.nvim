@@ -1,6 +1,6 @@
 ---macOS
 ---@module platformdirs.platforms.macos
-local PlatformDirs = require 'platformdirs.platformdirs'.PlatformDirs
+local PlatformDirs = require 'platformdirs.platforms'.PlatformDirs
 
 local M = {
     PlatformDirs = {
@@ -105,3 +105,5 @@ end
 function M.PlatformDirs:user_desktop_dir()
     return self:expand_user("~/Desktop")
 end
+
+return M

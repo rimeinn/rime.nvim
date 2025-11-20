@@ -1,5 +1,5 @@
 ---abstract class.
----@module platformdirs.platformsdirs
+---@module platformdirs.platforms
 local fs = require 'platformdirs.fs'
 
 local M = {

@@ -1,6 +1,6 @@
 ---android miss a library like <https://pypi.org/project/jnius>
 ---@module platformdirs.platforms.android
-local PlatformDirs = require 'platformdirs.platformdirs'.PlatformDirs
+local PlatformDirs = require 'platformdirs.platforms'.PlatformDirs
 
 local M = {
     PlatformDirs = {
@@ -100,3 +100,5 @@ end
 function M.PlatformDirs:user_desktop_dir()
     return self:expand_user("~/Desktop")
 end
+
+return M

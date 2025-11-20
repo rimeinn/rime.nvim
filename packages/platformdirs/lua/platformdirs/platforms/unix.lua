@@ -6,7 +6,7 @@
 local getuid = require 'posix.unistd'.getuid
 
 local fs = require 'platformdirs.fs'
-local PlatformDirs = require 'platformdirs.platformdirs'.PlatformDirs
+local PlatformDirs = require 'platformdirs.platforms'.PlatformDirs
 
 local M = {
     PlatformDirs = {
@@ -188,3 +188,5 @@ end
 function M.PlatformDirs:user_desktop_dir()
     return M.getenv("XDG_DESKTOP_DIR", self:expand_user("~/Desktop"))
 end
+
+return M
