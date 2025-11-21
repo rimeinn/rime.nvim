@@ -289,10 +289,8 @@ dynamic link libraries are broken after `nix-collect-garbage -d`.
 
 ## Similar Projects
 
-- [pyrime](https://github.com/rimeinn/pyrime): a python binding of librime.
-  Practically, a vim plugin with the same feature as this plugin by python
-  implementation is possible. Like
-  [cmp-rime](https://github.com/Ninlives/cmp-rime).
+- [pyrime.nvim](https://github.com/rimeinn/pyrime/tree/main/src/pyrime/nvim):
+  python implementation. Inactive maintenance.
 - [coc-rime](https://github.com/rimeinn/coc-rime): nodejs
   implementation. Inactive maintenance.
 
