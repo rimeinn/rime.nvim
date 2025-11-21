@@ -3,8 +3,6 @@
 ---and
 ---[XDG user directories](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/)
 ---@module platformdirs.platforms.unix
-local getuid = require 'posix.unistd'.getuid
-
 local fs = require 'platformdirs.fs'
 local PlatformDirs = require 'platformdirs.platforms'.PlatformDirs
 
@@ -127,11 +125,12 @@ end
 ---fallback: `/tmp/runtime-1000/$app/$version`
 ---@return string
 function M.PlatformDirs:user_runtime_dir()
-    local path = fs.joinpath("/run/user", getuid())
+    local id = fs.getuid()
+    local path = fs.joinpath("/run/user", id)
     if not fs.isdirectory(path) then
-        path = fs.joinpath("/var/run/user", getuid())
+        path = fs.joinpath("/var/run/user", id)
         if not fs.isdirectory(path) then
-            path = fs.joinpath("/tmp", "runtime-" .. getuid())
+            path = fs.joinpath("/tmp", "runtime-" .. id)
         end
     end
     path = M.getenv("XDG_RUNTIME_DIR", path)

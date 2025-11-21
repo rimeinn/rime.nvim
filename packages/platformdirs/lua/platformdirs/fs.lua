@@ -35,4 +35,23 @@ function M.mkdir(name)
     lfs.mkdir(name)
 end
 
+---wrap `vim.uv.getuid()`
+---@return integer id
+function M.getuid()
+    local ok, mod = pcall(require, 'luv')
+    if not ok then
+        ok, mod = pcall(require, 'posix.unistd')
+    end
+    if ok then
+        return mod.getuid()
+    end
+    local p = io.popen "id -u"
+    local id = 1000
+    if p then
+        id = tonumber(p:read("*a")) or id
+        p:close()
+    end
+    return id
+end
+
 return M

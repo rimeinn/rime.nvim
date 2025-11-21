@@ -1,5 +1,5 @@
 package = "platformdirs"
-version = "0.2.7"
+version = "0.2.8"
 lua = ">=5.1"
 
 [description]
@@ -15,7 +15,6 @@ url = "https://github.com/rimeinn/rime.nvim/archive/$(VERSION).zip"
 dir = "rime.nvim-$(VERSION)/packages/$(PACKAGE)"
 
 [dependencies]
-luaposix = ">= 36"
 luafilesystem = " >= 1.8.0"
 
 [test]
