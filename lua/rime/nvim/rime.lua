@@ -13,14 +13,19 @@ local M = {
     }
 }
 
----feed keys, wrap `vim.v.char` and `vim.api.nvim_feedkeys()`
+---feed keys, wrap `vim.v.char`
+---`vim.api.nvim_feedkeys(text, 't', true)` cannot override InsertCharPre
 ---@param text string
 function M.feed_keys(text)
     if vim.v.char ~= "" then
         vim.v.char = text
         return
     end
-    vim.api.nvim_feedkeys(text, 't', true)
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local r = cursor[1]
+    local c = cursor[2]
+    vim.api.nvim_buf_set_text(0, r - 1, c, r - 1, c, { text })
+    vim.api.nvim_win_set_cursor(0, { r, c + #text })
 end
 
 ---@param rime table?
