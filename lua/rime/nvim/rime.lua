@@ -25,7 +25,7 @@ function M.feed_keys(text)
     local r = cursor[1]
     local c = cursor[2]
     vim.api.nvim_buf_set_text(0, r - 1, c, r - 1, c, { text })
-    vim.api.nvim_win_set_cursor(0, { r, c + #text })
+    vim.api.nvim_win_set_cursor(0, { r, c + vim.api.nvim_strwidth(text) })
 end
 
 ---@param rime table?
