@@ -281,6 +281,64 @@ So they will not conflict.
 Both `rime.nvim` and `fcitx5-ui.nvim` uses `:let/unlet b:iminsert` to save
 internal IME's enabled flags. They will conflict.
 
+### [vim-smartinput](https://github.com/kana/vim-smartinput)
+
+```vim
+call smartinput#map_to_trigger('i', '（', '（', '（')
+call smartinput#define_rule({
+      \ 'at': '\%#',
+      \ 'char': '（',
+      \ 'input': '（）<Left>',
+      \ })
+```
+
+We use `|` to represent cursor. Every time you input a character:
+
+1. rime.nvim will process it firstly, such as `|( -> |（`
+2. vim-smartinput will process it then, such as `|（ -> （|）`
+
+However, if a menu exists, the situation is different.
+E.g.,
+
+```vim
+call smartinput#map_to_trigger('i', '【', '【', '【')
+call smartinput#define_rule({
+      \ 'at': '\%#',
+      \ 'char': '【',
+      \ 'input': '【】<Left>',
+      \ })
+```
+
+When you input `[`:
+
+```text
+「|
+[① 「 〔全角〕]② 【 ③ 〔 ④ ［ 〔全角〕
+```
+
+Then you press `2` to select the second candidate `【`, it will be:
+
+1. rime.nvim will process it firstly, such as `|2 -> |【`
+2. vim-smartinput will do nothing, because `|2` will not trigger the rule of `|【`.
+
+You will not get `【|】`!
+
+Especially, when you mix Chinese punctuation and ASCII punctuation:
+
+```vim
+call smartinput#map_to_trigger('i', '<Space>', '<Space>', '<Space>')
+call smartinput#define_rule({
+      \ 'at': '(\%#)',
+      \ 'char': '<Space>',
+      \ 'input': '<Space><Space><Left>',
+      \ })
+```
+
+If you press `<Space>` in `(|)`, you will get `( | )`.
+However, if you press `<Space>` to select the first candidate `你好`,
+you will get `(你好| )` due to `| -> |你好`!
+The best solution is using Chinese punctuation to get `（你好|）`.
+
 ## Tips
 
 For Nix user, run
