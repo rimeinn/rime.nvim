@@ -112,7 +112,7 @@ local context = session:get_context()
 if context == nil then
     return
 end
-content, _ = ui:draw(context)
+local content, _ = ui:draw(context)
 print(table.concat(content, "\n"))
 ```
 
