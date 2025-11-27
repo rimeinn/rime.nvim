@@ -1,5 +1,5 @@
 package = "vim"
-version = "0.2.11"
+version = "0.0.1"
 lua = ">=5.1"
 
 [description]
@@ -11,8 +11,8 @@ homepage = "https://github.com/rimeinn/rime.nvim/tree/main/packages/vim"
 license = 'GPL-3.0'
 
 [source]
-url = "https://github.com/rimeinn/rime.nvim/archive/$(VERSION).zip"
-dir = "rime.nvim-$(VERSION)/packages/$(PACKAGE)"
+url = "https://github.com/rimeinn/rime.nvim/archive/a39141f5380dda01529e4c7ca05c11d640104894.zip"
+dir = "rime.nvim-a39141f5380dda01529e4c7ca05c11d640104894/packages/$(PACKAGE)"
 
 [dependencies]
 luafilesystem = " >= 1.8.0"

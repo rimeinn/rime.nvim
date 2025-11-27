@@ -15,7 +15,7 @@ url = "https://github.com/rimeinn/rime.nvim/archive/$(VERSION).zip"
 dir = "rime.nvim-$(VERSION)/packages/$(PACKAGE)"
 
 [dependencies]
-vi = " >= 0.0.1"
+vim = " >= 0.0.1"
 
 [test]
 type = "busted"
