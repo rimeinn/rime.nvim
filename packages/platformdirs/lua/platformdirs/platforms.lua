@@ -42,7 +42,7 @@ end
 ---@param path string
 function M.PlatformDirs:optionally_create_directory(path)
     if self.ensure_exists and not fn.isdirectory(path) then
-        fn.mkdir(path)
+        fn.mkdir(path, 'p')
     end
 end
 

@@ -58,7 +58,7 @@ function M.Traits:new(traits)
     if traits.distribution_version:match "%$" or traits.distribution_version == "none" then
         traits.distribution_version = "0.0.1"
     end
-    fn.mkdir(traits.log_dir)
+    fn.mkdir(traits.log_dir, 'p')
     return Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
         traits.distribution_code_name, traits.distribution_version, traits.app_name,
         M.log_level[traits.min_log_level])

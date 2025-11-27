@@ -1,7 +1,7 @@
 ---wrap `vim.fn`
 ---@module vim.fn
 ---@diagnostic disable: undefined-global
--- luacheck: ignore 111 113
+-- luacheck: ignore 111 113 212
 if vim and vim.fn then
     return vim.fn
 end
@@ -17,7 +17,10 @@ end
 
 ---wrap `vim.fn.mkdir()`
 ---@param name string
-function M.mkdir(name)
+---@param flags string?
+---@param prot integer?
+---@diagnostic disable-next-line: unused-local
+function M.mkdir(name, flags, prot)
     lfs.mkdir(name)
 end
 
