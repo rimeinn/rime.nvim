@@ -448,7 +448,7 @@ function M.root(source, marker)
         local paths = M.find(mark, {
             upward = true,
             -- path = vim.fn.fnamemodify(path, ':p:h'),
-            path = path
+            path = vim.fs.dirname(path)
         })
 
         if #paths ~= 0 then

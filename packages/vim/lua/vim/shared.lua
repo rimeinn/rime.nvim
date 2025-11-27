@@ -25,7 +25,7 @@ end
 ---@param opts table?
 ---@diagnostic disable-next-line: unused-local
 function M.gsplit(s, sep, opts)
-    return s:gmatch("([^" .. sep .. "]+)" .. sep)
+    return s:gmatch("([^" .. sep .. "]+)" .. sep .. '?')
 end
 
 ---wrap `vim.startswith()`
