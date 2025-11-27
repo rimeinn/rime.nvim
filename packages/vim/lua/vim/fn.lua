@@ -8,6 +8,15 @@ end
 local lfs = require "lfs"
 local M = {}
 
+---wrap `vim.fn.getcwd()`
+---@return string cwd
+function M.getcwd()
+    if vim then
+        return vim.fn.getcwd()
+    end
+    return lfs.currentdir()
+end
+
 ---wrap `vim.fn.isdirectory()`
 ---@param dir string
 ---@return boolean
