@@ -5,13 +5,7 @@
 if vim and vim.validate then
     return vim
 end
-local M = {
-    uv = require "vim.uv"
-}
-local ok, luv = pcall(require, 'luv')
-if ok then
-    M.uv = luv
-end
+local M = {}
 
 ---wrap `vim.validate()`
 ---@diagnostic disable-next-line: unused-vararg

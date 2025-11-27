@@ -18,9 +18,31 @@ if vim and vim.fs then
 end
 local lfs = require "lfs"
 local vim = require "vim.shared"
+vim.uv = require "vim.uv"
+vim.fs = {}
+vim.fn = {}
+---wrap `vim.fn.fnamemodify()`
+---@param fname string
+---@param mods string
+---@return string
+function vim.fn.fnamemodify(fname, mods)
+    local fs = vim.fs
+    for mod in mods:gmatch(':(.)') do
+        if mod == 'p' then
+            fname = fs.abspath(fname)
+            if lfs.attributes(fname) and lfs.attributes(fname).mode == "directory" then
+                fname = fs.joinpath(fname, '')
+            end
+        elseif mod == 'h' then
+            fname = fs.dirname(fname)
+        end
+    end
+    return fname
+end
+
 local uv = vim.uv
-local M = {}
-vim.fs = M
+
+local M = vim.fs
 
 -- Can't use `has('win32')` because the `nvim -ll` test runner doesn't support `vim.fn` yet.
 local sysname = uv.os_uname().sysname:lower()
@@ -447,8 +469,7 @@ function M.root(source, marker)
     for _, mark in ipairs(markers) do
         local paths = M.find(mark, {
             upward = true,
-            -- path = vim.fn.fnamemodify(path, ':p:h'),
-            path = vim.fs.dirname(path)
+            path = vim.fn.fnamemodify(path, ':p:h'),
         })
 
         if #paths ~= 0 then

@@ -6,6 +6,7 @@ if vim and vim.fn then
     return vim.fn
 end
 local lfs = require "lfs"
+local fs = require 'vim.fs'
 local M = {}
 
 ---wrap `vim.fn.getcwd()`
@@ -51,6 +52,24 @@ end
 ---@return integer
 function M.strwidth(string)
     return #string
+end
+
+---wrap `vim.fn.fnamemodify()`
+---@param fname string
+---@param mods string
+---@return string
+function M.fnamemodify(fname, mods)
+    for mod in mods:gmatch(':(.)') do
+        if mod == 'p' then
+            fname = fs.abspath(fname)
+            if M.isdirectory(fname) then
+                fname = fs.joinpath(fname, '')
+            end
+        elseif mod == 'h' then
+            fname = fs.dirname(fname)
+        end
+    end
+    return fname
 end
 
 return M
