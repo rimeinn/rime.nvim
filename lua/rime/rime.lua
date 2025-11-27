@@ -1,6 +1,6 @@
 ---Provide a simple IME based on `ime.IME()`.
 ---any subclass can use `self:process()` to customize `self:exe()`
-local fs = require 'ime.fs'
+local fn = require 'ime.fn'
 local Key = require 'rime.key'.Key
 local UI = require 'ime.ui'.UI
 local IME = require "ime.ime".IME
@@ -70,7 +70,7 @@ end
 function M.Rime:main()
     self:enable()
     while true do
-        local c = fs.getchar()
+        local c = fn.getchar()
         self:call({ code = c, mask = 0 })
     end
 end
