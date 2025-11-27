@@ -1,7 +1,7 @@
 ---abstract class.
 ---@module platformdirs.platforms
-local fn = require 'vi.fn'
-local fs = require 'vi.fs'
+local fn = require 'vim.fn'
+local fs = require 'vim.fs'
 
 local M = {
     PlatformDirs = {

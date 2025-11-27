@@ -1,6 +1,6 @@
 ---wrap `rime.Traits()`
 ---@module rime.traits
-local fn = require 'vi.fn'
+local fn = require 'vim.fn'
 local PlatformDirs = require 'platformdirs'.PlatformDirs
 
 local Traits = require 'rime'.Traits

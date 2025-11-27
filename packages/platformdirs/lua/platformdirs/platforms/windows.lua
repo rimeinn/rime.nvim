@@ -1,6 +1,6 @@
 ---win32 miss a library like ctypes, only luajit has `require'ffi'`
 ---@module platformdirs.platforms.windows
-local fs = require 'vi.fs'
+local fs = require 'vim.fs'
 
 local PlatformDirs = require 'platformdirs.platforms'.PlatformDirs
 

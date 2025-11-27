@@ -1,5 +1,5 @@
 ---wrap `vim.fn`
----@module vi.fn
+---@module vim.fn
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
 if vim and vim.fn then

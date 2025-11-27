@@ -1,6 +1,6 @@
 ---select a `PlatformDirs` according to OS
 ---@module platformdirs
-local uv = require "vi.uv"
+local uv = require "vim.uv"
 local PlatformDirs = require "platformdirs.platforms".PlatformDirs
 local Unix = require "platformdirs.platforms.unix".PlatformDirs
 local Android = require "platformdirs.platforms.android".PlatformDirs

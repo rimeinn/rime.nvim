@@ -1,12 +1,12 @@
----wrap `vim.*`
----@module vi
+---wrap `vim.shared`
+---@module vim.shared
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113 212
 if vim and vim.validate then
     return vim
 end
 local M = {
-    uv = require "vi.uv"
+    uv = require "vim.uv"
 }
 local ok, luv = pcall(require, 'luv')
 if ok then

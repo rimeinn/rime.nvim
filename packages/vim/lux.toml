@@ -1,4 +1,4 @@
-package = "vi"
+package = "vim"
 version = "0.2.11"
 lua = ">=5.1"
 
@@ -7,7 +7,7 @@ summary = "use vim.fs outside of neovim"
 detailed = "See :help vim.fs"
 maintainer = "Wu"
 labels = ["neovim"]
-homepage = "https://github.com/rimeinn/rime.nvim/tree/main/packages/vi"
+homepage = "https://github.com/rimeinn/rime.nvim/tree/main/packages/vim"
 license = 'GPL-3.0'
 
 [source]
