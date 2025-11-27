@@ -3,8 +3,8 @@
 ---and
 ---[XDG user directories](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/)
 ---@module platformdirs.platforms.unix
-local fs = require 'platformdirs.fs'
-local uv = require 'platformdirs.uv'
+local fs = require 'vi.fs'
+local uv = require 'vi.uv'
 local PlatformDirs = require 'platformdirs.platforms'.PlatformDirs
 
 local M = {

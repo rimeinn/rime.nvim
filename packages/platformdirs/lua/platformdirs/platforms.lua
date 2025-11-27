@@ -1,7 +1,7 @@
 ---abstract class.
 ---@module platformdirs.platforms
-local fn = require 'platformdirs.fn'
-local fs = require 'platformdirs.fs'
+local fn = require 'vi.fn'
+local fs = require 'vi.fs'
 
 local M = {
     PlatformDirs = {

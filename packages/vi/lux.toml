@@ -1,13 +1,13 @@
-package = "platformdirs"
+package = "vi"
 version = "0.2.11"
 lua = ">=5.1"
 
 [description]
-summary = "A lua implementation of platformdirs"
-detailed = "Respect the standards of Unix XDG, Android, macOS, Windows"
+summary = "use vim.fs outside of neovim"
+detailed = "See :help vim.fs"
 maintainer = "Wu"
-labels = ["xdg"]
-homepage = "https://github.com/rimeinn/rime.nvim/tree/main/packages/platformdirs"
+labels = ["neovim"]
+homepage = "https://github.com/rimeinn/rime.nvim/tree/main/packages/vi"
 license = 'GPL-3.0'
 
 [source]
@@ -15,7 +15,7 @@ url = "https://github.com/rimeinn/rime.nvim/archive/$(VERSION).zip"
 dir = "rime.nvim-$(VERSION)/packages/$(PACKAGE)"
 
 [dependencies]
-vi = " >= 0.0.1"
+luafilesystem = " >= 1.8.0"
 
 [test]
 type = "busted"

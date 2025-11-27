@@ -8,7 +8,7 @@ dir = "_readthedocs/html"
 readme = {
     "README.md"
 }
-file = {"lua", "assets/templates", "packages/platformdirs/lua"}
+file = {"lua", "assets/templates", "packages/platformdirs/lua", "packages/vi/lua"}
 description = title
 full_description = [[
 Use RIME in NeoVim!

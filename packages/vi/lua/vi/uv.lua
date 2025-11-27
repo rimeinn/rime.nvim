@@ -1,5 +1,5 @@
 ---wrap `vim.uv`
----@module platformdirs.uv
+---@module vi.uv
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
 local _ok, luv = pcall(require, 'luv')

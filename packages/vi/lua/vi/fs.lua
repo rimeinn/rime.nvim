@@ -9,15 +9,15 @@
 ---     vim.print('file exists')
 ---   end
 --- <
----@module platformdirs.fs
+---@module vi.fs
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113 631
 
-if vim then
+if vim and vim.fs then
     return vim.fs
 end
 local lfs = require "lfs"
-local vim = require "platformdirs.vim"
+local vim = require "vi.vim"
 local uv = vim.uv
 local M = {}
 vim.fs = M
