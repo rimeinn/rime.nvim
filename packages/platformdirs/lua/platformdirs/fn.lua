@@ -1,5 +1,5 @@
----wrap `vim.fs` and `vim.fn`
----@module platformdirs.fs
+---wrap `vim.fn`
+---@module platformdirs.fn
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
 local lfs = require "lfs"

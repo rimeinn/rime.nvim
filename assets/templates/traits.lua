@@ -1,6 +1,6 @@
 ---wrap `rime.Traits()`
 ---@module rime.traits
-local fs = require 'platformdirs.fs'
+local fn = require 'platformdirs.fn'
 local PlatformDirs = require 'platformdirs'.PlatformDirs
 
 local Traits = require 'rime'.Traits
@@ -33,7 +33,7 @@ local M = {
 }
 
 for _, dir in ipairs(PlatformDirs { appname = "rime-data", multipath = true }:site_data_dirs()) do
-    if fs.isdirectory(dir) then
+    if fn.isdirectory(dir) then
         M.Traits.shared_data_dir = dir
     end
 end
@@ -42,7 +42,7 @@ for _, dir in ipairs {
     PlatformDirs { appname = "fcitx5", version = "rime" }:user_data_dir(),
     PlatformDirs { appname = "fcitx", version = "rime" }:user_config_dir(),
 } do
-    if fs.isdirectory(dir) then
+    if fn.isdirectory(dir) then
         M.Traits.user_data_dir = dir
     end
 end
@@ -58,7 +58,7 @@ function M.Traits:new(traits)
     if traits.distribution_version:match "%$" or traits.distribution_version == "none" then
         traits.distribution_version = "0.0.1"
     end
-    fs.mkdir(traits.log_dir)
+    fn.mkdir(traits.log_dir)
     return Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
         traits.distribution_code_name, traits.distribution_version, traits.app_name,
         M.log_level[traits.min_log_level])

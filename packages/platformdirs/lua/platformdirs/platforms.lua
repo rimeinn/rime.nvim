@@ -1,6 +1,6 @@
 ---abstract class.
 ---@module platformdirs.platforms
-local fs = require 'platformdirs.fs'
+local fn = require 'platformdirs.fn'
 
 local M = {
     PlatformDirs = {
@@ -28,11 +28,11 @@ setmetatable(M.PlatformDirs, {
 ---@param ... string
 ---@return string
 function M.PlatformDirs:append_app_name_and_version(...)
-    local path = fs.joinpath(...)
+    local path = fn.joinpath(...)
     if self.appname then
-        path = fs.joinpath(path, self.appname)
+        path = fn.joinpath(path, self.appname)
         if self.version then
-            path = fs.joinpath(path, self.version)
+            path = fn.joinpath(path, self.version)
         end
     end
     return path
@@ -40,8 +40,8 @@ end
 
 ---@param path string
 function M.PlatformDirs:optionally_create_directory(path)
-    if self.ensure_exists and not fs.isdirectory(path) then
-        fs.mkdir(path)
+    if self.ensure_exists and not fn.isdirectory(path) then
+        fn.mkdir(path)
     end
 end
 
@@ -66,7 +66,7 @@ function M.PlatformDirs:expand_user(path)
         return self.get_home()
     end
     if path:sub(1, 2) == "~/" then
-        path = fs.joinpath(self.get_home(), path:sub(3))
+        path = fn.joinpath(self.get_home(), path:sub(3))
     end
     return path
 end
@@ -80,7 +80,7 @@ end
 function M.PlatformDirs:user_data_dir()
     local home = self.get_home()
     if self.appname then
-        return fs.joinpath(home, "." .. self.appname)
+        return fn.joinpath(home, "." .. self.appname)
     end
     return home
 end
@@ -141,7 +141,7 @@ end
 function M.PlatformDirs:user_log_dir()
     local path = self:user_state_dir()
     if self.opinion then
-        path = fs.joinpath(path, "log")
+        path = fn.joinpath(path, "log")
         self:optionally_create_directory(path)
     end
     return path
@@ -154,7 +154,7 @@ end
 function M.PlatformDirs:user_runtime_dir()
     local path = self:user_cache_dir()
     if self.opinion then
-        path = fs.joinpath(path, "tmp")
+        path = fn.joinpath(path, "tmp")
         self:optionally_create_directory(path)
     end
     return path

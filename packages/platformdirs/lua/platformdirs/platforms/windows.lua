@@ -1,6 +1,6 @@
 ---win32 miss a library like ctypes, only luajit has `require'ffi'`
 ---@module platformdirs.platforms.windows
-local fs = require 'platformdirs.fs'
+local fn = require 'platformdirs.fn'
 
 local PlatformDirs = require 'platformdirs.platforms'.PlatformDirs
 
@@ -44,7 +44,7 @@ function M.PlatformDirs:expand_user(path)
         return self.get_home()
     end
     if path:sub(1, 2) == "~/" then
-        path = fs.joinpath(self.get_home(), path:sub(3))
+        path = fn.joinpath(self.get_home(), path:sub(3))
     end
     return self.normpath(path)
 end
@@ -56,11 +56,11 @@ function M.PlatformDirs:append_app_name_and_version(base, ...)
     local path = base
     if self.appname then
         if self.appauthor then
-            path = fs.joinpath(path, self.appauthor)
+            path = fn.joinpath(path, self.appauthor)
         end
-        path = fs.joinpath(path, self.appname, ...)
+        path = fn.joinpath(path, self.appname, ...)
         if self.version then
-            path = fs.joinpath(path, self.version)
+            path = fn.joinpath(path, self.version)
         end
     end
     return self.normpath(path)
@@ -98,7 +98,7 @@ end
 function M.PlatformDirs:user_log_dir()
     local path = self:user_state_dir()
     if self.opinion then
-        path = fs.joinpath(path, "Logs")
+        path = fn.joinpath(path, "Logs")
         path = self.norm(path)
         self:optionally_create_directory(path)
     end

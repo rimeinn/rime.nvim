@@ -18,7 +18,7 @@ function M.PlatformDirs(...)
         end
         return Android(...)
     end
-    local binary_format = package.cpath:match('([^.]+)$'):gsub(";$", "")
+    local binary_format = package.cpath:match('([^.]+);?$')
     if binary_format == "so" then
         return Unix(...)
     elseif binary_format == "dll" then
