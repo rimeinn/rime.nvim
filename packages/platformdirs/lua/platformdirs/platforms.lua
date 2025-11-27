@@ -1,6 +1,7 @@
 ---abstract class.
 ---@module platformdirs.platforms
 local fn = require 'platformdirs.fn'
+local fs = require 'platformdirs.fs'
 
 local M = {
     PlatformDirs = {
@@ -28,11 +29,11 @@ setmetatable(M.PlatformDirs, {
 ---@param ... string
 ---@return string
 function M.PlatformDirs:append_app_name_and_version(...)
-    local path = fn.joinpath(...)
+    local path = fs.joinpath(...)
     if self.appname then
-        path = fn.joinpath(path, self.appname)
+        path = fs.joinpath(path, self.appname)
         if self.version then
-            path = fn.joinpath(path, self.version)
+            path = fs.joinpath(path, self.version)
         end
     end
     return path
@@ -66,7 +67,7 @@ function M.PlatformDirs:expand_user(path)
         return self.get_home()
     end
     if path:sub(1, 2) == "~/" then
-        path = fn.joinpath(self.get_home(), path:sub(3))
+        path = fs.joinpath(self.get_home(), path:sub(3))
     end
     return path
 end
@@ -80,7 +81,7 @@ end
 function M.PlatformDirs:user_data_dir()
     local home = self.get_home()
     if self.appname then
-        return fn.joinpath(home, "." .. self.appname)
+        return fs.joinpath(home, "." .. self.appname)
     end
     return home
 end
@@ -141,7 +142,7 @@ end
 function M.PlatformDirs:user_log_dir()
     local path = self:user_state_dir()
     if self.opinion then
-        path = fn.joinpath(path, "log")
+        path = fs.joinpath(path, "log")
         self:optionally_create_directory(path)
     end
     return path
@@ -154,7 +155,7 @@ end
 function M.PlatformDirs:user_runtime_dir()
     local path = self:user_cache_dir()
     if self.opinion then
-        path = fn.joinpath(path, "tmp")
+        path = fs.joinpath(path, "tmp")
         self:optionally_create_directory(path)
     end
     return path

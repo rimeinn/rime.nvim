@@ -1,5 +1,6 @@
 ---select a `PlatformDirs` according to OS
 ---@module platformdirs
+local uv = require "platformdirs.uv"
 local PlatformDirs = require "platformdirs.platforms".PlatformDirs
 local Unix = require "platformdirs.platforms.unix".PlatformDirs
 local Android = require "platformdirs.platforms.android".PlatformDirs
@@ -8,7 +9,6 @@ local Windows = require "platformdirs.platforms.windows".PlatformDirs
 
 local M = {}
 
----refer <https://github.com/wakatime/prompt-style.lua/blob/0.0.11/lua/prompt/style.lua#L123>
 ---@param ... any
 ---@return table
 function M.PlatformDirs(...)
@@ -18,12 +18,12 @@ function M.PlatformDirs(...)
         end
         return Android(...)
     end
-    local binary_format = package.cpath:match('([^.]+);?$')
-    if binary_format == "so" then
+    local sysname = uv.os_uname().sysname:lower()
+    if sysname:find('linux') or sysname:find('unix') then
         return Unix(...)
-    elseif binary_format == "dll" then
+    elseif sysname:find('windows') or sysname:find('mingw') then
         return Windows(...)
-    elseif binary_format == "dylib" then
+    elseif sysname:find('macos') then
         return MacOS(...)
     end
     return PlatformDirs(...)
