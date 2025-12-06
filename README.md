@@ -45,8 +45,7 @@ This project is consist of two parts:
 
 ```sh
 # Ubuntu
-sudo apt-get -y install librime-dev librime1
-sudo apt-mark auto librime-dev
+sudo apt-get -y install librime1
 # ArchLinux
 sudo pacman -S librime
 # Android Termux
@@ -54,14 +53,32 @@ apt-get -y install librime
 # Nix
 # use nix-shell to create a virtual environment then build
 # homebrew
-brew install librime pkg-config
+brew install librime
 # Windows msys2
-pacboy -S --noconfirm pkg-config librime gcc
+pacboy -S --noconfirm librime
 ```
 
 ## Install
 
 ### rocks.nvim
+
+We provide a [luarocks server](https://rimeinn.github.io/rime.nvim) to avoid
+your troublesome of building binary lua module.
+
+```lua
+vim.g.rocks_nvim = {
+  -- ...
+  luarocks_config = {
+    -- ...
+    rocks_servers = {
+      "https://rimeinn.github.io/rime.nvim",
+      -- other servers
+      "https://lumen-oss.github.io/rocks-binaries",
+      "https://luarocks.org",
+    }
+  }
+}
+```
 
 #### Command style
 
