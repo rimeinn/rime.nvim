@@ -1,0 +1,53 @@
+---
+"on":
+  push:
+    paths-ignore:
+      - "**.md"
+      - doc/*
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - doc/*
+  workflow_dispatch:
+
+# Prevent concurrent auto-commits
+concurrency:
+  group: auto-commit-linux-x86_64
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{secrets.GH_TOKEN}}
+          ref: gh-pages
+      - uses: leafo/gh-actions-lua@v12
+        with:
+          luaVersion: "5.1"
+      - uses: luarocks/gh-actions-luarocks@v6
+      - name: Install Dependencies
+        run: |
+          # https://github.com/drivendataorg/repro-zipfile/pull/23
+          pip install git+https://github.com/Freed-Wu/repro-zipfile@mode rpzip
+          luarocks install luanativeobjects
+          luarocks install lua-cjson
+          sudo apt-get -y update
+          sudo apt-get -y install librime-dev
+      - run: |
+          luarocks config variables.ZIP rpzip
+          luarocks install rime.nvim
+          rm -f ./*.rock
+          luarocks list --porcelain | sed 's/\(\S\+\).*/luarocks pack \1 \&\& \
+          luarocks download --rockspec \1/' | sh
+          luarocks-admin make-manifest .
+          zip manifest-5.1.zip manifest-5.1
+          rm -f ./*.rockspec manifest{,-5.{1..4}}
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: gh-pages
+          commit_message: 'chore: update build artifacts'
+          file_pattern: index.html manifest* *.rock
+          commit_options: --amend --no-edit
+          push_options: --force
