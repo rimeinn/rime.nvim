@@ -174,6 +174,27 @@ Because only printable key can be passed to rime when rime window is closed.
 
 ## Integration
 
+### Other frontends of librime
+
+This plugin will search ibus/fcitx/trime's config path by order and load it.
+You can customize it by:
+
+```lua
+local Traits = require 'rime'.Traits
+local Session = require "rime.session".Session
+local Rime = require 'rime.nvim.rime'.Rime
+
+local rime = Rime {
+    session = Session {
+        traits = Traits {
+            user_data_dir = vim.fn.expand "~/.config/ibus/rime"
+        }
+    }
+}
+rime:create_autocmds()
+vim.keymap.set('i', '<C-^>', rime:toggle_cb())
+```
+
 ### Vim Cursor
 
 ```vim
