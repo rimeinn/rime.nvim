@@ -7,12 +7,12 @@ summary = "A library related to input method engine for neovim"
 detailed = "rime.nvim, fcitx5-ui.nvim and ime.nvim depend on it"
 maintainer = "Wu"
 labels = ["neovim", "ime"]
-homepage = "https://github.com/rimeinn/ime.nvim/tree/main/packages/ime"
+homepage = "https://github.com/rimeinn/rime.nvim/tree/main/packages/ime"
 license = 'GPL-3.0'
 
 [source]
-url = "https://github.com/rimeinn/ime.nvim/archive/$(VERSION).zip"
-dir = "ime.nvim-$(VERSION)/packages/$(PACKAGE)"
+url = "https://github.com/rimeinn/rime.nvim/archive/$(VERSION).zip"
+dir = "rime.nvim-$(VERSION)/packages/$(PACKAGE)"
 
 [test]
 type = "busted"
