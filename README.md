@@ -360,30 +360,17 @@ However, if you press `<Space>` to select the first candidate `你好`,
 you will get `(你好| )` due to `| -> |你好`!
 The best solution is using Chinese punctuation to get `（你好|）`.
 
-## Tips
+### Nix
 
 For Nix user, run
 `/the/path/of/luarocks/rocks-5.1/rime.nvim/VERSION/scripts/update.sh` when
 dynamic link libraries are broken after `nix-collect-garbage -d`.
 
-## Similar Projects
-
-- [pyrime.nvim](https://github.com/rimeinn/pyrime/tree/main/src/pyrime/nvim):
-  python implementation. Inactive maintenance.
-- [coc-rime](https://github.com/rimeinn/coc-rime): nodejs
-  implementation. Inactive maintenance.
-
 ## Related Projects
 
-- [A collection](https://github.com/rimeinn/ime.nvim) of the solutions to
-  input CJKV characters in vim
+- [A collection](https://github.com/rimeinn/ime.nvim#librime) of rime frontends
+  for neovim
 - [A collection](https://github.com/rime/librime#frontends) of rime frontends
-
-### Bindings
-
-- [rime.nvim](https://github.com/rimeinn/rime.nvim): this project
-- [pyrime](https://github.com/rimeinn/pyrime): for python
-- [coc-rime](https://github.com/rimeinn/coc-rime): for nodejs
 
 ### Translators and Filters
 
