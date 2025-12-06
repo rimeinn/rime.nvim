@@ -27,6 +27,7 @@ jobs:
         with:
           luaVersion: "5.1"
       - uses: luarocks/gh-actions-luarocks@v6
+      - uses: xmake-io/github-action-setup-xmake@v1
       - name: Install Dependencies
         run: |
           # https://github.com/drivendataorg/repro-zipfile/pull/23
