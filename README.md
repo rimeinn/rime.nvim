@@ -180,7 +180,7 @@ This plugin will search ibus/fcitx/trime's config path by order and load it.
 You can customize it by:
 
 ```lua
-local Traits = require 'rime'.Traits
+local Traits = require 'rime.traits'.Traits
 local Session = require "rime.session".Session
 local Rime = require 'rime.nvim.rime'.Rime
 
