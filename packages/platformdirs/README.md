@@ -1,6 +1,7 @@
 # platformdirs
 
 A lua implementation of [platformdirs](https://github.com/tox-dev/platformdirs).
+Use `vim.fs` to check if a directory exists.
 
 ```lua
 local PlatformDirs = require 'platformdirs'.PlatformDirs

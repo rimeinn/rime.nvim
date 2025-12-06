@@ -1,6 +1,5 @@
 ---abstract class.
 ---@module platformdirs.platforms
-local fn = require 'vim.fn'
 local fs = require 'vim.fs'
 
 local M = {
@@ -37,13 +36,6 @@ function M.PlatformDirs:append_app_name_and_version(...)
         end
     end
     return path
-end
-
----@param path string
-function M.PlatformDirs:optionally_create_directory(path)
-    if self.ensure_exists and not fn.isdirectory(path) then
-        fn.mkdir(path, 'p')
-    end
 end
 
 ---@param directory string
@@ -143,7 +135,6 @@ function M.PlatformDirs:user_log_dir()
     local path = self:user_state_dir()
     if self.opinion then
         path = fs.joinpath(path, "log")
-        self:optionally_create_directory(path)
     end
     return path
 end
@@ -156,7 +147,6 @@ function M.PlatformDirs:user_runtime_dir()
     local path = self:user_cache_dir()
     if self.opinion then
         path = fs.joinpath(path, "tmp")
-        self:optionally_create_directory(path)
     end
     return path
 end

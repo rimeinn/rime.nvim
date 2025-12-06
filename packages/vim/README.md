@@ -1,6 +1,7 @@
 # vim
 
-use vim.fs outside of neovim.
+use `vim.fs` outside of neovim. use `luafilesystem` and optional `luaposix` or
+`luv` to simulate some `vim.fn.*` and `vim.uv`.
 
 ```lua
 local fs = require'vim.fs'
@@ -18,3 +19,7 @@ print(path)
 You also can add `local vim = require'vim'` before any `vim.fs.*()`.
 
 See `:help vim.fs` in neovim to know its usage.
+
+## TODO
+
+- [ ] `vim.filetype`: detect file type from file path

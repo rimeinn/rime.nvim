@@ -100,7 +100,6 @@ function M.PlatformDirs:user_log_dir()
     if self.opinion then
         path = fs.joinpath(path, "Logs")
         path = self.norm(path)
-        self:optionally_create_directory(path)
     end
     return path
 end
