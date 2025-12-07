@@ -10,6 +10,14 @@ local M = {
     regex = {},
 }
 
+---wrap `vim.deepcopy()`
+---@param orig any
+---@param noref any
+---@diagnostic disable-next-line: unused-local
+function M.deepcopy(orig, noref)
+    return orig
+end
+
 ---wrap `vim.validate()`
 ---@diagnostic disable-next-line: unused-vararg
 function M.validate(...)
@@ -20,9 +28,24 @@ end
 ---@param s string
 ---@param sep string
 ---@param opts table?
+---@return function
 ---@diagnostic disable-next-line: unused-local
 function M.gsplit(s, sep, opts)
     return s:gmatch("([^" .. sep .. "]+)" .. sep .. '?')
+end
+
+---wrap `vim.split()`
+---@param s string
+---@param sep string
+---@param opts table?
+---@return string[]
+---@diagnostic disable-next-line: unused-local
+function M.split(s, sep, opts)
+    local matches = {}
+    for m in s:gmatch("([^" .. sep .. "]+)" .. sep .. '?') do
+        table.insert(matches, m)
+    end
+    return matches
 end
 
 ---wrap `vim.startswith()`

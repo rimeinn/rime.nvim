@@ -2,9 +2,12 @@
 ---@module vim
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113 212
-local vim = require "vim.shared"
-vim.filetype = require "vim.filetype"
+local vim = require 'vim.shared'
+vim.filetype = require 'vim.filetype'
 vim.fs = require 'vim.fs'
+vim.uri = require 'vim.uri'
+vim.version = require 'vim.version'
+-- not full APIs
 vim.fn = require 'vim.fn'
-vim.uv = require "vim.uv"
+vim.uv = require 'vim.uv'
 return vim
