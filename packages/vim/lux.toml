@@ -3,8 +3,8 @@ version = "0.2.11"
 lua = ">=5.1"
 
 [description]
-summary = "use vim.fs outside of neovim"
-detailed = "See :help vim.fs"
+summary = "use vim.fs and vim.filetype outside of neovim"
+detailed = "See :help vim.fs and :help vim.filetype"
 maintainer = "Wu"
 labels = ["neovim"]
 homepage = "https://github.com/rimeinn/rime.nvim/tree/main/packages/vim"
