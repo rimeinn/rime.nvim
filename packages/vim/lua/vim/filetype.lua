@@ -4,6 +4,8 @@
 local vim = require "vim.shared"
 vim.g = {}
 vim.fn = require'vim.fn'
+vim.env = require "vim._meta".env
+vim.regex = require "vim._meta".regex
 local api = vim.api
 local fn = vim.fn
 
