@@ -21,6 +21,10 @@ end
 function M.fs_stat(path)
     local opts = lfs.attributes(path) or {}
     opts.type = opts.mode
+    opts.mtime = {
+        sec = math.floor(opts.modification / 1000000000),
+        nsec = opts.modification % 1000000000,
+    }
     return opts
 end
 

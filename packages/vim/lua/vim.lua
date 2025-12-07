@@ -1,5 +1,7 @@
----wrap `vim`
+---wrap `vim._meta`
 ---@module vim
+---@diagnostic disable: undefined-global
+-- luacheck: ignore 111 113 212
 local vim = require "vim.shared"
 vim.fs = require 'vim.fs'
 vim.fn = require 'vim.fn'

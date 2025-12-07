@@ -76,6 +76,43 @@ function M.getchar()
     return io.read(1):byte()
 end
 
+---wrap `vim.fn.readfile()`
+---@param fname string
+---@return string[]
+function M.readfile(fname)
+    local f = io.open(fname)
+    local lines = {}
+    if f then
+        for line in f:lines() do
+            table.insert(lines, line)
+        end
+        f:close()
+    end
+    return lines
+end
+
+
+---wrap `vim.fn.substitute()`
+---@param string string
+---@param pat string
+---@param sub string
+---@param flags string
+---@return string
+function M.substitute(string, pat, sub, flags)
+    local n
+    if not flags:match 'g' then
+        n = 1
+    end
+    string = string:gsub(pat, sub, n)
+    return string
+end
+
+---wrap `vim.fn.did_filetype()`
+---@return 0
+function M.did_filetype()
+    return 0
+end
+
 ---wrap `vim.fn.strwidth()`
 ---@param string string
 ---@return integer
