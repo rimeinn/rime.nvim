@@ -5,7 +5,10 @@
 if vim and vim.validate then
     return vim
 end
-local M = {}
+local M = {
+    env = {},
+    regex = {},
+}
 
 ---wrap `vim.validate()`
 ---@diagnostic disable-next-line: unused-vararg
@@ -28,6 +31,42 @@ end
 ---@return boolean
 function M.startswith(s, prefix)
     return s:sub(1, #prefix) == prefix
+end
+
+---wrap `vim.pesc()`
+---@param s string
+---@return string
+function M.pesc(s)
+    return s
+end
+
+setmetatable(M.env, {
+  __index = function(t, k)
+    return os.getenv(k) or ''
+  end,
+})
+
+---wrap `vim.regex()`
+---@param pattern string
+---@return table
+function M.regex:new(pattern)
+    local regex = { pattern = pattern }
+    setmetatable(regex, {
+        __index = self
+    })
+    return regex
+end
+
+setmetatable(M.regex, {
+    __call = M.regex.new
+})
+
+---wrap `vim.regex():match_str()`
+---@param str string
+---@return integer?
+---@return integer?
+function M.regex:match_str(str)
+    return str:match(self.pattern) and 1, 1
 end
 
 return M
