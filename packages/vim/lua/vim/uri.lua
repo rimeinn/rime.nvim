@@ -2,7 +2,12 @@
 -- https://tools.ietf.org/html/rfc3986
 -- https://tools.ietf.org/html/rfc2732
 -- https://tools.ietf.org/html/rfc2396
----@module vim.uri
+---@diagnostic disable: undefined-global
+-- luacheck: ignore 111 113
+
+if vim and vim.uri then
+    return vim.uri
+end
 
 local M = {}
 local sbyte = string.byte

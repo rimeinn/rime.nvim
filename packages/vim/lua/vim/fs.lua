@@ -9,7 +9,6 @@
 ---     vim.print('file exists')
 ---   end
 --- <
----@module vim.fs
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113 631
 

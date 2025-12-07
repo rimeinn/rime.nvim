@@ -51,7 +51,12 @@
 --- Partial left: missing pieces treated as 0 (1.2 => 1.2.0).
 --- 1.2 - 2.3.0       is 1.2.0 - 2.3.0
 --- ```
---- @module vim.version
+---@diagnostic disable: undefined-global
+-- luacheck: ignore 111 113
+
+if vim and vim.version then
+    return vim.version
+end
 local vim = require'vim.shared'
 
 local M = {}

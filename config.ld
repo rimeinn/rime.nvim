@@ -8,7 +8,9 @@ dir = "_readthedocs/html"
 readme = {
     "README.md"
 }
-file = {"lua", "assets/templates", "packages/ime/lua", "packages/platformdirs/lua", "packages/vim/lua"}
+-- "packages/vim/lua"
+-- some vim's lua script has @class with conflict of ldoc
+file = {"lua", "assets/templates", "packages/ime/lua", "packages/platformdirs/lua"}
 description = title
 full_description = [[
 Use RIME in NeoVim!

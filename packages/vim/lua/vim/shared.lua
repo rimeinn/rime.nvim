@@ -5,10 +5,15 @@
 -- regardless if it is code in the editor itself, or in worker threads/processes,
 -- or the test suite. (Eventually the test suite will be run in a worker process,
 -- so this wouldn't be a separate case to consider)
----@module vim.shared
 
 ---@nodoc
 -- _G.vim = _G.vim or {} --[[@as table]]
+---@diagnostic disable: undefined-global
+-- luacheck: ignore 111 113
+
+if vim and vim.shared then
+    return vim.shared
+end
 local vim = {}
 -- luacheck: ignore 214 631
 -- TODO(lewis6991): better fix for flaky luals

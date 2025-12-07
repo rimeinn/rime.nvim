@@ -1,6 +1,8 @@
----wrap `vim.filetype`
----@module vim.filetype
--- luacheck: ignore 212
+---@diagnostic disable: undefined-global
+-- luacheck: ignore 111 113 212
+if vim and vim.filetype then
+    return vim.filetype
+end
 local vim = require "vim.shared"
 vim.g = {}
 vim.fn = require'vim.fn'
