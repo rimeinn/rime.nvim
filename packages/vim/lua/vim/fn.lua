@@ -1,4 +1,4 @@
----wrap `vim.fn`
+---wrap `vim.fn`. `vim.fn` doesn't use `boolean` rather than `0 | 1`.
 ---@module vim.fn
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113 212
@@ -7,22 +7,42 @@ if vim and vim.fn then
 end
 local lfs = require "lfs"
 local fs = require 'vim.fs'
+local uv = require 'vim.uv'
 local M = {}
+
+---wrap `vim.fn.has()`
+---@param feature string
+---@return 0 | 1
+function M.has(feature)
+    local ret
+    if feature == 'win32' then
+        ret = uv.os_uname().sysname == "windows"
+    elseif feature == 'nvim' then
+        ret = true
+    end
+    return ret and 1 or 0
+end
 
 ---wrap `vim.fn.getcwd()`
 ---@return string cwd
 function M.getcwd()
-    if vim then
-        return vim.fn.getcwd()
-    end
     return lfs.currentdir()
+end
+
+---wrap `vim.fn.executable()`
+---@param expr string
+---@return 0 | 1
+function M.executable(expr)
+    local attr = lfs.attributes(expr)
+    return attr and attr.mode ~= "directory" and attr.permissions:match 'x' and 1 or 0
 end
 
 ---wrap `vim.fn.isdirectory()`
 ---@param dir string
----@return boolean
+---@return 0 | 1
 function M.isdirectory(dir)
-    return lfs.attributes(dir) and lfs.attributes(dir).mode == "directory"
+    local attr = lfs.attributes(dir)
+    return attr and attr.mode == "directory" and 1 or 0
 end
 
 ---wrap `vim.fn.mkdir()`
@@ -38,6 +58,15 @@ end
 ---@param dir string
 ---@return string
 function M.expand(dir)
+    if dir == "~" then
+        dir = uv.os_homedir() or "/"
+    elseif dir:match "^~/" then
+        dir = dir:gsub("^~", uv.os_homedir() or "")
+    end
+    local path = dir
+    for m in path:gmatch('%$[a-zA-Z_]+') do
+        dir = dir:gsub('%' .. m, os.getenv(m:sub(2)) or '')
+    end
     return dir
 end
 
@@ -54,6 +83,14 @@ function M.strwidth(string)
     return #string
 end
 
+---wrap `vim.fn.fnameescape()`
+---@param string string
+---@return string
+function M.fnameescape(string)
+    string = string:gsub("[+| %%]", "\\%1")
+    return string
+end
+
 ---wrap `vim.fn.fnamemodify()`
 ---@param fname string
 ---@param mods string
@@ -62,11 +99,17 @@ function M.fnamemodify(fname, mods)
     for mod in mods:gmatch(':(.)') do
         if mod == 'p' then
             fname = fs.abspath(fname)
-            if M.isdirectory(fname) then
+            if M.isdirectory(fname) == 1 then
                 fname = fs.joinpath(fname, '')
             end
         elseif mod == 'h' then
             fname = fs.dirname(fname)
+        elseif mod == 't' then
+            fname = fs.basename(fname)
+        elseif mod == 'e' then
+            fname = fname:match('%.[^./]+$') or ''
+        elseif mod == 'r' then
+            fname = fname:match('(.*)%.[^./]+$') or fname
         end
     end
     return fname

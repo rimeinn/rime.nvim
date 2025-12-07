@@ -85,7 +85,7 @@ end
 ---wrap `vim.uv.os_getenv()`
 ---@return string?
 function M.os_homedir()
-    return os.getenv("HOME")
+    return os.getenv("HOME") or os.getenv("USERPROFILE")
 end
 
 return M
