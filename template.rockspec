@@ -16,9 +16,9 @@ description = {
   $license
 }
 
-build_dependencies = { "luanativeobjects", "lua-cjson" }
+build_dependencies = { "luanativeobjects" }
 
-dependencies = { "lua >= 5.1", 'ime >= 0.0.4', 'platformdirs' }
+dependencies = { "lua >= 5.1", 'ime >= 0.0.4', 'platformdirs', 'lua-cjson' }
 
 test_dependencies = $test_dependencies
 
