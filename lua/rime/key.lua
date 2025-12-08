@@ -39,8 +39,8 @@ function M.decode(name)
     return cjson.decode(M.read(M.get_path(name)))
 end
 
-local keys = M.decode("keys")
-local modifiers = M.decode("modifiers")
+local keys = M.decode "keys"
+local modifiers = M.decode "modifiers"
 
 ---@param key table?
 ---@return table
