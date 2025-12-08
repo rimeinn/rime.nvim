@@ -10,7 +10,7 @@ readme = {
 }
 -- "packages/vim/lua"
 -- some vim's lua script has @class with conflict of ldoc
-file = {"lua", "assets/templates", "packages/ime/lua", "packages/platformdirs/lua"}
+file = {"lua", "packages/ime/lua", "packages/platformdirs/lua"}
 description = title
 full_description = [[
 Use RIME in NeoVim!

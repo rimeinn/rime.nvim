@@ -2,7 +2,7 @@ _readthedocs/
 compile_commands.json
 
 data/
-lua/rime/traits.lua
+lua/rime/version.lua
 /output/
 build/
 .cache/

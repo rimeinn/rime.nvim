@@ -4,6 +4,7 @@ local fn = require 'vim.fn'
 local PlatformDirs = require 'platformdirs'.PlatformDirs
 
 local Traits = require 'rime'.Traits
+local _, distribution_version = pcall(require, 'rime.version')
 
 local M = {
     --- Value is passed to Glog library using FLAGS_minloglevel variable.
@@ -28,7 +29,7 @@ local M = {
         min_log_level = 'FATAL', -- Minimal level of logged messages.
         distribution_name = "Rime", -- distribution name
         distribution_code_name = "nvim-rime", -- distribution code name
-        distribution_version = "${GIT_TAG}", -- distribution version
+        distribution_version = distribution_version, -- distribution version
     },
 }
 
@@ -55,9 +56,8 @@ function M.Traits:new(traits)
     setmetatable(traits, {
         __index = self
     })
-    if traits.distribution_version:match "%$" or traits.distribution_version == "none" then
-        traits.distribution_version = "0.0.1"
-    end
+    traits.distribution_version = traits.distribution_version:match("%d[%d.]+%d") or "0.0.1"
+    traits.distribution_version = traits.distribution_version:gsub("%.+", ".")
     fn.mkdir(traits.log_dir, 'p')
     return Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
         traits.distribution_code_name, traits.distribution_version, traits.app_name,
