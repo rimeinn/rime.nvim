@@ -23,7 +23,6 @@ jobs:
       - name: Install dependencies
         run: |
           luarocks install luanativeobjects
-          luarocks install lua-cjson
           sudo apt-get -y update
           sudo apt-get -y install librime-dev
       - uses: nvim-neorocks/luarocks-tag-release@v7
