@@ -7,12 +7,9 @@ local UI = require "ime.ui".UI
 ---@diagnostic disable: undefined-global
 describe("test", function()
     it("tests parse key", function()
-        local modifiers = { "Shift", "Lock", "Control", "Alt" }
-        local key = Key({ name = "<C-M-S>" }, {}, modifiers)
+        local key = Key:from_vim "<C-M-S>"
         assert.are.equal(key.code, string.byte('s'))
         assert.are.equal(key.mask, 2 ^ 2 + 2 ^ 3)
-        local key2 = Key({ code = key.code, mask = key.mask }, {}, modifiers)
-        assert.are.equal(key2.name, key.name)
     end)
     it("tests draw ui", function()
         local ui = UI()

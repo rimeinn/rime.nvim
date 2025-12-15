@@ -38,11 +38,7 @@ setmetatable(M.Rime, {
 function M.Rime:draw(...)
     for _, key in ipairs { ... } do
         if not self.session:process_key(key.code, key.mask) then
-            local text = ""
-            if key.mask == 0 then
-                text = string.char(key.code)
-            end
-            return text, {}, 0
+            return tostring(key), {}, 0
         end
     end
     local context = self.session:get_context()
@@ -59,7 +55,7 @@ end
 function M.Rime:process(...)
     local keys = {}
     for _, name in ipairs { ... } do
-        table.insert(keys, Key { name = name })
+        table.insert(keys, Key:from_vim(name))
     end
     ---@diagnostic disable-next-line: deprecated
     local unpack = unpack or table.unpack

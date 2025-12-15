@@ -120,7 +120,7 @@ local Key = require "rime.key".Key
 local Session = require "rime.session".Session
 
 local session = Session()
-local key = Key {name = "n"}
+local key = Key:from_vim"n"
 local ui = UI()
 if not session:process_key(key.code, key.mask) then
     return
