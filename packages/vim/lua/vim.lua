@@ -10,4 +10,7 @@ vim.version = require 'vim.version'
 -- not full APIs
 vim.fn = require 'vim.fn'
 vim.uv = require 'vim.uv'
+-- external modules
+vim.json = require 'vim.json'
+vim.lpeg = require 'vim.lpeg'
 return vim

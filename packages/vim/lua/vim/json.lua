@@ -1,4 +1,4 @@
----wrap `vim.json`. `vim.json` doesn't use `boolean` rather than `0 | 1`.
+---wrap `vim.json`.
 ---@module vim.json
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
