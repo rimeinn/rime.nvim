@@ -1,4 +1,5 @@
 ---wrap `vim.uv`
+---In fact, vim support `require'luv'` which is shorter and preferred.
 ---@module vim.uv
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113

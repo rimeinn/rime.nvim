@@ -1,4 +1,5 @@
 ---wrap `vim.lpeg`.
+---In fact, vim support `require'lpeg'` which is shorter and preferred.
 ---@module vim.lpeg
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113

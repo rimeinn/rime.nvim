@@ -2,7 +2,7 @@
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
 local fs = require 'vim.fs'
-local json = require 'vim.json'
+local json = require 'cjson'
 local Key = require 'ime.key'.Key
 
 local M = {
