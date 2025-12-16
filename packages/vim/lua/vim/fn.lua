@@ -6,7 +6,7 @@ if vim and vim.fn then
     return vim.fn
 end
 local lfs = require "lfs"
-local _, cjson = pcall(require, "cjson")
+local json = require "vim.json"
 local fs = require 'vim.fs'
 local uv = require 'vim.uv'
 local M = {}
@@ -15,14 +15,14 @@ local M = {}
 ---@param string string
 ---@return table
 function M.json_decode(string)
-    return cjson.decode(string)
+    return json.decode(string)
 end
 
 ---wrap `vim.fn.json_encode()`
 ---@param expr table
 ---@return string
 function M.json_encode(expr)
-    return cjson.encode(expr)
+    return json.encode(expr)
 end
 
 ---wrap `vim.fn.has()`

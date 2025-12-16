@@ -2,7 +2,7 @@
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113
 local fs = require 'vim.fs'
-local fn = require 'vim.fn'
+local json = require 'vim.json'
 local Key = require 'ime.key'.Key
 
 local M = {
@@ -54,7 +54,7 @@ end
 ---@param name string
 ---@return table
 function M.decode(name)
-    return fn.json_decode(M.read(M.get_path(name)))
+    return json.decode(M.read(M.get_path(name)))
 end
 
 M.keys = M.decode "keys"
