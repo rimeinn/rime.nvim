@@ -1,5 +1,5 @@
 ---wrap `vim.json`.
----Although vim.json is cjson actually, vim doesn't support `require'cjson'`.
+-- <https://github.com/neovim/neovim/blob/v0.11.5/MAINTAIN.md?plain=1#L149>
 ---@module vim.json
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113

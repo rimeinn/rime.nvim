@@ -1,5 +1,5 @@
----wrap `vim.uv`
----In fact, vim support `require'luv'` which is shorter and preferred.
+---wrap `vim.uv`.
+-- <https://github.com/neovim/neovim/blob/v0.11.5/src/nvim/lua/executor.c#L619>
 ---@module vim.uv
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113

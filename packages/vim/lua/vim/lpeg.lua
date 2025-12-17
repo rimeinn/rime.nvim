@@ -1,5 +1,5 @@
 ---wrap `vim.lpeg`.
----In fact, vim support `require'lpeg'` which is shorter and preferred.
+-- <https://github.com/neovim/neovim/blob/v0.11.5/src/nvim/lua/stdlib.c#L757>
 ---@module vim.lpeg
 ---@diagnostic disable: undefined-global
 -- luacheck: ignore 111 113

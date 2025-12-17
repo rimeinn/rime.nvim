@@ -9,8 +9,11 @@ vim.uri = require 'vim.uri'
 vim.version = require 'vim.version'
 -- not full APIs
 vim.fn = require 'vim.fn'
-vim.uv = require 'vim.uv'
 -- external modules
 vim.json = require 'vim.json'
+vim.inspect = require 'vim.inspect'
+-- package.loaded
+vim.uv = require 'vim.uv'
 vim.lpeg = require 'vim.lpeg'
+vim.mpack = require 'vim.mpack'
 return vim
