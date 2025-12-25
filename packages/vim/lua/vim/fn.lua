@@ -106,6 +106,18 @@ function M.readfile(fname)
     return lines
 end
 
+---wrap `vim.fn.filereadable()`
+---@param file string
+---@return 1 | 0
+function M.filereadable(file)
+    local f = io.open(file)
+    if f then
+        f:close()
+        return 1
+    end
+    return 0
+end
+
 ---wrap `vim.fn.substitute()`
 ---@param string string
 ---@param pat string
