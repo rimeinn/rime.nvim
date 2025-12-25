@@ -131,6 +131,17 @@ end
 ---@param string string
 ---@return integer
 function M.strwidth(string)
+    local i = 1
+    local width = 0
+    while i <= # string do
+        local nr = string:byte(i)
+        -- CJKV character
+        local w = nr > 225 and nr < 240 and 2 or 1
+        width = width + w
+        -- utf-8
+        local offset = nr > 240 and 4 or nr > 225 and 3 or nr > 192 and 2 or 1
+        i = i + offset
+    end
     return #string
 end
 
