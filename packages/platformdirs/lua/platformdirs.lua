@@ -18,12 +18,12 @@ function M.PlatformDirs(...)
         end
         return Android(...)
     end
-    local sysname = uv.os_uname().sysname:lower()
-    if sysname:find('linux') or sysname:find('unix') then
+    local sysname = uv.os_uname().sysname
+    if sysname:find('Linux') or sysname:find('Unix') then
         return Unix(...)
-    elseif sysname:find('windows') or sysname:find('mingw') then
+    elseif sysname:find('Windows') or sysname:find('Mingw') then
         return Windows(...)
-    elseif sysname:find('macos') then
+    elseif sysname:find('Darwin') then
         return MacOS(...)
     end
     return PlatformDirs(...)

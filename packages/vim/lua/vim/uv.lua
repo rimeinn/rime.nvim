@@ -36,11 +36,11 @@ function M.os_uname()
     local opts = {}
     local binary_format = package.cpath:match('([^.]+);?$')
     if binary_format == "dll" then
-        opts.sysname = "windows"
+        opts.sysname = "Windows"
     elseif binary_format == "so" then
-        opts.sysname = "unix"
+        opts.sysname = "Linux"
     elseif binary_format == "dylib" then
-        opts.sysname = "macos"
+        opts.sysname = "Darwin"
     else
         opts.sysname = "unknown"
     end
