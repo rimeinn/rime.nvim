@@ -109,6 +109,16 @@ $ luarocks --lua-version 5.1 --local --tree ~/.local/share/nvim/rocks install ri
 # you can change it according to your vim.g.rocks_nvim.rocks_path
 ```
 
+### lazy.nvim
+
+```lua
+require("lazy").setup {
+  spec = {
+    { "rimeinn/rime.nvim", lazy = false },
+  },
+}
+```
+
 ## Usage
 
 ### Binding

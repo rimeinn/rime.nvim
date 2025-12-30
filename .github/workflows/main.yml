@@ -33,7 +33,7 @@ jobs:
           extra_luarocks_args: |
             --force
           version: scm
-          template: template.rockspec
+          template: rime.nvim-scm-1.rockspec
       - uses: nvim-neorocks/luarocks-tag-release@v7
         env:
           LUAROCKS_API_KEY: ${{secrets.LUAROCKS_API_KEY}}
@@ -41,4 +41,4 @@ jobs:
         with:
           extra_luarocks_args: |
             --force
-          template: template.rockspec
+          template: rime.nvim-scm-1.rockspec
