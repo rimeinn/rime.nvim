@@ -7,6 +7,8 @@ vim.filetype = require 'vim.filetype'
 vim.fs = require 'vim.fs'
 vim.uri = require 'vim.uri'
 vim.version = require 'vim.version'
+vim.iter = require 'vim.iter'
+vim.glob = require 'vim.glob'
 -- not full APIs
 vim.fn = require 'vim.fn'
 -- external modules

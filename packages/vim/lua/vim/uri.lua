@@ -8,11 +8,15 @@
 if vim and vim.uri then
     return vim.uri
 end
+local isok, bit = pcall(require, 'bit')
+if not isok then
+  return {}
+end
 
 local M = {}
 local sbyte = string.byte
 local schar = string.char
-local tohex = require('bit').tohex
+local tohex = bit.tohex
 local URI_SCHEME_PATTERN = '^([a-zA-Z]+[a-zA-Z0-9.+-]*):.*'
 -- local WINDOWS_URI_SCHEME_PATTERN = '^([a-zA-Z]+[a-zA-Z0-9.+-]*):[a-zA-Z]:.*'
 local PATTERNS = {

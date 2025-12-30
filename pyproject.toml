@@ -2,4 +2,4 @@
 number = true
 
 [tool.codespell]
-ignore-words-list = "rime, rightt, abl, edn, tese, rcall, ist, mot, mata, wast, wit, Re-use"
+ignore-words-list = "rime, rightt, abl, edn, tese, rcall, ist, mot, mata, wast, wit, re-use, ques"
