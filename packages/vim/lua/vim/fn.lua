@@ -139,6 +139,27 @@ function M.did_filetype()
     return 0
 end
 
+---wrap `vim.fn.trim()`
+---@param string string
+---@return string
+function M.trim(string)
+    local s = 0
+    local e = #string
+    for i = 1, #string do
+        if string:sub(i, i):match "%S" then
+            s = i
+            break
+        end
+    end
+    for i = #string, 1, -1 do
+        if string:sub(i, i):match "%S" then
+            e = i
+            break
+        end
+    end
+    return string:sub(s, e)
+end
+
 ---wrap `vim.fn.strwidth()`
 ---@param string string
 ---@return integer
@@ -154,7 +175,7 @@ function M.strwidth(string)
         local offset = nr > 240 and 4 or nr > 225 and 3 or nr > 192 and 2 or 1
         i = i + offset
     end
-    return #string
+    return width
 end
 
 ---wrap `vim.fn.fnameescape()`
