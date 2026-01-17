@@ -15,6 +15,8 @@ typedef RimeTraits Traits;
     var_in { "int", "min_log_level" },
     c_source [[
 RIME_STRUCT(RimeTraits, traits);
+RIME_MODULE_LIST(modules, "default");
+traits.modules = modules;
 traits.shared_data_dir = ${shared_data_dir};
 traits.user_data_dir = ${user_data_dir};
 traits.log_dir = ${log_dir};
