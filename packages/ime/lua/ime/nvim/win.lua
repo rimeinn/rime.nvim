@@ -36,7 +36,7 @@ end
 ---If the windows has preedit
 ---@return boolean has_preedit
 function M.Win:has_preedit()
-    return #self.lines == 2
+    return #self.lines > 1
 end
 
 ---Open or close a window

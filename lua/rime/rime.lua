@@ -2,7 +2,7 @@
 ---any subclass can use `self:process()` to customize `self:exe()`
 local fn = require 'vim.fn'
 local Key = require 'rime.key'.Key
-local UI = require 'ime.ui'.UI
+local UI = require 'ime.ui.horizontal'.UI
 local IME = require "ime.ime".IME
 local Session = require "rime.session".Session
 local M = {

@@ -124,7 +124,7 @@ require("lazy").setup {
 ### Binding
 
 ```lua
-local UI = require "ime.ui".UI
+local UI = require "ime.ui.horizontal".UI
 
 local Key = require "rime.key".Key
 local Session = require "rime.session".Session
@@ -180,10 +180,11 @@ It is useful for some key such as the key for switching input schema.
 Lazy load is possible:
 
 ```lua
-local ui = require('ime.ui')
+local ui = require "ime.ui"
+local UI = require "ime.ui.horizontal".UI
 
-local rime = require('rime.nvim')
-rime.rime = { ui = ui.UI { indices = ui.styles.square } }
+local rime = require "rime.nvim"
+rime.rime = { ui = UI { indices = ui.styles.square } }
 vim.keymap.set('i', '<C-^>', rime.toggle)
 vim.keymap.set('i', '<C-@>', rime.enable)
 vim.keymap.set('i', '<C-_>', rime.disable)
