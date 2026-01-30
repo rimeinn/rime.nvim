@@ -21,7 +21,9 @@ function M.feed_keys(text)
         return
     end
     -- input is <CR>
-    vim.api.nvim_put({ text }, "b", false, true)
+    if #text > 0 then
+        vim.api.nvim_put({ text }, "b", false, true)
+    end
 end
 
 ---@param rime table?
