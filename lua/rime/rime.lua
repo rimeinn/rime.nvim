@@ -67,7 +67,7 @@ function M.Rime:main()
     self:enable()
     while true do
         local c = fn.getchar()
-        self:call({ code = c, mask = 0 })
+        self:call(Key { code = c, mask = 0 })
     end
 end
 
