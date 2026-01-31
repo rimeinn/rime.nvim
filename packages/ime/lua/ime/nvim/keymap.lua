@@ -13,7 +13,7 @@ for i = 0x2a, 0x7b do
     local key = string.char(i)
     table.insert(nowait, key)
 end
-local special = { "<S-Esc>", "<S-Tab>", "<BS>", "<M-BS>", "<C-Space>", "<M-C-Space>", "<M-Bar>" }
+local special = { "<Space>", "<S-Esc>", "<S-Tab>", "<BS>", "<M-BS>", "<C-Space>", "<M-C-Space>", "<M-Bar>" }
 for _, name in ipairs { "Insert", "CR", "Del", "Up", "Down", "Left", "Right", "Home", "End", "PageUp", "PageDown" } do
     for _, s_name in ipairs { name, "S-" .. name } do
         for _, c_s_name in ipairs { s_name, "C-" .. s_name } do
