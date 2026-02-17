@@ -34,7 +34,7 @@ end
 ---@return table opts
 function M.os_uname()
     local opts = {}
-    local binary_format = package.cpath:match('([^.]+);?$')
+    local binary_format = package.cpath:match('([^.;]+);*$')
     if binary_format == "dll" then
         opts.sysname = "Windows"
     elseif binary_format == "so" then
