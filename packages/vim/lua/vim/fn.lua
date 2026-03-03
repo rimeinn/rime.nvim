@@ -66,6 +66,12 @@ end
 ---@param prot integer?
 ---@diagnostic disable-next-line: unused-local
 function M.mkdir(name, flags, prot)
+    if flags and flags:match 'p' then
+        local parent = fs.dirname(name)
+        if M.isdirectory(parent) == 0 then
+            M.mkdir(parent, flags)
+        end
+    end
     lfs.mkdir(name)
 end
 
