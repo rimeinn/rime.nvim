@@ -9,6 +9,7 @@ local lfs = require "lfs"
 local json = require "vim.json"
 local fs = require 'vim.fs'
 local uv = require 'vim.uv'
+local vim = require 'vim.shared'
 local M = {}
 
 ---wrap `vim.fn.json_decode()`
@@ -38,7 +39,7 @@ function M.has(feature)
     return ret and 1 or 0
 end
 
----wrap `vim.fn.system()`
+---wrap `vim.fn.writefile()`
 ---@param list string[]
 ---@param fname string
 function M.writefile(list, fname)
@@ -63,7 +64,11 @@ function M.system(expr, input)
         local list = type(input) == type {} and input or { input }
         ---@diagnostic disable-next-line: param-type-mismatch
         M.writefile(list, fname)
-        cmd = ("cat %q | "):format(fname) .. expr
+        local cat = "cat"
+        if uv.os_uname().sysname == "Windows" then
+            cat = "type"
+        end
+        cmd = ("%s %q | "):format(cat, fname) .. expr
     end
     local p = io.popen(cmd)
     if p == nil then
@@ -75,6 +80,15 @@ function M.system(expr, input)
         os.remove(fname)
     end
     return text
+end
+
+---wrap `vim.fn.systemlist()`
+---@param expr string
+---@param input string | string[]?
+---@return string[]
+function M.systemlist(expr, input)
+    local text = M.system(expr, input)
+    return vim.split(text, "\n")
 end
 
 ---wrap `vim.fn.getcwd()`
