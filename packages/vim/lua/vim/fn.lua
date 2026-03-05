@@ -38,6 +38,45 @@ function M.has(feature)
     return ret and 1 or 0
 end
 
+---wrap `vim.fn.system()`
+---@param list string[]
+---@param fname string
+function M.writefile(list, fname)
+    local f = io.open(fname, "w")
+    if f == nil then
+        return
+    end
+    local text = table.concat(list, "\n")
+    f:write(text)
+    f:close()
+end
+
+---wrap `vim.fn.system()`
+---@param expr string
+---@param input string | string[]?
+---@return string
+function M.system(expr, input)
+    local cmd = expr
+    local fname
+    if input then
+        fname = fs.joinpath(os.getenv "TEMP" or "/tmp", expr .. '.txt')
+        local list = type(input) == type {} and input or { input }
+        ---@diagnostic disable-next-line: param-type-mismatch
+        M.writefile(list, fname)
+        cmd = ("cat %q | "):format(fname) .. expr
+    end
+    local p = io.popen(cmd)
+    if p == nil then
+        return ""
+    end
+    local text = p:read "*a"
+    p:close()
+    if fname then
+        os.remove(fname)
+    end
+    return text
+end
+
 ---wrap `vim.fn.getcwd()`
 ---@return string cwd
 function M.getcwd()
