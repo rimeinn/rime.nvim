@@ -32,7 +32,7 @@
 
 Rime for neovim.
 
-![screencast](https://github.com/user-attachments/assets/71882a57-d4dd-4898-8eee-b7a17ae5193f)
+![screenshot](https://github.com/user-attachments/assets/28926d50-2b50-46db-9ff6-04588e29fcd8)
 
 This project is consist of two parts:
 
