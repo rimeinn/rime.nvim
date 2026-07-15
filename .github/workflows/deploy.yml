@@ -30,8 +30,7 @@ jobs:
       - uses: xmake-io/github-action-setup-xmake@v1
       - name: Install Dependencies
         run: |
-          # https://github.com/drivendataorg/repro-zipfile/pull/23
-          pip install git+https://github.com/Freed-Wu/repro-zipfile@mode rpzip
+          luarocks install rpzip
           luarocks install luanativeobjects
           luarocks install lua-cjson
           sudo apt-get -y update
