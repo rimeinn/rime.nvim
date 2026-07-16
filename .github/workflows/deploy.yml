@@ -22,7 +22,7 @@ jobs:
       matrix:
         runs-on:
           - macos-latest
-          - windows-latest
+          # - windows-latest
     runs-on: ${{matrix.runs-on}}
     steps:
       - name: Install MSVC Compiler Toolchain
@@ -37,11 +37,9 @@ jobs:
       - uses: luarocks/gh-actions-luarocks@v6
       - name: Install Dependencies
         if: runner.os == 'Windows'
-        # yamllint disable rule:line-length
         run: |
           scoop bucket add siku https://github.com/amorphobia/siku
           scoop install librime pkg-config
-        # yamllint enable rule:line-length
       - name: Install Dependencies
         if: runner.os == 'macOS'
         run: |
@@ -53,6 +51,7 @@ jobs:
           luarocks install luanativeobjects
           luarocks install rime.nvim
           luarocks pack lua-cjson
+          luarocks pack lua-zlib
           luarocks pack luafilesystem
           luarocks pack rime.nvim
       - uses: actions/upload-artifact@v4
