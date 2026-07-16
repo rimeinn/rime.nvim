@@ -76,7 +76,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install librime-dev
+          sudo apt-get -y install librime-dev rename
           rm -f ./*.rock
       - uses: actions/download-artifact@v4
         with:
@@ -89,6 +89,7 @@ jobs:
           luarocks install rime.nvim
           luarocks list --porcelain | sed 's/\(\S\+\).*/luarocks pack \1 \&\& \
             luarocks download --rockspec \1/' | sh
+          rename -f s/linux-x86_64/all/ texrocks-*.rock
           luarocks-admin make-manifest .
           zip manifest-5.1.zip manifest-5.1
           rm -f ./*.rockspec manifest{,-5.{1..4}}
