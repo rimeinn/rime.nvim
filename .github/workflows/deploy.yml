@@ -16,7 +16,53 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on:
+          - macos-latest
+          - windows-latest
+    runs-on: ${{matrix.runs-on}}
+    steps:
+      - name: Install MSVC Compiler Toolchain
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: Install Scoop
+        uses: MinoruSekine/setup-scoop@v4
+        if: runner.os == 'Windows'
+      - uses: xmake-io/github-action-setup-xmake@v1
+      - uses: leafo/gh-actions-lua@v12
+        with:
+          luaVersion: "5.1"
+      - uses: luarocks/gh-actions-luarocks@v6
+      - name: Install Dependencies
+        if: runner.os == 'Windows'
+        # yamllint disable rule:line-length
+        run: |
+          scoop bucket add siku https://github.com/amorphobia/siku
+          scoop install librime pkg-config
+        # yamllint enable rule:line-length
+      - name: Install Dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install librime
+      - name: Install Dependencies
+        run: |
+          luarocks config variables.ZIP rpzip
+          luarocks install rpzip
+          luarocks install luanativeobjects
+          luarocks install rime.nvim
+          luarocks pack lua-cjson
+          luarocks pack luafilesystem
+          luarocks pack rime.nvim
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifact-${{matrix.runs-on}}
+          path: |
+            *.rock
+
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,17 +76,20 @@ jobs:
       - uses: xmake-io/github-action-setup-xmake@v1
       - name: Install Dependencies
         run: |
-          luarocks install rpzip
-          luarocks install luanativeobjects
-          luarocks install lua-cjson
           sudo apt-get -y update
           sudo apt-get -y install librime-dev
+          rm -f ./*.rock
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: artifact-*
+          merge-multiple: true
       - run: |
           luarocks config variables.ZIP rpzip
+          luarocks install rpzip
+          luarocks install luanativeobjects
           luarocks install rime.nvim
-          rm -f ./*.rock
           luarocks list --porcelain | sed 's/\(\S\+\).*/luarocks pack \1 \&\& \
-          luarocks download --rockspec \1/' | sh
+            luarocks download --rockspec \1/' | sh
           luarocks-admin make-manifest .
           zip manifest-5.1.zip manifest-5.1
           rm -f ./*.rockspec manifest{,-5.{1..4}}
