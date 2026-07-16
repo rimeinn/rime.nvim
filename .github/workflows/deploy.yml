@@ -92,6 +92,7 @@ jobs:
           luarocks-admin make-manifest .
           zip manifest-5.1.zip manifest-5.1
           rm -f ./*.rockspec manifest{,-5.{1..4}}
+          perl -ni -e'print unless /Lua 5.[2345] manifest file/' index.html
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: gh-pages

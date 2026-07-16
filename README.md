@@ -56,6 +56,9 @@ apt-get -y install librime
 brew install librime
 # Windows msys2
 pacboy -S --noconfirm librime
+# Windows MSVC
+scoop bucket add siku https://github.com/amorphobia/siku
+scoop install librime
 ```
 
 ## Install
