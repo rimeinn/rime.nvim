@@ -65,24 +65,6 @@ scoop install librime
 
 ### rocks.nvim
 
-We provide a [luarocks server](https://rimeinn.github.io/rime.nvim) to avoid
-your troublesome of building binary lua module.
-
-```lua
-vim.g.rocks_nvim = {
-  -- ...
-  luarocks_config = {
-    -- ...
-    rocks_servers = {
-      "https://rimeinn.github.io/rime.nvim",
-      -- other servers
-      "https://lumen-oss.github.io/rocks-binaries",
-      "https://luarocks.org",
-    }
-  }
-}
-```
-
 #### Command style
 
 ```vim
