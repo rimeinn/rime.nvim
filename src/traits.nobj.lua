@@ -12,10 +12,11 @@ typedef RimeTraits Traits;
     var_in { "char *", "distribution_code_name" },
     var_in { "char *", "distribution_version" },
     var_in { "char *", "app_name" },
+    var_in { "char *", "modules" },
     var_in { "int", "min_log_level" },
     c_source [[
 RIME_STRUCT(RimeTraits, traits);
-RIME_MODULE_LIST(modules, "default");
+RIME_MODULE_LIST(modules, ${modules});
 traits.modules = modules;
 traits.shared_data_dir = ${shared_data_dir};
 traits.user_data_dir = ${user_data_dir};
