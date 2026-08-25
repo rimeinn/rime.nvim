@@ -79,8 +79,15 @@ function M.Key:from_vim(name)
             mask = mask,
         }
     end
+    name = name:lower()
+    local code = 0
+    if self.convert then
+        code = self.convert(name)
+    elseif vim then
+        code = vim.fn.eval(('"\\<%s>"'):format(name)):byte()
+    end
     return self {
-        code = self.convert(name:lower()),
+        code = code,
         mask = mask,
     }
 end
