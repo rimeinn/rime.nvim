@@ -42,7 +42,7 @@ function M.Rime:draw(...)
         end
     end
     local context = self.session:get_context()
-    if context == nil or context.menu.num_candidates == 0 then
+    if context == nil or (context.menu.num_candidates == 0 and context.composition.preedit == nil) then
         return self.session:get_commit_text(), {}, 0
     end
     local lines, col = self.ui:draw(context)
