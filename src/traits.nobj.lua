@@ -13,9 +13,19 @@ typedef RimeTraits Traits;
     var_in { "char *", "distribution_version" },
     var_in { "char *", "app_name" },
     var_in { "int", "min_log_level" },
+    var_in { "<any>", "modules" },
     c_source [[
 RIME_STRUCT(RimeTraits, traits);
-RIME_MODULE_LIST(modules, "default");
+const char *modules[64];
+size_t n_modules = 0;
+size_t len = lua_objlen(L, ${modules::idx});
+for (size_t i = 1; i <= len && n_modules < 63; i++) {
+  lua_rawgeti(L, ${modules::idx}, i);
+  const char *name = lua_tostring(L, -1);
+  lua_pop(L, 1);
+  if (name) modules[n_modules++] = name;
+}
+modules[n_modules] = NULL;
 traits.modules = modules;
 traits.shared_data_dir = ${shared_data_dir};
 traits.user_data_dir = ${user_data_dir};
