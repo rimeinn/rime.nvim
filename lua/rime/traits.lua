@@ -30,6 +30,8 @@ local M = {
         distribution_name = "Rime", -- distribution name
         distribution_code_name = "nvim-rime", -- distribution code name
         distribution_version = distribution_version, -- distribution version
+        -- neovim's luaJIT conflicts with librime's lua
+        modules = { "default", "octagram", "predict" }, -- librime modules to load
     },
 }
 
@@ -61,7 +63,7 @@ function M.Traits:new(traits)
     fn.mkdir(traits.log_dir, 'p')
     return Traits(traits.shared_data_dir, traits.user_data_dir, traits.log_dir, traits.distribution_name,
         traits.distribution_code_name, traits.distribution_version, traits.app_name,
-        M.log_level[traits.min_log_level])
+        M.log_level[traits.min_log_level], traits.modules)
 end
 
 setmetatable(M.Traits, {
