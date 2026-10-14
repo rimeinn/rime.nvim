@@ -63,8 +63,7 @@ jobs:
       - name: Install dependencies
         run: |
           luarocks install luanativeobjects
-          sudo apt-get -y update
-          sudo apt-get -y install librime-dev
+          brew install librime
       - run: |
           luarocks install rime.nvim
           luarocks pack rime.nvim
