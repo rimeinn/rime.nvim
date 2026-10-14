@@ -208,6 +208,45 @@ rime:create_autocmds()
 vim.keymap.set('i', '<C-^>', rime:toggle_cb())
 ```
 
+### librime-lua
+
+By default, librime-lua is disabled due to different lua versions between
+librime-lua and neovim. For example, librime-lua on NixOS uses
+[lua 5.2](https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/li/librime-lua/package.nix#L6)
+and librime-lua on ArchLinux uses latest lua 5.5. You can enable it by:
+
+NixOS:
+
+`~/.config/nixpkgs/config.nix`:
+
+```nix
+{
+  packageOverrides =
+    {
+      librime-lua = (pkgs.librime-lua.override { lua5_2_compat = pkgs.luajit; });
+    };
+}
+```
+
+ArchLinux:
+
+```bash
+paru -S librime-luajit
+```
+
+Then:
+
+```lua
+local Traits = require 'rime.traits'.Traits
+local rime = Rime {
+    session = Session {
+        traits = Traits {
+            modules = { "default", "lua", "octagram", "predict" },
+        }
+    }
+}
+```
+
 ### Vim Cursor
 
 ```vim
