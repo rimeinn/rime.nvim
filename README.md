@@ -211,9 +211,14 @@ vim.keymap.set('i', '<C-^>', rime:toggle_cb())
 ### librime-lua
 
 By default, librime-lua is disabled due to different lua versions between
-librime-lua and neovim. For example, librime-lua on NixOS uses
-[lua 5.2](https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/li/librime-lua/package.nix#L6)
-and librime-lua on ArchLinux uses latest lua 5.5. You can enable it by:
+librime-lua and neovim:
+
+- neovim uses luaJIT;
+- librime-lua on NixOS uses
+  [lua 5.2](https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/li/librime-lua/package.nix#L6);
+- librime-lua on ArchLinux uses latest lua 5.5.
+
+You can enable it by:
 
 NixOS:
 
@@ -411,12 +416,6 @@ If you press `<Space>` in `(|)`, you will get `( | )`.
 However, if you press `<Space>` to select the first candidate `你好`,
 you will get `(你好| )` due to `| -> |你好`!
 The best solution is using Chinese punctuation to get `（你好|）`.
-
-### Nix
-
-For Nix user, run
-`/the/path/of/luarocks/rocks-5.1/rime.nvim/VERSION/scripts/update.sh` when
-dynamic link libraries are broken after `nix-collect-garbage -d`.
 
 ## Related Projects
 

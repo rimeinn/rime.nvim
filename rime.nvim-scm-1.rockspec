@@ -1,54 +1,25 @@
-local git_ref = '$git_ref'
-local modrev = '$modrev'
-local specrev = '$specrev'
-
-local repo_url = '$repo_url'
-
 rockspec_format = '3.0'
-package = '$package'
-if modrev:sub(1, 1) == '$' then
-  modrev = "scm"
-  specrev = "1"
-  repo_url = "https://github.com/rimeinn/rime.nvim"
-  package = repo_url:match("/([^/]+)/?$")
-end
-version = modrev ..'-'.. specrev
-
 description = {
-  summary = '$summary',
+  summary = '',
   detailed = '',
-  labels = { 'lua', 'neovim', 'rime', 'vim', 'xmake' },
-  homepage = '$homepage',
+  labels = {},
+  homepage = 'https://github.com/rimeinn/rime.nvim',
   license = 'GPL-3.0',
 }
-
-build_dependencies = { "luanativeobjects" }
-
-dependencies = { "lua >= 5.1", 'ime >= 0.0.8', 'platformdirs', 'lua-cjson' }
-
-test_dependencies = {}
-
+package = description.homepage:match('/([^/]+)/?$')
+version = 'scm-1'
 source = {
-  url = repo_url .. '/archive/' .. git_ref .. '.zip',
-  dir = '$repo_name-' .. '$archive_dir_suffix',
+  url = description.homepage:gsub('https', 'git')
 }
 
-if modrev == 'scm' or modrev == 'dev' then
-  source = {
-    url = repo_url:gsub('https', 'git')
-  }
-end
-
+dependencies = { "lua >= 5.1", 'ime >= 0.0.8', 'platformdirs', 'lua-cjson' }
+build_dependencies = { "luanativeobjects" }
 build = {
   type = 'xmake',
-  copy_directories = {'after'},
+  copy_directories = { 'after' },
   install = {
     bin = {
-      rime = 'bin/rime'
-    },
-    conf = {
-      ['..'] = 'shell.nix',
-      ['../scripts/update.sh'] = 'scripts/update.sh',
+      rime = 'bin/rime',
     },
   },
 }
