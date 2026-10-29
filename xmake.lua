@@ -12,5 +12,5 @@ do
     add_cflags("-Wno-int-conversion")
     add_packages("rime")
     set_configdir("lua/rime")
-    add_configfiles("lua/rime/assets/templates/version.lua")
+    add_configfiles("lua/rime/templates/version.lua")
 end

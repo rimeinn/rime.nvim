@@ -12,7 +12,7 @@ source = {
   url = description.homepage:gsub('https', 'git')
 }
 
-dependencies = { "lua >= 5.1", 'ime >= 0.0.8', 'platformdirs', 'lua-cjson' }
+dependencies = { "lua >= 5.1", 'ime >= 0.0.8', 'platformdirs', 'lua-cjson', 'datafile' }
 build_dependencies = { "luanativeobjects" }
 build = {
   type = 'xmake',
@@ -20,6 +20,10 @@ build = {
   install = {
     bin = {
       rime = 'bin/rime',
+    },
+    conf = {
+      ['keys.json'] = 'etc/conf/keys.json',
+      ['modifiers.json'] = 'etc/conf/modifiers.json',
     },
   },
 }

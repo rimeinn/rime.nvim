@@ -3,6 +3,7 @@
 -- luacheck: ignore 111 113
 local fs = require 'vim.fs'
 local json = require 'vim.json'
+local datafile = require 'datafile'
 local Key = require 'ime.key'.Key
 
 local M = {
@@ -27,21 +28,12 @@ for k, v in pairs(Key.aliases) do
     M.Key.aliases[k] = v
 end
 
----get file path
----@param name string
----@return string
-function M.get_path(name)
-    return fs.joinpath(
-        fs.dirname(debug.getinfo(1).source:match("@?(.*)")),
-        "assets", "json", name .. '.json'
-    )
-end
-
 ---get file content
 ---@param path string
 ---@return string
 function M.read(path)
-    local f = io.open(path)
+    local f = datafile.open(path)
+        or io.open(debug.getinfo(1).source:match("@?(.*/)[^/]+/[^/]+/[^/]+$") .. fs.joinpath("etc", path))
     local text = "{}"
     if f then
         text = f:read "*a"
@@ -54,11 +46,11 @@ end
 ---@param name string
 ---@return table
 function M.decode(name)
-    return json.decode(M.read(M.get_path(name)))
+    return json.decode(M.read(fs.joinpath('conf', name)))
 end
 
-M.keys = M.decode "keys"
-for i, v in ipairs(M.decode "modifiers") do
+M.keys = M.decode "keys.json"
+for i, v in ipairs(M.decode "modifiers.json") do
     if v == "Shift" then
         M.Key.modifiers.S = 2 ^ (i - 1)
     elseif v == "Control" then
